@@ -1,0 +1,34 @@
+{
+  "name": "@semaphore-pay/client",
+  "version": "0.1.0",
+  "module": "src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./react-native": {
+      "import": "./dist/react-native/index.js",
+      "types": "./dist/react-native/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^19"
+  },
+  "peerDependencies": {
+    "typescript": "^5",
+    "react": ">=18",
+    "react-native": ">=0.73",
+    "react-native-webview": ">=13"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "react-native": { "optional": true },
+    "react-native-webview": { "optional": true }
+  }
+}
