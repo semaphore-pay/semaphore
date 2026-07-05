@@ -9,16 +9,27 @@
     "@types/node": "^26.0.1",
     "drizzle-kit": "^0.31.10"
   },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./schema/sqlite": {
+      "import": "./dist/database/schema/sqlite.js",
+      "types": "./dist/database/schema/sqlite.d.ts"
+    },
+    "./schema/pg": {
+      "import": "./dist/database/schema/pg.js",
+      "types": "./dist/database/schema/pg.d.ts"
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
+    "build": "tsc --project tsconfig.build.json",
     "generate:pg": "DB_DIALECT=postgresql drizzle-kit generate",
     "generate:sqlite": "DB_DIALECT=sqlite drizzle-kit generate",
     "generate:all": "bun run generate:pg && bun run generate:sqlite"

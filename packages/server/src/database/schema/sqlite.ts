@@ -229,6 +229,8 @@ export const subscription = sqliteTable(
     currentPeriodEndAt: timestamp("current_period_end_at"),
     trialEndAt: timestamp("trial_end_at"),
     nextRetryAt: timestamp("next_retry_at"),
+    retryCount: integer("retry_count").notNull().default(0),
+    lastRetryAt: timestamp("last_retry_at"),
     canceledAt: timestamp("canceled_at"),
     endedAt: timestamp("ended_at"),
     quantity: integer("quantity").notNull().default(1),

@@ -16,6 +16,11 @@
   "files": [
     "dist"
   ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/react": "^19"

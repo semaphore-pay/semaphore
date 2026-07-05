@@ -26,7 +26,7 @@ export async function processNombaEvent(
   let collectionId: string | null = null;
   let subscription: any | null = null;
 
-  if (eventType === "payment_success") {
+  if (eventType === "payment_success" || eventType === "payment_failed") {
     const reference = data?.merchantTxRef ?? data?.orderReference;
     if (reference) {
       subscription = await engine.db.query.subscription.findFirst({
@@ -55,6 +55,11 @@ export async function processNombaEvent(
         console.error(
           `Received payment for unknown transaction reference: ${data?.merchantTxRef ?? data?.orderReference}`,
         );
+      }
+      break;
+    case "payment_failed":
+      if (subscription) {
+        await handlePaymentFailed(engine, subscription, data);
       }
       break;
     case "mandate.debit_success":
@@ -86,6 +91,44 @@ async function handlePaymentSuccess(
     status: "paid",
   });
 
+  // Save tokenized card data if present — needed for recurring billing
+  const tokenizedCards = data?.tokenizedCardData as
+    | Array<{ tokenKey: string; cardType?: string; cardBrand?: string; last4?: string; expiryMonth?: number; expiryYear?: number }>
+    | undefined;
+
+  if (tokenizedCards?.length) {
+    for (const card of tokenizedCards) {
+      if (!card.tokenKey) continue;
+
+      // Check if this token is already saved
+      const existing = await engine.db.query.paymentMethod.findFirst({
+        where: eq(schema.paymentMethod.nombaTokenId, card.tokenKey),
+      });
+
+      if (!existing) {
+        await engine.db.insert(schema.paymentMethod).values({
+          id: crypto.randomUUID(),
+          customerId: subscription.customerId,
+          nombaTokenId: card.tokenKey,
+          type: card.cardType ?? null,
+          brand: card.cardBrand ?? null,
+          last4: card.last4 ?? null,
+          expiryMonth: card.expiryMonth ?? null,
+          expiryYear: card.expiryYear ?? null,
+          isDefault: true,
+        });
+      }
+
+      // Link the payment method to the subscription
+      if (!subscription.nombaPaymentMethodId) {
+        await engine.db
+          .update(schema.subscription)
+          .set({ nombaPaymentMethodId: card.tokenKey, updatedAt: new Date() })
+          .where(eq(schema.subscription.id, subscription.id));
+      }
+    }
+  }
+
   const plan = await engine.db.query.plan.findFirst({
     where: eq(schema.plan.id, subscription.planId),
   });
@@ -103,6 +146,8 @@ async function handlePaymentSuccess(
       currentPeriodStartAt: now,
       currentPeriodEndAt: periodEndAt,
       trialEndAt: null,
+      retryCount: 0,
+      lastRetryAt: null,
       updatedAt: now,
     })
     .where(eq(schema.subscription.id, subscription.id));
@@ -110,6 +155,59 @@ async function handlePaymentSuccess(
   if (plan?.interval !== "none" && plan?.interval !== "yearly") {
     await resetEntitlementBalances(engine, subscription.id, now);
   }
+}
+
+async function handlePaymentFailed(
+  engine: SemaphorePayEngine<any>,
+  subscription: any,
+  data: Record<string, any>,
+) {
+  const schema = engine.schema;
+  const now = new Date();
+  const maxRetries = 3;
+
+  // Increment retry count and schedule next retry with exponential backoff
+  const currentRetryCount = (subscription.retryCount ?? 0) + 1;
+  const backoffDays = currentRetryCount === 1 ? 1 : currentRetryCount === 2 ? 3 : 7;
+  const nextRetryAt = new Date(now.getTime() + backoffDays * 24 * 60 * 60 * 1000);
+
+  if (currentRetryCount >= maxRetries) {
+    // Max retries reached — cancel the subscription
+    await engine.db
+      .update(schema.subscription)
+      .set({
+        status: "canceled",
+        canceledAt: now,
+        endedAt: now,
+        retryCount: currentRetryCount,
+        lastRetryAt: now,
+        updatedAt: now,
+      })
+      .where(eq(schema.subscription.id, subscription.id));
+  } else {
+    // Schedule next retry
+    await engine.db
+      .update(schema.subscription)
+      .set({
+        status: "past_due",
+        retryCount: currentRetryCount,
+        lastRetryAt: now,
+        nextRetryAt,
+        updatedAt: now,
+      })
+      .where(eq(schema.subscription.id, subscription.id));
+  }
+
+  // Record the failed invoice
+  await upsertInvoiceRecord(engine, {
+    collectionId: subscription.collectionId,
+    customerId: subscription.customerId,
+    subscriptionId: subscription.id,
+    amount: data.amount,
+    currency: data.currency || "NGN",
+    nombaTransactionId: data?.merchantTxRef ?? data?.orderReference,
+    status: "failed",
+  });
 }
 
 async function resetEntitlementBalances(

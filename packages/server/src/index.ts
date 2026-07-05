@@ -32,6 +32,7 @@ export { getSemaphorePayHooks } from "./auth";
 
 export * from "./api/api.service";
 export { runSemaphorePayCron } from "./cron";
+export * from "./customer/customer.api";
 export * from "./product/product.api";
 export * from "./product/product.service";
 export * from "./product/product.types";
@@ -43,3 +44,4 @@ export * from "./subscription/subscription.service";
 export { type SubscribeToPlanInput, type SubscribeToPlanResult } from "./subscription/subscription.types";
 export * from "./entitlement/entitlement.api";
 export * from "./entitlement/entitlement.service";
+export * from "./webhook/webhook.api";
