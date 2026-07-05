@@ -1,0 +1,132 @@
+{
+  "title": "Semaphore Pay",
+  "description": "",
+  "pages": [
+    {
+      "title": "Collections API",
+      "url": "https://docs.semaphorepay.tech/api-reference/collections/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Customers API",
+      "url": "https://docs.semaphorepay.tech/api-reference/customers/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Entitlements API",
+      "url": "https://docs.semaphorepay.tech/api-reference/entitlements/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "API Reference",
+      "url": "https://docs.semaphorepay.tech/api-reference/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Plans API",
+      "url": "https://docs.semaphorepay.tech/api-reference/plans/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Products API",
+      "url": "https://docs.semaphorepay.tech/api-reference/products/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Subscriptions API",
+      "url": "https://docs.semaphorepay.tech/api-reference/subscriptions/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Collections",
+      "url": "https://docs.semaphorepay.tech/concepts/collections/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Entitlements",
+      "url": "https://docs.semaphorepay.tech/concepts/entitlements/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Products & Plans",
+      "url": "https://docs.semaphorepay.tech/concepts/products-plans/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Subscriptions",
+      "url": "https://docs.semaphorepay.tech/concepts/subscriptions/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Deploy to Cloudflare",
+      "url": "https://docs.semaphorepay.tech/deploy/cloudflare/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Environment Variables",
+      "url": "https://docs.semaphorepay.tech/deploy/env/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "React Native",
+      "url": "https://docs.semaphorepay.tech/guides/react-native/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "React Integration",
+      "url": "https://docs.semaphorepay.tech/guides/react/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Testing",
+      "url": "https://docs.semaphorepay.tech/guides/testing/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Webhooks",
+      "url": "https://docs.semaphorepay.tech/guides/webhooks/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Semaphore — Subscription Billing for Nomba",
+      "url": "https://docs.semaphorepay.tech/",
+      "description": "",
+      "priority": "high"
+    },
+    {
+      "title": "First API Call",
+      "url": "https://docs.semaphorepay.tech/quickstart/first-call/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Quick Start",
+      "url": "https://docs.semaphorepay.tech/quickstart/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Install SDK",
+      "url": "https://docs.semaphorepay.tech/quickstart/install/",
+      "description": "",
+      "priority": "medium"
+    }
+  ]
+}

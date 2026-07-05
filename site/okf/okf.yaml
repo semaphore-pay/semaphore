@@ -1,0 +1,185 @@
+okf_version: 0.8.9
+bundle:
+  name: semaphore-pay
+  title: "Semaphore Pay"
+  description: ""
+  url: "https://docs.semaphorepay.tech"
+  generated_by: "@docmd/plugin-okf"
+  generated_at: "2026-07-05T13:54:02.051Z"
+  default_type: concept
+stats:
+  concepts: 21
+  by_type:
+    concept: 17
+    guide: 4
+  locales: 
+  versions: 
+concepts:
+  - id: api-reference-collections
+    type: concept
+    title: "Collections API"
+    path: /api-reference/collections/
+    file: concepts/api-reference-collections.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: api-reference-customers
+    type: concept
+    title: "Customers API"
+    path: /api-reference/customers/
+    file: concepts/api-reference-customers.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: api-reference-entitlements
+    type: concept
+    title: "Entitlements API"
+    path: /api-reference/entitlements/
+    file: concepts/api-reference-entitlements.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: api-reference-plans
+    type: concept
+    title: "Plans API"
+    path: /api-reference/plans/
+    file: concepts/api-reference-plans.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: api-reference-products
+    type: concept
+    title: "Products API"
+    path: /api-reference/products/
+    file: concepts/api-reference-products.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: api-reference-subscriptions
+    type: concept
+    title: "Subscriptions API"
+    path: /api-reference/subscriptions/
+    file: concepts/api-reference-subscriptions.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: api-reference
+    type: concept
+    title: "API Reference"
+    path: /api-reference/
+    file: concepts/api-reference.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: concepts-collections
+    type: concept
+    title: Collections
+    path: /concepts/collections/
+    file: concepts/concepts-collections.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: concepts-entitlements
+    type: concept
+    title: Entitlements
+    path: /concepts/entitlements/
+    file: concepts/concepts-entitlements.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: concepts-products-plans
+    type: concept
+    title: "Products & Plans"
+    path: /concepts/products-plans/
+    file: concepts/concepts-products-plans.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: concepts-subscriptions
+    type: concept
+    title: Subscriptions
+    path: /concepts/subscriptions/
+    file: concepts/concepts-subscriptions.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: deploy-cloudflare
+    type: concept
+    title: "Deploy to Cloudflare"
+    path: /deploy/cloudflare/
+    file: concepts/deploy-cloudflare.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: deploy-env
+    type: concept
+    title: "Environment Variables"
+    path: /deploy/env/
+    file: concepts/deploy-env.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: guides-react-native
+    type: guide
+    title: "React Native"
+    path: /guides/react-native/
+    file: concepts/guides-react-native.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: guides-react
+    type: guide
+    title: "React Integration"
+    path: /guides/react/
+    file: concepts/guides-react.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: guides-testing
+    type: guide
+    title: Testing
+    path: /guides/testing/
+    file: concepts/guides-testing.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: guides-webhooks
+    type: guide
+    title: Webhooks
+    path: /guides/webhooks/
+    file: concepts/guides-webhooks.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: root
+    type: concept
+    title: "Semaphore — Subscription Billing for Nomba"
+    path: /
+    file: concepts/root.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: quickstart-first-call
+    type: concept
+    title: "First API Call"
+    path: /quickstart/first-call/
+    file: concepts/quickstart-first-call.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: quickstart-install
+    type: concept
+    title: "Install SDK"
+    path: /quickstart/install/
+    file: concepts/quickstart-install.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: quickstart
+    type: concept
+    title: "Quick Start"
+    path: /quickstart/
+    file: concepts/quickstart.md
+    locale: ""
+    version: ""
+    tags: 
