@@ -24,11 +24,6 @@
 			"database_name": "semaphore_dev",
 			"database_id": "REPLACE_WITH_D1_ID"
 		},
-		{
-			"binding": "semaphore_dev",
-			"database_name": "semaphore_dev",
-			"database_id": "436e455b-f789-416c-a277-0ce340c6724d"
-		}
 	],
 	/**
 	 * Smart Placement
