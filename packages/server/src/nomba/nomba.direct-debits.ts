@@ -4,7 +4,6 @@ import type {
   CreateMandateResponse,
   DebitMandateRequest,
   DebitMandateResponse,
-  GetMandateByIdResponse,
   GetMandateStatusResponse,
   ListMandatesData,
   ListMandatesParams,
@@ -78,12 +77,12 @@ export class NombaDirectDebitClient {
     });
   }
 
-  /** Fetch full mandate details by ID (amount, frequency, dates, status, etc). */
-  getMandate(mandateId: string): Promise<GetMandateByIdResponse> {
-    return this.http.get<GetMandateByIdResponse>(
-      `/v1/direct-debits/${encodeURIComponent(mandateId)}`,
-      { skipCodeCheck: true }
-    );
+  /** Fetch the status of a mandate by ID (alias for getStatus — uses the same endpoint). */
+  getMandate(mandateId: string): Promise<GetMandateStatusResponse> {
+    return this.http.get<GetMandateStatusResponse>("/v1/direct-debits/status", {
+      query: { mandateId },
+      skipCodeCheck: true,
+    });
   }
 
   /**

@@ -5,11 +5,11 @@ import { SemaphorePayClient, type PlanInterval } from "../index";
  * State shape returned by {@link useSemaphorePay}.
  */
 export interface SemaphorePayState {
-  /** Whether the initial setup (collection + customer creation) is done. */
+  /** Whether the initial setup (customer creation) is done. */
   ready: boolean;
   /** The customer ID. Set after {@link SemaphorePayClient.createCustomer} succeeds. */
   customerId: string | null;
-  /** The selected plan's ID (from {@link SemaphorePayClient.createPlan}). */
+  /** The selected plan's ID. */
   planId: string | null;
   /** Whether the subscription is active (paid + completed) or a free plan. */
   subscribed: boolean;
@@ -22,11 +22,10 @@ export interface SemaphorePayState {
 export interface UseSemaphorePayOptions {
   /** The base URL of your SemaphorePay server. */
   baseUrl: string;
-  /**
-   * Collection name. If omitted, a new collection is created each session.
-   * In production you'd likely use a pre-existing collection ID.
-   */
-  collectionName?: string;
+  /** Public API key scoped to your collection. */
+  apiKey: string;
+  /** The collection ID to operate on. */
+  collectionId: string;
   /**
    * Plan ID to subscribe to (e.g. "plan_starter_monthly").
    * The plan must already exist in the collection.
@@ -60,22 +59,18 @@ export interface UseSemaphorePayReturn extends SemaphorePayState {
 }
 
 /**
- * useSemaphorePay — React hook for managing the full SemaphorePay lifecycle
- * from collection creation through subscription via a single hook.
- *
- * On mount (if `autoSubscribe` is true), it:
- * 1. Creates (or finds) a collection
- * 2. Creates/upserts a customer
- * 3. Subscribes the customer to the plan
+ * useSemaphorePay — React hook for managing the SemaphorePay lifecycle
+ * from customer creation through subscription via a single hook.
  *
  * ```tsx
  * import { useSemaphorePay } from "@semaphore-pay/client/react-native";
- * import { SemaphorePayPaywall } from "@semaphore-pay/client/react-native";
  *
  * function App() {
  *   const { ready, subscribed, error, subscribe, client, customerId } =
  *     useSemaphorePay({
  *       baseUrl: "https://your-server.example.com",
+ *       apiKey: "pk_test_...",
+ *       collectionId: "col_...",
  *       userId: "user-123",
  *       userEmail: "a@b.com",
  *       planId: "plan_starter_monthly",
@@ -109,7 +104,8 @@ export function useSemaphorePay(
 ): UseSemaphorePayReturn {
   const {
     baseUrl,
-    collectionName,
+    apiKey,
+    collectionId,
     planId,
     userId,
     userEmail,
@@ -117,7 +113,7 @@ export function useSemaphorePay(
     autoSubscribe = true,
   } = options;
 
-  const clientRef = useRef(new SemaphorePayClient({ baseUrl }));
+  const clientRef = useRef(new SemaphorePayClient({ baseUrl, apiKey, collectionId }));
   const client = clientRef.current;
   const ranSetup = useRef(false);
 
@@ -139,14 +135,7 @@ export function useSemaphorePay(
     ranSetup.current = true;
 
     try {
-      // 1. Collection
-      const col = await client.createCollection({
-        name: collectionName ?? "SemaphorePay RN App",
-        userId: userId ?? `rn_user_${crypto.randomUUID()}`,
-      });
-      client.setPublicApiKey(col.keys.public);
-
-      // 2. Customer — generates a unique userId if not provided
+      // 1. Customer — generates a unique userId if not provided
       const uid = userId ?? `rn_user_${crypto.randomUUID()}`;
       const customer = await client.createCustomer({
         userId: uid,
@@ -156,7 +145,7 @@ export function useSemaphorePay(
       const cid = (customer as any).id;
       client.currentCustomerId = cid;
 
-      // 3. Plan — look it up
+      // 2. Plan — look it up
       let resolvedPlanId: string | null = null;
       if (planId) {
         const plans = (await client.listPlans()) as any[];
@@ -168,7 +157,7 @@ export function useSemaphorePay(
         }
       }
 
-      // 4. Subscribe
+      // 3. Subscribe
       if (autoSubscribe && resolvedPlanId && cid) {
         const subResult = await client.subscribeToPlan({
           customerId: cid,
@@ -198,7 +187,6 @@ export function useSemaphorePay(
     }
   }, [
     client,
-    collectionName,
     planId,
     userId,
     userEmail,

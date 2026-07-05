@@ -22,6 +22,27 @@ type Env = {
   _semaphorePayApiKeySchema: any;
 };
 
+export type NombaConfig = {
+  clientId: string;
+  clientSecret: string;
+  accountId: string;
+  callbackUrl: string;
+  environment?: "sandbox" | "production";
+};
+
+/**
+ * Create a NombaClient from config. Reused across webhook, cron, and checkout.
+ */
+function createNombaClient(nombaConfig: NombaConfig, environment?: string): NombaClient {
+  return new NombaClient({
+    clientId: nombaConfig.clientId,
+    clientSecret: nombaConfig.clientSecret,
+    accountId: nombaConfig.accountId,
+    environment:
+      nombaConfig.environment ?? (environment === "production" ? "production" : "sandbox"),
+  });
+}
+
 /**
  * Create a new collection (tenant). Generates a unique ID and
  * inserts the record. No API key required.
@@ -87,7 +108,7 @@ export async function createApiKey(
       collectionId: input.collectionId,
       type: input.type,
       environment: input.environment,
-      userId: input.type === "public" ? input.userId : null,
+      userId: input.userId ?? null,
     })
     .returning();
 
@@ -234,11 +255,15 @@ export function createSemaphorePayRouter(
       return c.json({ error: "Missing webhook secret." }, 500);
     }
 
+    const nombaContext = options?.nomba
+      ? { nomba: { transactions: createNombaClient(options.nomba).transactions } }
+      : {};
+
     const result = await handleWebhook(engine, {
       rawBody,
       signature,
       webhookSecret: options.webhookSecret,
-    });
+    }, nombaContext);
 
     return c.json(result);
   });
@@ -311,7 +336,28 @@ export function createSemaphorePayRouter(
   });
 
   admin.post("/admin/cron/run", async (c) => {
-    const result = await runSemaphorePayCron(engine);
+    const chargeFn = options?.nomba
+      ? async (input: { tokenKey: string; amount: number; currency: string; orderReference: string }) => {
+          const nomba = createNombaClient(options.nomba!);
+          try {
+            const result = await nomba.tokenizedCards.charge({
+              tokenKey: input.tokenKey,
+              order: {
+                orderReference: input.orderReference,
+                amount: input.amount,
+                currency: input.currency as any,
+                customerEmail: "",
+                callbackUrl: options.nomba!.callbackUrl,
+              },
+            });
+            return { success: result.status, status: result.message };
+          } catch {
+            return { success: false };
+          }
+        }
+      : undefined;
+
+    const result = await runSemaphorePayCron(engine, chargeFn);
     return c.json(result);
   });
 
@@ -327,10 +373,9 @@ export function createSemaphorePayRouter(
   user.post("/customers", async (c) => {
     const collectionId = c.get("collectionId");
     const body = await c.req.json();
-    const resolved = resolveCustomerId(c, body.customerId);
-    if ("error" in resolved) return c.json({ error: resolved.error }, resolved.status);
-    body.userId = resolved.customerId;
-    delete body.customerId;
+    if (!body.userId) {
+      return c.json({ error: "userId is required in the request body." }, 400);
+    }
     const result = await upsertCustomer(engine, body, { collectionId });
     return c.json(result);
   });
@@ -402,13 +447,7 @@ export function createSemaphorePayRouter(
       throw new Error("Customer email is required for Nomba checkout.");
     }
 
-    const nomba = new NombaClient({
-      clientId: options.nomba.clientId,
-      clientSecret: options.nomba.clientSecret,
-      accountId: options.nomba.accountId,
-      environment:
-        options.nomba.environment ?? (environment === "production" ? "production" : "sandbox"),
-    });
+    const nomba = createNombaClient(options.nomba, environment);
 
     const checkout = await nomba.checkout.createOrder({
       order: {
@@ -452,6 +491,48 @@ export function createSemaphorePayRouter(
     body.customerId = resolved.customerId;
 
     const result = await purchaseProduct(engine, body, { collectionId, environment });
+
+    // If Nomba is configured and the product has a price, create a checkout order
+    if (options?.nomba && result.status === "completed") {
+      const product = await engine.db.query.product.findFirst({
+        where: and(
+          eq(engine.schema.product.internalId, body.productInternalId),
+          eq(engine.schema.product.collectionId, collectionId),
+        ),
+      });
+
+      if (product?.priceAmount && product.priceAmount > 0) {
+        const customer = await engine.db.query.customer.findFirst({
+          where: and(
+            eq(engine.schema.customer.id, body.customerId),
+            eq(engine.schema.customer.collectionId, collectionId),
+          ),
+        });
+
+        if (customer?.email) {
+          const nomba = createNombaClient(options.nomba, environment);
+          const orderRef = `prod_${result.purchaseId}`;
+
+          const checkout = await nomba.checkout.createOrder({
+            order: {
+              orderReference: orderRef,
+              amount: product.priceAmount,
+              currency: (product.priceCurrency ?? "NGN") as any,
+              customerEmail: customer.email,
+              callbackUrl: options.nomba.callbackUrl,
+            },
+            tokenizeCard: true,
+          });
+
+          return c.json({
+            ...result,
+            nombaOrderReference: checkout.orderReference,
+            checkout,
+          });
+        }
+      }
+    }
+
     return c.json(result);
   });
 

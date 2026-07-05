@@ -3,6 +3,7 @@ import type {
   FetchSingleTransactionParams,
   FilterTransactionRequest,
   ListTransactionsParams,
+  RequeryTransactionResult,
   TransactionListResults,
   TransactionResult,
 } from "./nomba.types";
@@ -45,8 +46,8 @@ export class NombaTransactionClient {
   }
 
   /** Requery a transaction by session ID to force a fresh status check upstream. */
-  requery(sessionId: string): Promise<TransactionResult> {
-    return this.http.get<TransactionResult>(
+  requery(sessionId: string): Promise<RequeryTransactionResult> {
+    return this.http.get<RequeryTransactionResult>(
       `/v1/transactions/requery/${encodeURIComponent(sessionId)}`
     );
   }

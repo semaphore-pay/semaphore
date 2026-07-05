@@ -1,5 +1,5 @@
 import type { SemaphorePayEngine } from "../database/index";
-import { processNombaEvent } from "./webhook.service";
+import { processNombaEvent, type WebhookContext } from "./webhook.service";
 
 /** Required inputs for verifying and processing a Nomba webhook. */
 export interface WebhookInput {
@@ -54,6 +54,7 @@ async function verifyNombaSignature(
 export async function handleWebhook(
   engine: SemaphorePayEngine<any>,
   input: WebhookInput,
+  context: WebhookContext = {},
 ) {
   if (!input.rawBody || !input.signature || !input.webhookSecret) {
     throw new Error("Missing required webhook verification parameters.");
@@ -76,5 +77,5 @@ export async function handleWebhook(
     throw new Error("Malformed webhook payload. Expected valid JSON.");
   }
 
-  return await processNombaEvent(engine, payload);
+  return await processNombaEvent(engine, payload, context);
 }

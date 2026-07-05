@@ -1,13 +1,15 @@
 {
   "name": "@semaphore-pay/server",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "license": "MIT",
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
     "@libsql/client": "^0.17.4",
     "@types/bun": "latest",
     "@types/node": "^26.0.1",
-    "drizzle-kit": "^0.31.10"
+    "drizzle-kit": "^0.31.10",
+    "typescript": "^5"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -33,9 +35,6 @@
     "generate:pg": "DB_DIALECT=postgresql drizzle-kit generate",
     "generate:sqlite": "DB_DIALECT=sqlite drizzle-kit generate",
     "generate:all": "bun run generate:pg && bun run generate:sqlite"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
   },
   "dependencies": {
     "better-auth": "^1.6.20",

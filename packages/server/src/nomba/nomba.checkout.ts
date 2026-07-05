@@ -1,9 +1,12 @@
 import type { NombaHttpClient } from "./nomba.http";
 import type {
+  CancelCheckoutTransactionRequest,
+  CancelCheckoutTransactionResponse,
+  CheckoutTransactionResult,
   CreateOrderRequest,
   CreateOrderResponse,
   RefundCheckoutTransactionRequest,
-  TransactionResult,
+  RefundCheckoutTransactionResponse,
 } from "./nomba.types";
 
 /**
@@ -31,20 +34,29 @@ export class NombaCheckoutClient {
     return this.http.post("/v1/checkout/order/cancel", { orderReference });
   }
 
-  /** Fetch a checkout transaction's details. */
-  getTransaction(transactionId: string): Promise<TransactionResult> {
-    return this.http.get<TransactionResult>("/v1/checkout/transaction", {
-      query: { transactionId },
+  /** Fetch a checkout transaction's details by order reference or order ID. */
+  getTransaction(
+    id: string,
+    idType: "ORDER_REFERENCE" | "ORDER_ID" = "ORDER_REFERENCE"
+  ): Promise<CheckoutTransactionResult> {
+    return this.http.get<CheckoutTransactionResult>("/v1/checkout/transaction", {
+      query: { idType, id },
     });
   }
 
   /** Cancel a checkout transaction. */
-  cancelTransaction(transactionId: string): Promise<unknown> {
-    return this.http.post("/v1/checkout/transaction/cancel", { transactionId });
+  cancelTransaction(
+    transactionId: string,
+    forceCancel: boolean = true
+  ): Promise<CancelCheckoutTransactionResponse> {
+    return this.http.post<CancelCheckoutTransactionResponse>(
+      "/v1/checkout/transaction/cancel",
+      { transactionId, forceCancel }
+    );
   }
 
   /** Refund a completed checkout transaction, in full or in part. */
-  refund(request: RefundCheckoutTransactionRequest): Promise<unknown> {
-    return this.http.post("/v1/checkout/refund", request);
+  refund(request: RefundCheckoutTransactionRequest): Promise<RefundCheckoutTransactionResponse> {
+    return this.http.post<RefundCheckoutTransactionResponse>("/v1/checkout/refund", request);
   }
 }

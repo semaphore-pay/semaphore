@@ -8,41 +8,10 @@ export type PlanInterval = "monthly" | "yearly" | "none";
 export interface SemaphorePayClientOptions {
   /** Base URL of your SemaphorePay server (e.g. http://localhost:8787). */
   baseUrl: string;
-  /** Optional API key to pre-set. Use setApiKey() later if not known at construction time. */
-  apiKey?: string;
-}
-
-/** Input for creating a new collection (tenant). No API key required. */
-export interface CreateCollectionInput {
-  /** Display name for the collection. */
-  name: string;
-  /** Optional user ID to scope the public key to. If omitted, the public key
-   *  will be unscoped (admin-like). In client apps, pass the current user's ID. */
-  userId?: string;
-}
-
-/** Result returned after creating a collection. */
-export interface CreateCollectionResult {
-  collection: { id: string; name: string };
-  /** API keys for this collection.
-   *  - Use `public` for client-side operations (check entitlements, subscribe, purchase).
-   *  - Use `secret` for server-side admin operations (create products, list customers, etc.).
-   */
-  keys: { public: string; secret: string };
-}
-
-/** Input for upserting a customer. If an id is provided, the existing record is updated. */
-export interface CustomerInput {
-  /** Existing customer ID to update instead of creating a new record. */
-  id?: string;
-  /** Your application's user identifier. */
-  userId: string;
-  /** Customer email (required for Nomba checkout on paid subscriptions). */
-  email?: string;
-  /** Customer display name. */
-  name?: string;
-  /** Arbitrary key/value metadata attached to the customer. */
-  metadata?: Record<string, string>;
+  /** Public or secret API key. Public keys are scoped to one collection. */
+  apiKey: string;
+  /** The collection ID this client is scoped to. */
+  collectionId: string;
 }
 
 /** A feature (entitlement) definition shared by plans and products. */
@@ -59,37 +28,11 @@ export interface FeatureInput {
   config?: Record<string, unknown>;
 }
 
-/** Input for creating a plan (recurring subscription). */
-export interface CreatePlanInput {
-  /** Unique plan identifier for your app (e.g. "pro", "team"). */
-  id: string;
-  /** Display name of the plan. */
-  name: string;
-  /** Optional description for pricing page. */
-  description?: string;
-  /** Price in the smallest currency unit (e.g. 5000 for ₦5000). */
-  priceAmount: number;
-  /** ISO 4217 currency code (e.g. "NGN", "USD"). */
-  priceCurrency?: string;
-  /** Billing interval: "monthly", "yearly", or "none" (one-time). */
-  interval: PlanInterval;
-  /** Trial period in days. Defaults to 30. Ignored if interval is "none". */
-  trialPeriodDays?: number;
-  /** Features (entitlements) included in this plan. */
-  features?: FeatureInput[];
-  /** Badge for pricing page (e.g. "Most Popular"). */
-  badge?: string;
-  /** CTA button text for pricing page. */
-  ctaText?: string;
-  /** Sort order for pricing page display. */
-  sortOrder?: number;
-  /** Whether the plan is active and purchasable. */
-  isActive?: boolean;
-}
-
 /** A plan with its features. */
 export interface Plan {
   id: string;
+  collectionId: string;
+  environment: Environment;
   name: string;
   description: string | null;
   priceAmount: number;
@@ -105,24 +48,36 @@ export interface Plan {
   updatedAt: string;
 }
 
-/** Input for creating a product (one-time purchase). */
-export interface CreateProductInput {
-  /** Unique product identifier for your app (e.g. "lifetime_pro"). */
+/** A product with its features. */
+export interface Product {
+  internalId: string;
   id: string;
-  /** Display name of the product. */
+  collectionId: string;
+  environment: Environment;
+  version: number;
   name: string;
-  /** Optional grouping label (e.g. "Team Plans"). */
-  group?: string;
-  /** Whether this is the default product for the collection. */
-  isDefault?: boolean;
-  /** Price in the smallest currency unit (e.g. 50000 for ₦50000). */
-  priceAmount?: number | null;
-  /** ISO 4217 currency code (e.g. "NGN", "USD"). */
-  priceCurrency?: string;
-  /** Product version. Increment this to trigger migrations. */
-  version?: number;
-  /** Features (entitlements) included in this product. */
-  features?: FeatureInput[];
+  group: string;
+  isDefault: boolean;
+  priceAmount: number | null;
+  priceCurrency: string;
+  priceInterval: string | null;
+  features: FeatureInput[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+/** Input for upserting a customer. If an id is provided, the existing record is updated. */
+export interface CustomerInput {
+  /** Existing customer ID to update instead of creating a new record. */
+  id?: string;
+  /** Your application's user identifier. */
+  userId: string;
+  /** Customer email (required for Nomba checkout on paid subscriptions). */
+  email?: string;
+  /** Customer display name. */
+  name?: string;
+  /** Arbitrary key/value metadata attached to the customer. */
+  metadata?: Record<string, string>;
 }
 
 /** Input for subscribing a customer to a plan. */
@@ -140,16 +95,16 @@ export interface SubscribeToPlanResult {
   nombaOrderReference: string | null;
   trialEndAt: string | null;
   checkout?: {
-    success: boolean;
     checkoutLink: string;
-  };
+    orderReference: string;
+  } | null;
 }
 
 /** Input for purchasing a product (one-time). */
 export interface PurchaseProductInput {
   /** The customer ID returned from createCustomer(). */
   customerId: string;
-  /** The product's internalId (from createProduct()). */
+  /** The product's internalId (from the catalog). */
   productInternalId: string;
 }
 
@@ -195,7 +150,7 @@ export interface EntitlementReportResult {
   } | null;
 }
 
-class HttpError extends Error {
+export class HttpError extends Error {
   public readonly status: number;
   public readonly body: unknown;
 
@@ -207,10 +162,25 @@ class HttpError extends Error {
   }
 }
 
+/**
+ * SemaphorePay end-user client.
+ *
+ * Configure with a public API key scoped to one collection.
+ * Use this client in your app/website for customer-facing operations:
+ * creating customers, subscribing to plans, checking entitlements, etc.
+ *
+ * ```ts
+ * const client = new SemaphorePayClient({
+ *   baseUrl: "https://your-server.example.com",
+ *   apiKey: "pk_test_...",
+ *   collectionId: "col_...",
+ * });
+ * ```
+ */
 export class SemaphorePayClient {
-  private baseUrl: string;
-  private apiKey?: string;
-  private publicApiKey?: string;
+  readonly baseUrl: string;
+  readonly apiKey: string;
+  readonly collectionId: string;
 
   /**
    * The current customer ID. Set this after successful login or customer
@@ -221,124 +191,75 @@ export class SemaphorePayClient {
   constructor(options: SemaphorePayClientOptions) {
     this.baseUrl = options.baseUrl.replace(/\/$/, "");
     this.apiKey = options.apiKey;
+    this.collectionId = options.collectionId;
   }
 
-  /** Set the secret (admin) API key for server-side operations. */
-  setApiKey(apiKey: string) {
-    this.apiKey = apiKey;
-  }
-
-  /** Set the public API key for client-side operations. */
-  setPublicApiKey(apiKey: string) {
-    this.publicApiKey = apiKey;
-  }
-
-  private getAuthKey(requiresAdmin: boolean): string | undefined {
-    return requiresAdmin ? this.apiKey : (this.publicApiKey ?? this.apiKey);
-  }
-
-  async createCollection(input: CreateCollectionInput): Promise<CreateCollectionResult> {
-    return await this.request<CreateCollectionResult>("POST", "/admin/collections", input);
-  }
+  // ──── Customer ────
 
   async createCustomer(input: CustomerInput) {
-    return await this.request("POST", "/customers", input, { requiresAuth: true, requiresAdmin: false });
+    return await this.request("POST", "/customers", input);
   }
 
   async getCustomer(customerId: string) {
-    return await this.request("GET", `/customers/${encodeURIComponent(customerId)}`, undefined, {
-      requiresAuth: true,
-      requiresAdmin: true,
-    });
+    return await this.request("GET", `/customers/${encodeURIComponent(customerId)}`);
   }
 
-  async deleteCustomer(customerId: string) {
-    return await this.request("DELETE", `/customers/${encodeURIComponent(customerId)}`, undefined, {
-      requiresAuth: true,
-      requiresAdmin: true,
-    });
-  }
-
-  async createPlan(input: CreatePlanInput): Promise<Plan> {
-    return await this.request<Plan>("POST", "/plans", input, { requiresAuth: true, requiresAdmin: true });
-  }
+  // ──── Plans (read-only catalog) ────
 
   async listPlans(): Promise<Plan[]> {
-    return await this.request<Plan[]>("GET", "/plans", undefined, { requiresAuth: true, requiresAdmin: false });
+    return await this.request<Plan[]>("GET", "/plans");
   }
 
-  async getPlan(planId: string): Promise<Plan> {
-    return await this.request<Plan>("GET", `/plans/${encodeURIComponent(planId)}`, undefined, {
-      requiresAuth: true,
-      requiresAdmin: false,
-    });
+  async getPlan(planId: string): Promise<Plan | null> {
+    return await this.request<Plan>("GET", `/plans/${encodeURIComponent(planId)}`);
   }
 
-  async createProduct(input: CreateProductInput) {
-    return await this.request("POST", "/products", input, { requiresAuth: true, requiresAdmin: true });
+  // ──── Products (read-only catalog) ────
+
+  async listProducts(): Promise<Product[]> {
+    return await this.request<Product[]>("GET", "/products");
   }
 
-  async listProducts() {
-    return await this.request("GET", "/products", undefined, { requiresAuth: true, requiresAdmin: false });
-  }
+  // ──── Subscriptions ────
 
   async subscribeToPlan(input: SubscribeToPlanInput): Promise<SubscribeToPlanResult> {
-    return await this.request<SubscribeToPlanResult>(
-      "POST",
-      "/subscriptions/subscribe",
-      input,
-      { requiresAuth: true, requiresAdmin: false },
-    );
-  }
-
-  async purchaseProduct(input: PurchaseProductInput) {
-    return await this.request("POST", "/products/purchase", input, { requiresAuth: true, requiresAdmin: false });
+    return await this.request<SubscribeToPlanResult>("POST", "/subscriptions/subscribe", input);
   }
 
   async cancelSubscription(subscriptionId: string) {
     return await this.request(
       "POST",
       `/subscriptions/${encodeURIComponent(subscriptionId)}/cancel`,
-      undefined,
-      { requiresAuth: true, requiresAdmin: true },
     );
   }
 
+  // ──── Products (purchase) ────
+
+  async purchaseProduct(input: PurchaseProductInput) {
+    return await this.request("POST", "/products/purchase", input);
+  }
+
+  // ──── Entitlements ────
+
   async checkEntitlement(input: EntitlementCheckInput): Promise<EntitlementCheckResult> {
-    return await this.request<EntitlementCheckResult>(
-      "POST",
-      "/entitlements/check",
-      input,
-      { requiresAuth: true, requiresAdmin: false },
-    );
+    return await this.request<EntitlementCheckResult>("POST", "/entitlements/check", input);
   }
 
   async reportEntitlement(input: EntitlementReportInput): Promise<EntitlementReportResult> {
-    return await this.request<EntitlementReportResult>(
-      "POST",
-      "/entitlements/report",
-      input,
-      { requiresAuth: true, requiresAdmin: false },
-    );
+    return await this.request<EntitlementReportResult>("POST", "/entitlements/report", input);
   }
+
+  // ──── Internal ────
 
   private async request<T>(
     method: "GET" | "POST" | "DELETE",
     path: string,
     body?: unknown,
-    options: { requiresAuth?: boolean; requiresAdmin?: boolean } = {},
   ): Promise<T> {
-    const headers: Record<string, string> = { "content-type": "application/json" };
-
-    if (options.requiresAuth) {
-      const key = this.getAuthKey(options.requiresAdmin ?? true);
-      if (!key) {
-        throw new Error(
-          `SemaphorePay ${options.requiresAdmin ? "admin" : "public"} API key is required for this request.`,
-        );
-      }
-      headers["x-api-key"] = key;
-    }
+    const headers: Record<string, string> = {
+      "content-type": "application/json",
+      "x-api-key": this.apiKey,
+    };
 
     const response = await fetch(`${this.baseUrl}${path}`, {
       method,

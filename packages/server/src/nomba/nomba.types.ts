@@ -109,7 +109,65 @@ export interface RefundCheckoutTransactionRequest {
   transactionId: string;
   /** Amount to refund. Omit to refund the full amount. */
   amount?: number;
-  reason?: string;
+  /** Account number for the refund (recommended for faster processing). */
+  accountNumber?: string;
+  /** Bank code for the refund (recommended for faster processing). */
+  bankCode?: string;
+}
+
+export interface RefundCheckoutTransactionResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface CancelCheckoutTransactionRequest {
+  transactionId: string;
+  /** Force the cancellation of the transaction. */
+  forceCancel: boolean;
+}
+
+export interface CancelCheckoutTransactionResponse {
+  success: boolean;
+  message: string;
+}
+
+/** Result from GET /v1/checkout/transaction (fetch checkout transaction). */
+export interface CheckoutTransactionResult {
+  success: string;
+  message: string;
+  order: {
+    orderId: string;
+    orderReference: string;
+    customerId: string;
+    accountId: string;
+    callbackUrl: string;
+    customerEmail: string;
+    amount: string;
+    currency: string;
+  };
+  transactionDetails: {
+    transactionDate: string;
+    paymentReference: string;
+    paymentVendorReference: string;
+    tokenizedCardPayment: string;
+    statusCode: string;
+  };
+  transferDetails?: {
+    sessionId: string;
+    beneficiaryAccountName: string;
+    beneficiaryAccountNumber: string;
+    originatorAccountName: string;
+    originatorAccountNumber: string;
+    narration: string;
+    destinationInstitutionCode: string;
+    paymentReference: string;
+  };
+  cardDetails?: {
+    cardPan: string;
+    cardType: string;
+    cardCurrency: string;
+    cardBank: string;
+  };
 }
 
 // ============================================================================
@@ -330,24 +388,18 @@ export interface BankAccountTransferMetaObject {
 }
 
 export interface BankAccountTransferResult {
-  amount: string;
+  id: string;
+  amount: number | string;
   source: string;
+  type: string;
+  status: NombaTransferStatus;
   sourceUserId?: string;
   customerBillerId?: string;
   productId?: string;
   meta: BankAccountTransferMetaObject;
-  fee: number;
+  fee?: number;
   timeCreated: string;
-  id: string;
-  type:
-    | "withdrawal"
-    | "purchase"
-    | "transfer"
-    | "p2p"
-    | "online_checkout"
-    | "qrt_credit"
-    | "qrt_debit";
-  status: NombaTransferStatus;
+  userId?: string;
 }
 
 /**
@@ -596,13 +648,26 @@ export type NombaTransactionType =
 export interface TransactionResult {
   id: string;
   status: NombaTransactionStatus;
-  amount: number;
-  fixedCharge?: number;
+  amount: number | string;
+  fixedCharge?: number | string;
   source: NombaTransactionSource;
   type: NombaTransactionType;
   gatewayMessage: string;
   customerBillerId?: string;
   timeCreated: string;
+  timeUpdated?: string;
+  walletCurrency?: string;
+  walletBalance?: string;
+  billingVendorReference?: string;
+  paymentVendorReference?: string;
+  userId?: string;
+  onlineCheckoutOrderId?: string;
+  onlineCheckoutOrderReference?: string;
+  onlineCheckoutCurrency?: string;
+  onlineCheckoutCustomerEmail?: string;
+  onlineCheckoutAmount?: string;
+  onlineCheckoutPaymentMethod?: string;
+  entryType?: string;
   posTid?: string;
   terminalId?: string;
   providerTerminalId?: string;
@@ -610,10 +675,28 @@ export interface TransactionResult {
   posSerialNumber?: string;
   posTerminalLabel?: string;
   stan?: string;
-  paymentVendorReference?: string;
-  userId?: string;
   posRrn?: string;
   merchantTxRef?: string;
+}
+
+/** Result from requery endpoint — extends TransactionResult with extra fields. */
+export interface RequeryTransactionResult extends TransactionResult {
+  walletBalance?: string;
+  billingVendorReference?: string;
+  ktaSenderName?: string;
+  ktaSenderAccountNumber?: string;
+  ktaSenderBankCode?: string;
+  recipientAccountNumber?: string;
+  recipientAccountType?: string;
+  senderName?: string;
+  bankCode?: string;
+  productId?: string;
+  isAgentTransaction?: boolean;
+  isInternational?: boolean;
+  customerCommission?: number;
+  sessionId?: string;
+  accountNumber?: string;
+  bankName?: string;
 }
 
 /** Query params for fetching a single transaction — supply at least one. */

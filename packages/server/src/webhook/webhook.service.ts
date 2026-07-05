@@ -1,14 +1,23 @@
 import { and, eq, isNull } from "drizzle-orm";
 import type { SemaphorePayEngine } from "../database/index";
+import type { NombaTransactionClient } from "../nomba/nomba.transactions";
 import { upsertInvoiceRecord } from "../invoice/invoice.service";
+
+export interface WebhookContext {
+  /** Nomba client for transaction verification. */
+  nomba?: {
+    transactions: NombaTransactionClient;
+  };
+}
 
 export async function processNombaEvent(
   engine: SemaphorePayEngine<any>,
   payload: Record<string, any>,
+  context: WebhookContext = {},
 ) {
   const schema = engine.schema;
   const requestId = payload.requestId;
-  const eventType = payload.event;
+  const eventType = payload.event_type ?? payload.event;
   const data = payload.data;
 
   if (!requestId || !eventType) {
@@ -27,7 +36,7 @@ export async function processNombaEvent(
   let subscription: any | null = null;
 
   if (eventType === "payment_success" || eventType === "payment_failed") {
-    const reference = data?.merchantTxRef ?? data?.orderReference;
+    const reference = data?.order?.orderReference ?? data?.merchantTxRef ?? data?.orderReference;
     if (reference) {
       subscription = await engine.db.query.subscription.findFirst({
         where: eq(schema.subscription.nombaOrderReference, reference),
@@ -50,10 +59,10 @@ export async function processNombaEvent(
   switch (eventType) {
     case "payment_success":
       if (subscription) {
-        await handlePaymentSuccess(engine, subscription, data);
+        await handlePaymentSuccess(engine, subscription, data, context);
       } else {
         console.error(
-          `Received payment for unknown transaction reference: ${data?.merchantTxRef ?? data?.orderReference}`,
+          `Received payment for unknown transaction reference: ${data?.order?.orderReference ?? data?.merchantTxRef ?? data?.orderReference}`,
         );
       }
       break;
@@ -75,18 +84,38 @@ async function handlePaymentSuccess(
   engine: SemaphorePayEngine<any>,
   subscription: any,
   data: Record<string, any>,
+  context: WebhookContext,
 ) {
   const schema = engine.schema;
-  const reference = data?.merchantTxRef ?? data?.orderReference;
+  const reference = data?.order?.orderReference ?? data?.merchantTxRef ?? data?.orderReference;
 
   if (!reference) return;
+
+  // Verify transaction server-side before activating
+  if (context.nomba) {
+    try {
+      const verification = await context.nomba.transactions.fetchSingle({
+        orderReference: reference,
+      });
+      if (verification.status !== "SUCCESS") {
+        console.error(`Transaction verification failed for ${reference}: status=${verification.status}`);
+        return;
+      }
+    } catch (err) {
+      console.error(`Transaction verification error for ${reference}:`, err);
+      // Continue anyway — webhook is the source of truth, verification is defense-in-depth
+    }
+  }
+
+  const amount = data?.order?.amount ?? data?.transaction?.transactionAmount ?? data.amount;
+  const currency = data?.order?.currency ?? data?.currency ?? "NGN";
 
   await upsertInvoiceRecord(engine, {
     collectionId: subscription.collectionId,
     customerId: subscription.customerId,
     subscriptionId: subscription.id,
-    amount: data.amount,
-    currency: data.currency || "NGN",
+    amount,
+    currency,
     nombaTransactionId: reference,
     status: "paid",
   });
@@ -100,7 +129,6 @@ async function handlePaymentSuccess(
     for (const card of tokenizedCards) {
       if (!card.tokenKey) continue;
 
-      // Check if this token is already saved
       const existing = await engine.db.query.paymentMethod.findFirst({
         where: eq(schema.paymentMethod.nombaTokenId, card.tokenKey),
       });
@@ -119,7 +147,6 @@ async function handlePaymentSuccess(
         });
       }
 
-      // Link the payment method to the subscription
       if (!subscription.nombaPaymentMethodId) {
         await engine.db
           .update(schema.subscription)
@@ -148,6 +175,7 @@ async function handlePaymentSuccess(
       trialEndAt: null,
       retryCount: 0,
       lastRetryAt: null,
+      nextRetryAt: null,
       updatedAt: now,
     })
     .where(eq(schema.subscription.id, subscription.id));
