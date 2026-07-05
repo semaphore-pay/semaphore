@@ -1,0 +1,17 @@
+{
+	"name": "cloudflare",
+	"type": "module",
+	"scripts": {
+		"dev": "wrangler dev",
+		"deploy": "wrangler deploy --minify",
+		"cf-typegen": "wrangler types --env-interface CloudflareBindings"
+	},
+	"dependencies": {
+		"drizzle-orm": "^0.45.2",
+		"hono": "^4.12.27"
+	},
+	"devDependencies": {
+		"@types/node": "^26.1.0",
+		"wrangler": "^4.106.0"
+	}
+}
