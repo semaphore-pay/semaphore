@@ -2,6 +2,7 @@ import * as pgSchema from "./schema/pg";
 import * as sqliteSchema from "./schema/sqlite";
 import { and, eq } from "drizzle-orm";
 
+export { pgSchema, sqliteSchema };
 export type PgSchemaType = typeof pgSchema;
 export type SqliteSchemaType = typeof sqliteSchema;
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4
+
+- Exported `sqliteSchema` and `pgSchema` from `database/index.ts` for drizzle-kit migrations
+
 ## 0.1.3
 
 - Re-exported `subscribe`, `cancel`, `pause`, `resume`, `reactivate` from main entry point
