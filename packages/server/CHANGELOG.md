@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.8
+
+- `list` now returns all plans (active and inactive) instead of filtering to active only
+
 ## 0.1.7
 
 - Added `deactivatePlan` — soft-disable a plan (stops recurring payments for new subscribers)

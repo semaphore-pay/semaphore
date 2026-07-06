@@ -83,7 +83,7 @@ export async function list(
   return await listPlans(engine, {
     collectionId: context.collectionId,
     environment: context.environment,
-    activeOnly: true,
+    activeOnly: false,
   });
 }
 
