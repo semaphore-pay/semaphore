@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5
+
+- Exported `sqliteSchema` and `pgSchema` from `index.ts` for drizzle-kit migrations
+
 ## 0.1.4
 
 - Exported `sqliteSchema` and `pgSchema` from `database/index.ts` for drizzle-kit migrations

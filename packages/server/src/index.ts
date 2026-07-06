@@ -20,6 +20,7 @@
  */
 
 export { initSemaphorePay } from "./database/index";
+export { sqliteSchema, pgSchema } from "./database/index";
 export type { SemaphorePayConfig } from "./database/index";
 
 /**
