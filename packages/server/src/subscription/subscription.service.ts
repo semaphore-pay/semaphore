@@ -1,6 +1,12 @@
-import { and, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, or, sql, count } from "drizzle-orm";
 import type { SemaphorePayEngine } from "../database/index";
-import type { SubscribeToPlanInput, SubscribeToPlanResult } from "./subscription.types";
+import type {
+  SubscribeToPlanInput,
+  SubscribeToPlanResult,
+  ListSubscriptionsInput,
+  ListSubscriptionsResult,
+  SubscriptionWithPlan,
+} from "./subscription.types";
 
 function getResetIntervalMs(resetInterval: string | null): number {
   if (!resetInterval) return 30 * 24 * 60 * 60 * 1000;
@@ -140,6 +146,237 @@ export async function cancelSubscription(
           )
         : eq(schema.subscription.id, subscriptionId),
     );
+}
+
+export async function getSubscription(
+  engine: SemaphorePayEngine<any>,
+  input: { subscriptionId: string; collectionId: string }
+): Promise<SubscriptionWithPlan | null> {
+  const schema = engine.schema;
+
+  const sub = await engine.db.query.subscription.findFirst({
+    where: and(
+      eq(schema.subscription.id, input.subscriptionId),
+      eq(schema.subscription.collectionId, input.collectionId),
+    ),
+  });
+
+  if (!sub) return null;
+
+  const plan = sub.planId
+    ? await engine.db.query.plan.findFirst({
+        where: and(
+          eq(schema.plan.id, sub.planId),
+          eq(schema.plan.collectionId, input.collectionId),
+        ),
+      })
+    : null;
+
+  return {
+    ...sub,
+    plan: plan
+      ? {
+          id: plan.id,
+          name: plan.name,
+          description: plan.description,
+          priceAmount: plan.priceAmount,
+          priceCurrency: plan.priceCurrency,
+          interval: plan.interval,
+          trialPeriodDays: plan.trialPeriodDays,
+          badge: plan.badge,
+          ctaText: plan.ctaText,
+          sortOrder: plan.sortOrder,
+          isActive: plan.isActive,
+        }
+      : null,
+  } as SubscriptionWithPlan;
+}
+
+export async function listSubscriptions(
+  engine: SemaphorePayEngine<any>,
+  input: ListSubscriptionsInput
+): Promise<ListSubscriptionsResult> {
+  const schema = engine.schema;
+
+  const conditions = [
+    eq(schema.subscription.collectionId, input.collectionId),
+  ];
+
+  if (input.status) {
+    conditions.push(eq(schema.subscription.status, input.status));
+  }
+  if (input.planId) {
+    conditions.push(eq(schema.subscription.planId, input.planId));
+  }
+  if (input.customerId) {
+    conditions.push(eq(schema.subscription.customerId, input.customerId));
+  }
+
+  const whereClause = and(...conditions);
+
+  const [totalResult] = await engine.db
+    .select({ value: count() })
+    .from(schema.subscription)
+    .where(whereClause);
+
+  const total = totalResult?.value ?? 0;
+
+  const subs = await engine.db
+    .select()
+    .from(schema.subscription)
+    .where(whereClause)
+    .orderBy(desc(schema.subscription.createdAt))
+    .limit(input.limit ?? 50)
+    .offset(input.offset ?? 0);
+
+  const planIds = [...new Set(subs.map((s: any) => s.planId).filter(Boolean))] as string[];
+  const plans: any[] =
+    planIds.length > 0
+      ? await engine.db
+          .select()
+          .from(schema.plan)
+          .where(
+            and(
+              inArray(schema.plan.id, planIds),
+              eq(schema.plan.collectionId, input.collectionId),
+            )
+          )
+      : [];
+
+  const planMap = new Map<string, any>(plans.map((p: any) => [p.id, p]));
+
+  const subscriptions: SubscriptionWithPlan[] = subs.map((sub: any) => {
+    const plan = planMap.get(sub.planId);
+    return {
+      ...sub,
+      plan: plan
+        ? {
+            id: plan.id,
+            name: plan.name,
+            description: plan.description,
+            priceAmount: plan.priceAmount,
+            priceCurrency: plan.priceCurrency,
+            interval: plan.interval,
+            trialPeriodDays: plan.trialPeriodDays,
+            badge: plan.badge,
+            ctaText: plan.ctaText,
+            sortOrder: plan.sortOrder,
+            isActive: plan.isActive,
+          }
+        : null,
+    } as SubscriptionWithPlan;
+  });
+
+  return { subscriptions, total };
+}
+
+export async function pauseSubscription(
+  engine: SemaphorePayEngine<any>,
+  input: { subscriptionId: string; collectionId: string }
+): Promise<SubscriptionWithPlan | null> {
+  const schema = engine.schema;
+
+  const sub = await engine.db.query.subscription.findFirst({
+    where: and(
+      eq(schema.subscription.id, input.subscriptionId),
+      eq(schema.subscription.collectionId, input.collectionId),
+    ),
+  });
+
+  if (!sub) {
+    throw new Error("Subscription not found.");
+  }
+
+  if (sub.status !== "active" && sub.status !== "trialing") {
+    throw new Error("Only active or trialing subscriptions can be paused.");
+  }
+
+  const now = new Date();
+
+  await engine.db
+    .update(schema.subscription)
+    .set({
+      status: "paused",
+      updatedAt: now,
+    })
+    .where(eq(schema.subscription.id, input.subscriptionId));
+
+  return getSubscription(engine, input);
+}
+
+export async function resumeSubscription(
+  engine: SemaphorePayEngine<any>,
+  input: { subscriptionId: string; collectionId: string }
+): Promise<SubscriptionWithPlan | null> {
+  const schema = engine.schema;
+
+  const sub = await engine.db.query.subscription.findFirst({
+    where: and(
+      eq(schema.subscription.id, input.subscriptionId),
+      eq(schema.subscription.collectionId, input.collectionId),
+    ),
+  });
+
+  if (!sub) {
+    throw new Error("Subscription not found.");
+  }
+
+  if (sub.status !== "paused") {
+    throw new Error("Only paused subscriptions can be resumed.");
+  }
+
+  const now = new Date();
+
+  await engine.db
+    .update(schema.subscription)
+    .set({
+      status: "active",
+      updatedAt: now,
+    })
+    .where(eq(schema.subscription.id, input.subscriptionId));
+
+  return getSubscription(engine, input);
+}
+
+export async function reactivateSubscription(
+  engine: SemaphorePayEngine<any>,
+  input: { subscriptionId: string; collectionId: string }
+): Promise<SubscriptionWithPlan | null> {
+  const schema = engine.schema;
+
+  const sub = await engine.db.query.subscription.findFirst({
+    where: and(
+      eq(schema.subscription.id, input.subscriptionId),
+      eq(schema.subscription.collectionId, input.collectionId),
+    ),
+  });
+
+  if (!sub) {
+    throw new Error("Subscription not found.");
+  }
+
+  if (sub.status !== "canceled") {
+    throw new Error("Only canceled subscriptions can be reactivated.");
+  }
+
+  if (!sub.cancelAtPeriodEnd) {
+    throw new Error("Subscription is already reactivated (cancelAtPeriodEnd is false).");
+  }
+
+  const now = new Date();
+
+  await engine.db
+    .update(schema.subscription)
+    .set({
+      status: "active",
+      cancelAtPeriodEnd: false,
+      canceledAt: null,
+      endedAt: null,
+      updatedAt: now,
+    })
+    .where(eq(schema.subscription.id, input.subscriptionId));
+
+  return getSubscription(engine, input);
 }
 
 export async function createProductPurchase(

@@ -18,6 +18,10 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
+    "./subscription": {
+      "import": "./dist/subscription/subscription.api.js",
+      "types": "./dist/subscription/subscription.api.d.ts"
+    },
     "./schema/sqlite": {
       "import": "./dist/database/schema/sqlite.js",
       "types": "./dist/database/schema/sqlite.d.ts"
