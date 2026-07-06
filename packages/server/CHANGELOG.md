@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.9
+
+- `deactivatePlan` now accepts `cancelRenewals` option — sets `cancelAtPeriodEnd` on all active subscriptions for the plan
+
 ## 0.1.8
 
 - `list` now returns all plans (active and inactive) instead of filtering to active only

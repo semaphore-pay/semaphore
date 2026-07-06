@@ -185,7 +185,7 @@ export async function getPlan(
 
 export async function deactivatePlan(
   engine: SemaphorePayEngine<any>,
-  input: { planId: string; collectionId: string; environment: "development" | "production" }
+  input: { planId: string; collectionId: string; environment: "development" | "production"; cancelRenewals?: boolean }
 ): Promise<Plan> {
   const schema = engine.schema;
   const existing = await getPlan(engine, input);
@@ -201,6 +201,19 @@ export async function deactivatePlan(
         eq(schema.plan.environment, input.environment),
       )
     );
+
+  if (input.cancelRenewals) {
+    await engine.db
+      .update(schema.subscription)
+      .set({ cancelAtPeriodEnd: true, updatedAt: new Date() })
+      .where(
+        and(
+          eq(schema.subscription.planId, input.planId),
+          eq(schema.subscription.collectionId, input.collectionId),
+          inArray(schema.subscription.status, ["active", "trialing"]),
+        )
+      );
+  }
 
   return { ...existing, isActive: false };
 }

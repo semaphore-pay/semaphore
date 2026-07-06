@@ -101,13 +101,14 @@ export async function get(
 
 export async function deactivate(
   engine: SemaphorePayEngine<any>,
-  input: { planId: string },
+  input: { planId: string; cancelRenewals?: boolean },
   context: { collectionId: string; environment: "development" | "production" }
 ) {
   return await deactivatePlan(engine, {
     planId: input.planId,
     collectionId: context.collectionId,
     environment: context.environment,
+    cancelRenewals: input.cancelRenewals,
   });
 }
 
