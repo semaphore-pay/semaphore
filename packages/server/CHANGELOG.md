@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.7
+
+- Added `deactivatePlan` — soft-disable a plan (stops recurring payments for new subscribers)
+- Added `deletePlan` — permanently remove a plan (only if no subscriptions exist)
+- Added `deactivate` and `remove` API functions in plan.api
+
 ## 0.1.6
 
 - Added `"default"` condition to package.json exports map for Bun/drizzle-kit compatibility

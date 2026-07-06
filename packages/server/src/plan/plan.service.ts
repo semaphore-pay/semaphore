@@ -182,3 +182,59 @@ export async function getPlan(
     })),
   } as Plan;
 }
+
+export async function deactivatePlan(
+  engine: SemaphorePayEngine<any>,
+  input: { planId: string; collectionId: string; environment: "development" | "production" }
+): Promise<Plan> {
+  const schema = engine.schema;
+  const existing = await getPlan(engine, input);
+  if (!existing) throw new Error("Plan not found");
+
+  await engine.db
+    .update(schema.plan)
+    .set({ isActive: false, updatedAt: new Date() })
+    .where(
+      and(
+        eq(schema.plan.id, input.planId),
+        eq(schema.plan.collectionId, input.collectionId),
+        eq(schema.plan.environment, input.environment),
+      )
+    );
+
+  return { ...existing, isActive: false };
+}
+
+export async function deletePlan(
+  engine: SemaphorePayEngine<any>,
+  input: { planId: string; collectionId: string; environment: "development" | "production" }
+): Promise<void> {
+  const schema = engine.schema;
+
+  const hasSubscriptions = await engine.db.query.subscription.findFirst({
+    where: and(
+      eq(schema.subscription.planId, input.planId),
+      eq(schema.subscription.collectionId, input.collectionId),
+    ),
+  });
+
+  if (hasSubscriptions) {
+    throw new Error("Cannot delete plan with active subscriptions. Deactivate it instead.");
+  }
+
+  await engine.transaction(async (tx: any) => {
+    await tx
+      .delete(schema.planFeature)
+      .where(eq(schema.planFeature.planId, input.planId));
+
+    await tx
+      .delete(schema.plan)
+      .where(
+        and(
+          eq(schema.plan.id, input.planId),
+          eq(schema.plan.collectionId, input.collectionId),
+          eq(schema.plan.environment, input.environment),
+        )
+      );
+  });
+}

@@ -1,6 +1,6 @@
 import * as z from "zod";
 import type { SemaphorePayEngine } from "../database/index";
-import { createPlan, listPlans, getPlan } from "./plan.service";
+import { createPlan, listPlans, getPlan, deactivatePlan, deletePlan } from "./plan.service";
 import type { CreatePlanInput } from "./plan.types";
 import { and, eq } from "drizzle-orm";
 
@@ -93,6 +93,30 @@ export async function get(
   context: { collectionId: string; environment: "development" | "production" }
 ) {
   return await getPlan(engine, {
+    planId: input.planId,
+    collectionId: context.collectionId,
+    environment: context.environment,
+  });
+}
+
+export async function deactivate(
+  engine: SemaphorePayEngine<any>,
+  input: { planId: string },
+  context: { collectionId: string; environment: "development" | "production" }
+) {
+  return await deactivatePlan(engine, {
+    planId: input.planId,
+    collectionId: context.collectionId,
+    environment: context.environment,
+  });
+}
+
+export async function remove(
+  engine: SemaphorePayEngine<any>,
+  input: { planId: string },
+  context: { collectionId: string; environment: "development" | "production" }
+) {
+  return await deletePlan(engine, {
     planId: input.planId,
     collectionId: context.collectionId,
     environment: context.environment,
