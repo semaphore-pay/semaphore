@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.6
+
+- Added `"default"` condition to package.json exports map for Bun/drizzle-kit compatibility
+
 ## 0.1.5
 
 - Exported `sqliteSchema` and `pgSchema` from `index.ts` for drizzle-kit migrations

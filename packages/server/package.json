@@ -1,6 +1,6 @@
 {
   "name": "@semaphore-pay/server",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "license": "MIT",
   "module": "index.ts",
   "type": "module",
@@ -16,7 +16,8 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./subscription": {
       "import": "./dist/subscription/subscription.api.js",
