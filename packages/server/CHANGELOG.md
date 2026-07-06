@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.14
+
+- Added `createFeature`, `deleteFeature`, `listFeatures` — feature CRUD
+- Added `attachFeatureToPlan`, `detachFeatureFromPlan`, `updatePlanFeature` — plan feature management
+- Added `attachFeatureToProduct`, `detachFeatureFromProduct` — product feature management
+- Added `getPlanFeatures`, `getProductFeatures` — list attached features
+- Feature API wrappers with Zod validation
+
+## 0.1.13
+
+- Added `getProduct`, `updateProduct`, `deleteProduct` to product service
+- Added `get`, `update`, `remove` API wrappers for product CRUD
+- `updateProduct` replaces feature rows in transaction, validates version uniqueness
+- `deleteProduct` blocks if product has existing purchases
+
 ## 0.1.12
 
 - Fixed `reactivatePlan` name collision between plan.api and plan.service exports
