@@ -218,6 +218,28 @@ export async function deactivatePlan(
   return { ...existing, isActive: false };
 }
 
+export async function reactivatePlan(
+  engine: SemaphorePayEngine<any>,
+  input: { planId: string; collectionId: string; environment: "development" | "production" }
+): Promise<Plan> {
+  const schema = engine.schema;
+  const existing = await getPlan(engine, input);
+  if (!existing) throw new Error("Plan not found");
+
+  await engine.db
+    .update(schema.plan)
+    .set({ isActive: true, updatedAt: new Date() })
+    .where(
+      and(
+        eq(schema.plan.id, input.planId),
+        eq(schema.plan.collectionId, input.collectionId),
+        eq(schema.plan.environment, input.environment),
+      )
+    );
+
+  return { ...existing, isActive: true };
+}
+
 export async function deletePlan(
   engine: SemaphorePayEngine<any>,
   input: { planId: string; collectionId: string; environment: "development" | "production" }

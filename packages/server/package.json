@@ -1,6 +1,6 @@
 {
   "name": "@semaphore-pay/server",
-  "version": "0.1.9",
+  "version": "0.1.12",
   "license": "MIT",
   "module": "index.ts",
   "type": "module",

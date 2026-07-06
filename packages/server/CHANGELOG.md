@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.12
+
+- Fixed `reactivatePlan` name collision between plan.api and plan.service exports
+
+## 0.1.11
+
+- Renamed plan API `reactivate` → `reactivatePlan` to avoid name collision with subscription API `reactivate`
+
+## 0.1.10
+
+- Added `reactivatePlan` — re-enable a deactivated plan for new signups
+- Added `reactivate` API function in plan.api
+
 ## 0.1.9
 
 - `deactivatePlan` now accepts `cancelRenewals` option — sets `cancelAtPeriodEnd` on all active subscriptions for the plan

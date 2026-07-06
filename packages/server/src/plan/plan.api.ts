@@ -1,6 +1,6 @@
 import * as z from "zod";
 import type { SemaphorePayEngine } from "../database/index";
-import { createPlan, listPlans, getPlan, deactivatePlan, deletePlan } from "./plan.service";
+import { createPlan, listPlans, getPlan, deactivatePlan, reactivatePlan as reactivatePlanService, deletePlan } from "./plan.service";
 import type { CreatePlanInput } from "./plan.types";
 import { and, eq } from "drizzle-orm";
 
@@ -109,6 +109,18 @@ export async function deactivate(
     collectionId: context.collectionId,
     environment: context.environment,
     cancelRenewals: input.cancelRenewals,
+  });
+}
+
+export async function reactivatePlanApi(
+  engine: SemaphorePayEngine<any>,
+  input: { planId: string },
+  context: { collectionId: string; environment: "development" | "production" }
+) {
+  return await reactivatePlanService(engine, {
+    planId: input.planId,
+    collectionId: context.collectionId,
+    environment: context.environment,
   });
 }
 
