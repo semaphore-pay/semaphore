@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+- Re-exported `subscribe`, `cancel`, `pause`, `resume`, `reactivate` from main entry point
+
 ## 0.1.2
 
 - Added `getSubscription` — fetch single subscription with plan details

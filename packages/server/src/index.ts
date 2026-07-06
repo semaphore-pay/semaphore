@@ -40,6 +40,7 @@ export * from "./plan/plan.api";
 export * from "./plan/plan.service";
 export * from "./plan/plan.types";
 export * from "./subscription/subscription.service";
+export { subscribe, cancel, pause, resume, reactivate } from "./subscription/subscription.api";
 export { type SubscribeToPlanInput, type SubscribeToPlanResult, type ListSubscriptionsInput, type ListSubscriptionsResult, type SubscriptionWithPlan } from "./subscription/subscription.types";
 export * from "./entitlement/entitlement.api";
 export * from "./entitlement/entitlement.service";
