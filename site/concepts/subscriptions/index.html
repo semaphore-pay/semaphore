@@ -105,10 +105,10 @@
       Subscriptions : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Subscriptions%0A---%0A%0A%23%20Subscriptions%0A%0ASubscriptions%20represent%20a%20customer&#039;s%20access%20to%20a%20product.%20They%20track%20billing%20status%2C%20renewal%20dates%2C%20and%20cancellation%20state.%0A%0A%23%23%20Subscription%20Lifecycle%0A%0A%60%60%60%0Acreated%20%E2%86%92%20active%20%E2%86%92%20past_due%20%E2%86%92%20canceled%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%86%98%20trialed%20%E2%86%97%0A%60%60%60%0A%0A%7C%20Status%20%7C%20Description%20%7C%0A%7C---%7C---%7C%0A%7C%20%60active%60%20%7C%20Subscription%20is%20current%20and%20billing%20%7C%0A%7C%20%60trialing%60%20%7C%20In%20free%20trial%20period%20%7C%0A%7C%20%60past_due%60%20%7C%20Payment%20failed%2C%20in%20dunning%20period%20%7C%0A%7C%20%60canceled%60%20%7C%20Subscription%20ended%20(either%20immediately%20or%20at%20period%20end)%20%7C%0A%0A%23%23%20Creating%20a%20Subscription%0A%0A%60%60%60typescript%0Aconst%20subscription%20%3D%20await%20engine.subscribe(collectionId%2C%20%7B%0A%20%20customerId%3A%20&#039;cust_abc123&#039;%2C%0A%20%20productId%3A%20&#039;prod_xyz789&#039;%2C%0A%20%20paymentMethod%3A%20%7B%0A%20%20%20%20type%3A%20&#039;card&#039;%2C%0A%20%20%20%20token%3A%20&#039;tok_...&#039;%2C%0A%20%20%7D%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Canceling%20a%20Subscription%0A%0AEnd%20users%20can%20cancel%20their%20own%20subscriptions%3A%0A%0A%60%60%60typescript%0A%2F%2F%20Client%20SDK%0Aconst%20result%20%3D%20await%20client.cancelSubscription(%7B%0A%20%20subscriptionId%3A%20&#039;sub_abc123&#039;%2C%0A%7D)%3B%0A%0Aconsole.log(result.cancelAtPeriodEnd)%3B%20%2F%2F%20true%0Aconsole.log(result.currentPeriodEnd)%3B%20%2F%2F%20When%20access%20ends%0A%60%60%60%0A%0A%3A%3A%3A%20info%0ACanceling%20sets%20%60cancelAtPeriodEnd%3A%20true%60.%20The%20subscription%20remains%20active%20until%20the%20current%20period%20ends.%0A%3A%3A%3A%0A%0A%23%23%20Renewals%0A%0ARenewals%20are%20handled%20automatically%20via%20cron%20job.%20When%20a%20subscription&#039;s%20%60currentPeriodEnd%60%20passes%3A%0A%0A1.%20Backend%20charges%20the%20tokenized%20card%20via%20Nomba%0A2.%20On%20success%2C%20updates%20%60currentPeriodEnd%60%20to%20next%20period%0A3.%20On%20failure%2C%20enters%20dunning%20with%20retry%20schedule%0A%0A%23%23%20Checking%20Entitlements%0A%0A%60%60%60typescript%0Aconst%20check%20%3D%20await%20engine.checkEntitlement(collectionId%2C%20%7B%0A%20%20customerId%3A%20&#039;cust_abc123&#039;%2C%0A%20%20feature%3A%20&#039;api_access&#039;%2C%0A%7D)%3B%0A%0Aif%20(check.entitled)%20%7B%0A%20%20%2F%2F%20Grant%20access%0A%7D%0A%60%60%60%0A%0A%23%23%20Reporting%20Usage%0A%0AFor%20metered%20billing%3A%0A%0A%60%60%60typescript%0Aawait%20engine.reportUsage(collectionId%2C%20%7B%0A%20%20customerId%3A%20&#039;cust_abc123&#039;%2C%0A%20%20feature%3A%20&#039;api_calls&#039;%2C%0A%20%20quantity%3A%20150%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Fetching%20Subscriptions%0A%0A%60%60%60typescript%0A%2F%2F%20Get%20customer&#039;s%20subscriptions%0Aconst%20subscriptions%20%3D%20await%20engine.getCustomer(collectionId%2C%20&#039;cust_abc123&#039;)%3B%0A%2F%2F%20Returns%20active%2C%20trialing%2C%20and%20past_due%20subscriptions%0A%60%60%60%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Subscriptions%0A---%0A%0A%23%20Subscriptions%0A%0ASubscriptions%20represent%20a%20customer&#039;s%20access%20to%20a%20plan.%20They%20track%20billing%20status%2C%20renewal%20dates%2C%20and%20cancellation%20state.%0A%0A%23%23%20Subscription%20Lifecycle%0A%0A%60%60%60%0Acreated%20%E2%86%92%20active%20%E2%86%92%20past_due%20%E2%86%92%20canceled%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%86%98%20trialed%20%E2%86%97%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%86%93%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20paused%20%E2%86%92%20active%20(resumed)%0A%60%60%60%0A%0A%7C%20Status%20%7C%20Description%20%7C%0A%7C---%7C---%7C%0A%7C%20%60active%60%20%7C%20Subscription%20is%20current%20and%20billing%20%7C%0A%7C%20%60trialing%60%20%7C%20In%20free%20trial%20period%20%7C%0A%7C%20%60past_due%60%20%7C%20Payment%20failed%2C%20in%20dunning%20period%20%7C%0A%7C%20%60canceled%60%20%7C%20Subscription%20ended%20(either%20immediately%20or%20at%20period%20end)%20%7C%0A%7C%20%60paused%60%20%7C%20Subscription%20temporarily%20paused%20%7C%0A%7C%20%60pending_payment%60%20%7C%20Awaiting%20initial%20payment%20(checkout%20in%20progress)%20%7C%0A%0A%23%23%20Creating%20a%20Subscription%0A%0A%60%60%60typescript%0Aimport%20%7B%20subscribe%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20result%20%3D%20await%20subscribe(engine%2C%20%7B%0A%20%20customerId%3A%20&#039;cust_abc123&#039;%2C%0A%20%20planId%3A%20&#039;plan_pro_monthly&#039;%2C%0A%7D%2C%20%7B%0A%20%20collectionId%3A%20&#039;col_abc123&#039;%2C%0A%20%20environment%3A%20&#039;development&#039;%2C%0A%7D)%3B%0A%0Aconsole.log(result.status)%3B%20%2F%2F%20&#039;active&#039;%20for%20free%2C%20&#039;pending_payment&#039;%20for%20paid%0Aconsole.log(result.checkout%3F.checkoutLink)%3B%20%2F%2F%20Nomba%20checkout%20URL%0A%60%60%60%0A%0A%23%23%20Canceling%20a%20Subscription%0A%0AEnd%20users%20can%20cancel%20their%20own%20subscriptions%3A%0A%0A%60%60%60typescript%0A%2F%2F%20Client%20SDK%0Aconst%20result%20%3D%20await%20client.cancelSubscription(&#039;sub_abc123&#039;)%3B%0A%60%60%60%0A%0A%3A%3A%3A%20info%0ACanceling%20sets%20%60cancelAtPeriodEnd%3A%20true%60.%20The%20subscription%20remains%20active%20until%20the%20current%20period%20ends.%0A%3A%3A%3A%0A%0A%23%23%20Pausing%20a%20Subscription%0A%0A%60%60%60typescript%0Aimport%20%7B%20pause%20%7D%20from%20&#039;%40semaphore-pay%2Fserver%2Fsubscription&#039;%3B%0A%0Aawait%20pause(engine%2C%20&#039;sub_abc123&#039;%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%60%60%60%0A%0A%23%23%20Resuming%20a%20Subscription%0A%0A%60%60%60typescript%0Aimport%20%7B%20resume%20%7D%20from%20&#039;%40semaphore-pay%2Fserver%2Fsubscription&#039;%3B%0A%0Aawait%20resume(engine%2C%20&#039;sub_abc123&#039;%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%60%60%60%0A%0A%23%23%20Renewals%0A%0ARenewals%20are%20handled%20automatically%20via%20cron%20job.%20When%20a%20subscription&#039;s%20%60currentPeriodEnd%60%20passes%3A%0A%0A1.%20Backend%20charges%20the%20tokenized%20card%20via%20Nomba%0A2.%20On%20success%2C%20updates%20%60currentPeriodEnd%60%20to%20next%20period%0A3.%20On%20failure%2C%20enters%20dunning%20with%20retry%20schedule%0A%0A%23%23%20Checking%20Entitlements%0A%0A%60%60%60typescript%0Aimport%20%7B%20check%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20entitlement%20%3D%20await%20check(engine%2C%20%7B%0A%20%20customerId%3A%20&#039;cust_abc123&#039;%2C%0A%20%20featureId%3A%20&#039;api_access&#039;%2C%0A%7D%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%0Aif%20(entitlement.allowed)%20%7B%0A%20%20%2F%2F%20Grant%20access%0A%7D%0A%60%60%60%0A%0A%23%23%20Reporting%20Usage%0A%0AFor%20metered%20billing%3A%0A%0A%60%60%60typescript%0Aimport%20%7B%20report%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aawait%20report(engine%2C%20%7B%0A%20%20customerId%3A%20&#039;cust_abc123&#039;%2C%0A%20%20featureId%3A%20&#039;api_calls&#039;%2C%0A%20%20amount%3A%20150%2C%0A%7D%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%60%60%60%0A%0A%23%23%20Fetching%20Subscriptions%0A%0A%60%60%60typescript%0Aimport%20%7B%20list%20as%20listSubscriptions%20%7D%20from%20&#039;%40semaphore-pay%2Fserver%2Fsubscription&#039;%3B%0A%0Aconst%20subscriptions%20%3D%20await%20listSubscriptions(engine%2C%20%7B%0A%20%20status%3A%20&#039;active&#039;%2C%0A%20%20limit%3A%2020%2C%0A%7D%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%60%60%60%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1089,10 +1089,12 @@
                 </div>
                 
                 <h1 id="subscriptions" class="docmd-heading"><a href="#subscriptions" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Subscriptions</h1>
-<p>Subscriptions represent a customer’s access to a product. They track billing status, renewal dates, and cancellation state.</p>
+<p>Subscriptions represent a customer’s access to a plan. They track billing status, renewal dates, and cancellation state.</p>
 <h2 id="subscriptions-subscription-lifecycle" class="docmd-heading"><a href="#subscriptions-subscription-lifecycle" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Subscription Lifecycle</h2>
 <pre class="hljs"><code>created → active → past_due → canceled
                  ↘ trialed ↗
+                      ↓
+                   paused → <span class="hljs-title function_">active</span> (resumed)
 </code></pre>
 <div class="table-wrapper"><table>
 <thead>
@@ -1118,31 +1120,48 @@
 <td><code>canceled</code></td>
 <td>Subscription ended (either immediately or at period end)</td>
 </tr>
+<tr>
+<td><code>paused</code></td>
+<td>Subscription temporarily paused</td>
+</tr>
+<tr>
+<td><code>pending_payment</code></td>
+<td>Awaiting initial payment (checkout in progress)</td>
+</tr>
 </tbody>
 </table>
 </div><h2 id="subscriptions-creating-a-subscription" class="docmd-heading"><a href="#subscriptions-creating-a-subscription" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Creating a Subscription</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> subscription <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">subscribe</span>(collectionId, {
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { subscribe } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">const</span> result <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">subscribe</span>(engine, {
   customerId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;cust_abc123&#039;</span>,
-  productId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;prod_xyz789&#039;</span>,
-  paymentMethod<span class="hljs-punctuation">:</span> {
-    <span class="hljs-keyword">type</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;card&#039;</span>,
-    token<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;tok_...&#039;</span>,
-  },
+  planId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;plan_pro_monthly&#039;</span>,
+}, {
+  collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span>,
+  environment<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;development&#039;</span>,
 });
+
+console.<span class="hljs-title function_">log</span>(result.<span class="hljs-attr">status</span>); <span class="hljs-comment">// &#039;active&#039; for free, &#039;pending_payment&#039; for paid</span>
+console.<span class="hljs-title function_">log</span>(result.<span class="hljs-attr">checkout</span><span class="hljs-punctuation">?</span>.<span class="hljs-attr">checkoutLink</span>); <span class="hljs-comment">// Nomba checkout URL</span>
 </code></pre>
 <h2 id="subscriptions-canceling-a-subscription" class="docmd-heading"><a href="#subscriptions-canceling-a-subscription" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Canceling a Subscription</h2>
 <p>End users can cancel their own subscriptions:</p>
 <pre class="hljs"><code class="language-typescript"><span class="hljs-comment">// Client SDK</span>
-<span class="hljs-keyword">const</span> result <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">cancelSubscription</span>({
-  subscriptionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;sub_abc123&#039;</span>,
-});
-
-console.<span class="hljs-title function_">log</span>(result.<span class="hljs-attr">cancelAtPeriodEnd</span>); <span class="hljs-comment">// true</span>
-console.<span class="hljs-title function_">log</span>(result.<span class="hljs-attr">currentPeriodEnd</span>); <span class="hljs-comment">// When access ends</span>
+<span class="hljs-keyword">const</span> result <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">cancelSubscription</span>(<span class="hljs-string">&#039;sub_abc123&#039;</span>);
 </code></pre>
 <div class="docmd-container callout callout-info"><div class="callout-content">
 <p>Canceling sets <code>cancelAtPeriodEnd: true</code>. The subscription remains active until the current period ends.</p>
 </div></div>
+<h2 id="subscriptions-pausing-a-subscription" class="docmd-heading"><a href="#subscriptions-pausing-a-subscription" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Pausing a Subscription</h2>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { pause } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server/subscription&#039;</span>;
+
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">pause</span>(engine, <span class="hljs-string">&#039;sub_abc123&#039;</span>, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
+</code></pre>
+<h2 id="subscriptions-resuming-a-subscription" class="docmd-heading"><a href="#subscriptions-resuming-a-subscription" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Resuming a Subscription</h2>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { resume } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server/subscription&#039;</span>;
+
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">resume</span>(engine, <span class="hljs-string">&#039;sub_abc123&#039;</span>, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
+</code></pre>
 <h2 id="subscriptions-renewals" class="docmd-heading"><a href="#subscriptions-renewals" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Renewals</h2>
 <p>Renewals are handled automatically via cron job. When a subscription’s <code>currentPeriodEnd</code> passes:</p>
 <ol>
@@ -1151,27 +1170,34 @@ console.<span class="hljs-title function_">log</span>(result.<span class="hljs-a
 <li>On failure, enters dunning with retry schedule</li>
 </ol>
 <h2 id="subscriptions-checking-entitlements" class="docmd-heading"><a href="#subscriptions-checking-entitlements" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Checking Entitlements</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> check <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">checkEntitlement</span>(collectionId, {
-  customerId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;cust_abc123&#039;</span>,
-  feature<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_access&#039;</span>,
-});
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { check } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
 
-<span class="hljs-keyword">if</span> (check.<span class="hljs-attr">entitled</span>) {
+<span class="hljs-keyword">const</span> entitlement <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">check</span>(engine, {
+  customerId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;cust_abc123&#039;</span>,
+  featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_access&#039;</span>,
+}, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
+
+<span class="hljs-keyword">if</span> (entitlement.<span class="hljs-attr">allowed</span>) {
   <span class="hljs-comment">// Grant access</span>
 }
 </code></pre>
 <h2 id="subscriptions-reporting-usage" class="docmd-heading"><a href="#subscriptions-reporting-usage" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Reporting Usage</h2>
 <p>For metered billing:</p>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">reportUsage</span>(collectionId, {
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { report } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">report</span>(engine, {
   customerId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;cust_abc123&#039;</span>,
-  feature<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_calls&#039;</span>,
-  quantity<span class="hljs-punctuation">:</span> <span class="hljs-number">150</span>,
-});
+  featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_calls&#039;</span>,
+  amount<span class="hljs-punctuation">:</span> <span class="hljs-number">150</span>,
+}, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
 </code></pre>
 <h2 id="subscriptions-fetching-subscriptions" class="docmd-heading"><a href="#subscriptions-fetching-subscriptions" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Fetching Subscriptions</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-comment">// Get customer&#039;s subscriptions</span>
-<span class="hljs-keyword">const</span> subscriptions <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">getCustomer</span>(collectionId, <span class="hljs-string">&#039;cust_abc123&#039;</span>);
-<span class="hljs-comment">// Returns active, trialing, and past_due subscriptions</span>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { list <span class="hljs-keyword">as</span> listSubscriptions } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server/subscription&#039;</span>;
+
+<span class="hljs-keyword">const</span> subscriptions <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">listSubscriptions</span>(engine, {
+  status<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;active&#039;</span>,
+  limit<span class="hljs-punctuation">:</span> <span class="hljs-number">20</span>,
+}, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
 </code></pre>
 
                 
@@ -1268,6 +1294,14 @@ console.<span class="hljs-title function_">log</span>(result.<span class="hljs-a
         </li>
       
         <li class="toc-item toc-level-2">
+          <a href="#subscriptions-pausing-a-subscription" class="toc-link">Pausing a Subscription</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#subscriptions-resuming-a-subscription" class="toc-link">Resuming a Subscription</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
           <a href="#subscriptions-renewals" class="toc-link">Renewals</a>
         </li>
       
@@ -1291,6 +1325,38 @@ console.<span class="hljs-title function_">log</span>(result.<span class="hljs-a
             <div class="page-footer-actions">
               
               
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
+              
               <span class="git-spacer"></span>
               
             </div>
@@ -1308,13 +1374,13 @@ console.<span class="hljs-title function_">log</span>(result.<span class="hljs-a
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

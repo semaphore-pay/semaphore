@@ -105,10 +105,10 @@
       React Native : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20React%20Native%0A---%0A%0A%23%20React%20Native%0A%0AUse%20the%20React%20Native%20hook%20for%20mobile%20apps.%0A%0A%23%23%20Installation%0A%0A%60%60%60bash%0Anpm%20install%20%40semaphore-pay%2Fclient%0A%60%60%60%0A%0A%23%23%20Setup%0A%0A%60%60%60tsx%0Aimport%20%7B%20useSemaphorePay%20%7D%20from%20&#039;%40semaphore-pay%2Fclient%2Freact-native&#039;%3B%0A%0Afunction%20App()%20%7B%0A%20%20const%20%7B%0A%20%20%20%20customer%2C%0A%20%20%20%20subscriptions%2C%0A%20%20%20%20isLoading%2C%0A%20%20%20%20error%2C%0A%20%20%20%20subscribe%2C%0A%20%20%20%20cancelSubscription%2C%0A%20%20%20%20checkEntitlement%2C%0A%20%20%7D%20%3D%20useSemaphorePay(%7B%0A%20%20%20%20baseUrl%3A%20&#039;https%3A%2F%2Fyour-api.example.com&#039;%2C%0A%20%20%20%20apiKey%3A%20&#039;pk_your_key&#039;%2C%0A%20%20%20%20collectionId%3A%20&#039;col_abc123&#039;%2C%0A%20%20%7D)%3B%0A%0A%20%20return%20(%0A%20%20%20%20%3CView%3E%0A%20%20%20%20%20%20%7BisLoading%20%3F%20(%0A%20%20%20%20%20%20%20%20%3CActivityIndicator%20%2F%3E%0A%20%20%20%20%20%20)%20%3A%20error%20%3F%20(%0A%20%20%20%20%20%20%20%20%3CText%3EError%3A%20%7Berror.message%7D%3C%2FText%3E%0A%20%20%20%20%20%20)%20%3A%20(%0A%20%20%20%20%20%20%20%20%3C%3E%0A%20%20%20%20%20%20%20%20%20%20%3CText%3ESubscriptions%3A%20%7Bsubscriptions.length%7D%3C%2FText%3E%0A%20%20%20%20%20%20%20%20%20%20%7Bsubscriptions.map((sub)%20%3D%3E%20(%0A%20%20%20%20%20%20%20%20%20%20%20%20%3CView%20key%3D%7Bsub.productId%7D%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3CText%3E%7Bsub.status%7D%3C%2FText%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C%2FView%3E%0A%20%20%20%20%20%20%20%20%20%20))%7D%0A%20%20%20%20%20%20%20%20%3C%2F%3E%0A%20%20%20%20%20%20)%7D%0A%20%20%20%20%3C%2FView%3E%0A%20%20)%3B%0A%7D%0A%60%60%60%0A%0A%23%23%20Deep%20Links%0A%0AThe%20client%20SDK%20supports%20Expo%20deep%20links.%20If%20a%20token%20appears%20in%20the%20URL%2C%20it&#039;s%20used%20for%20authentication%20(tokens%20expire%20but%20are%20safe%20for%20short-lived%20sessions).%0A%0A%23%23%20Configuration%0A%0A%7C%20Option%20%7C%20Type%20%7C%20Required%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C---%7C%0A%7C%20%60baseUrl%60%20%7C%20string%20%7C%20yes%20%7C%20API%20base%20URL%20%7C%0A%7C%20%60apiKey%60%20%7C%20string%20%7C%20yes%20%7C%20Public%20API%20key%20%7C%0A%7C%20%60collectionId%60%20%7C%20string%20%7C%20yes%20%7C%20Collection%20ID%20%7C%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20React%20Native%0A---%0A%0A%23%20React%20Native%0A%0AUse%20the%20React%20Native%20hook%20and%20components%20for%20mobile%20apps.%0A%0A%23%23%20Installation%0A%0A%60%60%60bash%0Anpm%20install%20%40semaphore-pay%2Fclient%0A%60%60%60%0A%0A%23%23%20Setup%0A%0A%60%60%60tsx%0Aimport%20%7B%20useSemaphorePay%20%7D%20from%20&#039;%40semaphore-pay%2Fclient%2Freact-native&#039;%3B%0A%0Afunction%20App()%20%7B%0A%20%20const%20%7B%0A%20%20%20%20ready%2C%0A%20%20%20%20customerId%2C%0A%20%20%20%20subscribed%2C%0A%20%20%20%20subscriptionStatus%2C%0A%20%20%20%20error%2C%0A%20%20%20%20subscribe%2C%0A%20%20%20%20check%2C%0A%20%20%20%20report%2C%0A%20%20%20%20client%2C%0A%20%20%7D%20%3D%20useSemaphorePay(%7B%0A%20%20%20%20baseUrl%3A%20&#039;https%3A%2F%2Fyour-api.example.com&#039;%2C%0A%20%20%20%20apiKey%3A%20&#039;pk_your_key&#039;%2C%0A%20%20%20%20collectionId%3A%20&#039;col_abc123&#039;%2C%0A%20%20%20%20planId%3A%20&#039;plan_pro_monthly&#039;%2C%0A%20%20%20%20userId%3A%20&#039;user_123&#039;%2C%0A%20%20%20%20userEmail%3A%20&#039;user%40example.com&#039;%2C%0A%20%20%20%20userName%3A%20&#039;John%20Doe&#039;%2C%0A%20%20%20%20autoSubscribe%3A%20true%2C%0A%20%20%7D)%3B%0A%0A%20%20if%20(error)%20return%20%3CText%3EError%3A%20%7Berror%7D%3C%2FText%3E%3B%0A%20%20if%20(!ready)%20return%20%3CActivityIndicator%20%2F%3E%3B%0A%0A%20%20if%20(subscribed)%20return%20%3CDashboard%20%2F%3E%3B%0A%0A%20%20return%20(%0A%20%20%20%20%3CView%3E%0A%20%20%20%20%20%20%3CText%3ESetting%20up%20subscription...%3C%2FText%3E%0A%20%20%20%20%3C%2FView%3E%0A%20%20)%3B%0A%7D%0A%60%60%60%0A%0A%23%23%20Hook%20Options%0A%0A%7C%20Option%20%7C%20Type%20%7C%20Required%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C---%7C%0A%7C%20%60baseUrl%60%20%7C%20string%20%7C%20yes%20%7C%20API%20base%20URL%20%7C%0A%7C%20%60apiKey%60%20%7C%20string%20%7C%20yes%20%7C%20Public%20API%20key%20%7C%0A%7C%20%60collectionId%60%20%7C%20string%20%7C%20yes%20%7C%20Collection%20ID%20%7C%0A%7C%20%60planId%60%20%7C%20string%20%7C%20no%20%7C%20Plan%20ID%20to%20subscribe%20to%20%7C%0A%7C%20%60userId%60%20%7C%20string%20%7C%20no%20%7C%20User%20identifier%20(auto-generated%20if%20not%20provided)%20%7C%0A%7C%20%60userEmail%60%20%7C%20string%20%7C%20no%20%7C%20Customer%20email%20%7C%0A%7C%20%60userName%60%20%7C%20string%20%7C%20no%20%7C%20Customer%20name%20%7C%0A%7C%20%60autoSubscribe%60%20%7C%20boolean%20%7C%20no%20%7C%20Auto-subscribe%20on%20mount%20(default%3A%20true)%20%7C%0A%0A%23%23%20Hook%20Return%20Values%0A%0A%7C%20Property%20%7C%20Type%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60client%60%20%7C%20%60SemaphorePayClient%60%20%7C%20The%20API%20client%20instance%20%7C%0A%7C%20%60ready%60%20%7C%20%60boolean%60%20%7C%20Whether%20setup%20is%20complete%20%7C%0A%7C%20%60customerId%60%20%7C%20%60string%20%5C%7C%20null%60%20%7C%20Current%20customer%20ID%20%7C%0A%7C%20%60subscribed%60%20%7C%20%60boolean%60%20%7C%20Whether%20subscription%20is%20active%20%7C%0A%7C%20%60subscriptionStatus%60%20%7C%20%60string%20%5C%7C%20null%60%20%7C%20Current%20subscription%20status%20%7C%0A%7C%20%60error%60%20%7C%20%60string%20%5C%7C%20null%60%20%7C%20Error%20message%20%7C%0A%7C%20%60subscribe%60%20%7C%20%60()%20%3D%3E%20Promise%3Cany%3E%60%20%7C%20Subscribe%20to%20plan%20%7C%0A%7C%20%60check%60%20%7C%20%60(featureId%2C%20required%3F)%20%3D%3E%20Promise%3Cany%3E%60%20%7C%20Check%20entitlement%20%7C%0A%7C%20%60report%60%20%7C%20%60(featureId%2C%20amount%3F)%20%3D%3E%20Promise%3Cany%3E%60%20%7C%20Report%20usage%20%7C%0A%0A%23%23%20Paywall%20Component%0A%0AThe%20%60SemaphorePayPaywall%60%20component%20hosts%20a%20WebView%20for%20Nomba%20checkout%3A%0A%0A%60%60%60tsx%0Aimport%20%7B%20SemaphorePayPaywall%20%7D%20from%20&#039;%40semaphore-pay%2Fclient%2Freact-native&#039;%3B%0A%0Afunction%20BuyButton()%20%7B%0A%20%20const%20%5Blink%2C%20setLink%5D%20%3D%20useState%3Cstring%20%7C%20null%3E(null)%3B%0A%0A%20%20const%20handleBuy%20%3D%20async%20()%20%3D%3E%20%7B%0A%20%20%20%20const%20result%20%3D%20await%20client.subscribeToPlan(%7B%20customerId%2C%20planId%20%7D)%3B%0A%20%20%20%20if%20(result.checkout%3F.checkoutLink)%20%7B%0A%20%20%20%20%20%20setLink(result.checkout.checkoutLink)%3B%0A%20%20%20%20%7D%0A%20%20%7D%3B%0A%0A%20%20return%20(%0A%20%20%20%20%3C%3E%0A%20%20%20%20%20%20%3CButton%20title%3D%22Buy%20Premium%22%20onPress%3D%7BhandleBuy%7D%20%2F%3E%0A%20%20%20%20%20%20%7Blink%20%26%26%20(%0A%20%20%20%20%20%20%20%20%3CSemaphorePayPaywall%0A%20%20%20%20%20%20%20%20%20%20visible%3D%7Btrue%7D%0A%20%20%20%20%20%20%20%20%20%20checkoutLink%3D%7Blink%7D%0A%20%20%20%20%20%20%20%20%20%20callbackUrl%3D%22https%3A%2F%2Fyour-api.example.com%2Fwebhook%22%0A%20%20%20%20%20%20%20%20%20%20callbacks%3D%7B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20onSuccess%3A%20()%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20setLink(null)%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20console.log(&#039;Payment%20successful!&#039;)%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20onCancel%3A%20()%20%3D%3E%20setLink(null)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20onError%3A%20(err)%20%3D%3E%20console.error(err)%2C%0A%20%20%20%20%20%20%20%20%20%20%7D%7D%0A%20%20%20%20%20%20%20%20%2F%3E%0A%20%20%20%20%20%20)%7D%0A%20%20%20%20%3C%2F%3E%0A%20%20)%3B%0A%7D%0A%60%60%60%0A%0A%23%23%23%20Paywall%20Props%0A%0A%7C%20Prop%20%7C%20Type%20%7C%20Required%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C---%7C%0A%7C%20%60checkoutLink%60%20%7C%20string%20%7C%20yes%20%7C%20Nomba%20checkout%20URL%20%7C%0A%7C%20%60visible%60%20%7C%20boolean%20%7C%20yes%20%7C%20Whether%20modal%20is%20visible%20%7C%0A%7C%20%60callbacks%60%20%7C%20object%20%7C%20yes%20%7C%20%60%7B%20onSuccess%2C%20onCancel%3F%2C%20onError%3F%20%7D%60%20%7C%0A%7C%20%60callbackUrl%60%20%7C%20string%20%7C%20no%20%7C%20Success%20detection%20URL%20%7C%0A%7C%20%60successUrlPrefix%60%20%7C%20string%20%7C%20no%20%7C%20Override%20success%20detection%20%7C%0A%0A%23%23%20Entitlement%20Guard%0A%0AThe%20%60SemaphorePayEntitlementGuard%60%20component%20gates%20content%20behind%20an%20entitlement%3A%0A%0A%60%60%60tsx%0Aimport%20%7B%20SemaphorePayEntitlementGuard%20%7D%20from%20&#039;%40semaphore-pay%2Fclient%2Freact-native&#039;%3B%0A%0Afunction%20ProDashboard()%20%7B%0A%20%20return%20(%0A%20%20%20%20%3CSemaphorePayEntitlementGuard%0A%20%20%20%20%20%20client%3D%7Bclient%7D%0A%20%20%20%20%20%20featureId%3D%22pro_mode%22%0A%20%20%20%20%20%20customerId%3D%7BcustomerId%7D%0A%20%20%20%20%20%20denied%3D%7B%0A%20%20%20%20%20%20%20%20%3CView%3E%0A%20%20%20%20%20%20%20%20%20%20%3CText%3EUpgrade%20to%20Pro%20to%20access%20this%20dashboard.%3C%2FText%3E%0A%20%20%20%20%20%20%20%20%20%20%3CButton%20title%3D%22Upgrade%22%20onPress%3D%7BopenPaywall%7D%20%2F%3E%0A%20%20%20%20%20%20%20%20%3C%2FView%3E%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%3E%0A%20%20%20%20%20%20%3CProFeaturesScreen%20%2F%3E%0A%20%20%20%20%3C%2FSemaphorePayEntitlementGuard%3E%0A%20%20)%3B%0A%7D%0A%60%60%60%0A%0A%23%23%23%20Guard%20Props%0A%0A%7C%20Prop%20%7C%20Type%20%7C%20Required%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C---%7C%0A%7C%20%60client%60%20%7C%20SemaphorePayClient%20%7C%20yes%20%7C%20API%20client%20instance%20%7C%0A%7C%20%60featureId%60%20%7C%20string%20%7C%20yes%20%7C%20Feature%20to%20check%20%7C%0A%7C%20%60customerId%60%20%7C%20string%20%7C%20no%20%7C%20Customer%20ID%20(falls%20back%20to%20client)%20%7C%0A%7C%20%60required%60%20%7C%20number%20%7C%20no%20%7C%20Units%20required%20(default%3A%201)%20%7C%0A%7C%20%60fallback%60%20%7C%20ReactNode%20%7C%20no%20%7C%20Loading%20state%20content%20%7C%0A%7C%20%60denied%60%20%7C%20ReactNode%20%7C%20no%20%7C%20Denied%20state%20content%20%7C%0A%7C%20%60children%60%20%7C%20ReactNode%20%7C%20yes%20%7C%20Content%20to%20render%20when%20allowed%20%7C%0A%7C%20%60onChecked%60%20%7C%20%60(allowed%3A%20boolean)%20%3D%3E%20void%60%20%7C%20no%20%7C%20Callback%20after%20check%20%7C%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1089,7 +1089,7 @@
                 </div>
                 
                 <h1 id="react-native" class="docmd-heading"><a href="#react-native" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>React Native</h1>
-<p>Use the React Native hook for mobile apps.</p>
+<p>Use the React Native hook and components for mobile apps.</p>
 <h2 id="react-native-installation" class="docmd-heading"><a href="#react-native-installation" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Installation</h2>
 <pre class="hljs"><code class="language-bash"><span class="hljs-keyword">npm</span> install @semaphore<span class="hljs-punctuation">-</span>pay<span class="hljs-punctuation">/</span>client
 </code></pre>
@@ -1098,42 +1098,39 @@
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>() {
   <span class="hljs-keyword">const</span> {
-    customer,
-    subscriptions,
-    isLoading,
+    ready,
+    customerId,
+    subscribed,
+    subscriptionStatus,
     error,
     subscribe,
-    cancelSubscription,
-    checkEntitlement,
+    check,
+    report,
+    client,
   } <span class="hljs-punctuation">=</span> <span class="hljs-title function_">useSemaphorePay</span>({
     baseUrl<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;https://your-api.example.com&#039;</span>,
     apiKey<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;pk_your_key&#039;</span>,
     collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span>,
+    planId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;plan_pro_monthly&#039;</span>,
+    userId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;user_123&#039;</span>,
+    userEmail<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;user@example.com&#039;</span>,
+    userName<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;John Doe&#039;</span>,
+    autoSubscribe<span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span>,
   });
+
+  <span class="hljs-keyword">if</span> (error) <span class="hljs-keyword">return</span> <span class="hljs-punctuation">&lt;</span>Text<span class="hljs-punctuation">&gt;</span>Error<span class="hljs-punctuation">:</span> {error}<span class="hljs-punctuation">&lt;/</span>Text<span class="hljs-punctuation">&gt;</span>;
+  <span class="hljs-keyword">if</span> (<span class="hljs-punctuation">!</span>ready) <span class="hljs-keyword">return</span> <span class="hljs-punctuation">&lt;</span>ActivityIndicator <span class="hljs-punctuation">/&gt;</span>;
+
+  <span class="hljs-keyword">if</span> (subscribed) <span class="hljs-keyword">return</span> <span class="hljs-punctuation">&lt;</span>Dashboard <span class="hljs-punctuation">/&gt;</span>;
 
   <span class="hljs-keyword">return</span> (
     <span class="hljs-punctuation">&lt;</span>View<span class="hljs-punctuation">&gt;</span>
-      {isLoading <span class="hljs-punctuation">?</span> (
-        <span class="hljs-punctuation">&lt;</span>ActivityIndicator <span class="hljs-punctuation">/&gt;</span>
-      ) <span class="hljs-punctuation">:</span> error <span class="hljs-punctuation">?</span> (
-        <span class="hljs-punctuation">&lt;</span>Text<span class="hljs-punctuation">&gt;</span>Error<span class="hljs-punctuation">:</span> {error.<span class="hljs-attr">message</span>}<span class="hljs-punctuation">&lt;/</span>Text<span class="hljs-punctuation">&gt;</span>
-      ) <span class="hljs-punctuation">:</span> (
-        <span class="hljs-punctuation">&lt;&gt;</span>
-          <span class="hljs-punctuation">&lt;</span>Text<span class="hljs-punctuation">&gt;</span>Subscriptions<span class="hljs-punctuation">:</span> {subscriptions.<span class="hljs-attr">length</span>}<span class="hljs-punctuation">&lt;/</span>Text<span class="hljs-punctuation">&gt;</span>
-          {subscriptions.<span class="hljs-title function_">map</span>((sub) <span class="hljs-punctuation">=&gt;</span> (
-            <span class="hljs-punctuation">&lt;</span>View key<span class="hljs-punctuation">=</span>{sub.<span class="hljs-attr">productId</span>}<span class="hljs-punctuation">&gt;</span>
-              <span class="hljs-punctuation">&lt;</span>Text<span class="hljs-punctuation">&gt;</span>{sub.<span class="hljs-attr">status</span>}<span class="hljs-punctuation">&lt;/</span>Text<span class="hljs-punctuation">&gt;</span>
-            <span class="hljs-punctuation">&lt;/</span>View<span class="hljs-punctuation">&gt;</span>
-          ))}
-        <span class="hljs-punctuation">&lt;/&gt;</span>
-      )}
+      <span class="hljs-punctuation">&lt;</span>Text<span class="hljs-punctuation">&gt;</span>Setting up subscription...<span class="hljs-punctuation">&lt;/</span>Text<span class="hljs-punctuation">&gt;</span>
     <span class="hljs-punctuation">&lt;/</span>View<span class="hljs-punctuation">&gt;</span>
   );
 }
 </code></pre>
-<h2 id="react-native-deep-links" class="docmd-heading"><a href="#react-native-deep-links" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Deep Links</h2>
-<p>The client SDK supports Expo deep links. If a token appears in the URL, it’s used for authentication (tokens expire but are safe for short-lived sessions).</p>
-<h2 id="react-native-configuration" class="docmd-heading"><a href="#react-native-configuration" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Configuration</h2>
+<h2 id="react-native-hook-options" class="docmd-heading"><a href="#react-native-hook-options" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Hook Options</h2>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
@@ -1161,6 +1158,255 @@
 <td>string</td>
 <td>yes</td>
 <td>Collection ID</td>
+</tr>
+<tr>
+<td><code>planId</code></td>
+<td>string</td>
+<td>no</td>
+<td>Plan ID to subscribe to</td>
+</tr>
+<tr>
+<td><code>userId</code></td>
+<td>string</td>
+<td>no</td>
+<td>User identifier (auto-generated if not provided)</td>
+</tr>
+<tr>
+<td><code>userEmail</code></td>
+<td>string</td>
+<td>no</td>
+<td>Customer email</td>
+</tr>
+<tr>
+<td><code>userName</code></td>
+<td>string</td>
+<td>no</td>
+<td>Customer name</td>
+</tr>
+<tr>
+<td><code>autoSubscribe</code></td>
+<td>boolean</td>
+<td>no</td>
+<td>Auto-subscribe on mount (default: true)</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="react-native-hook-return-values" class="docmd-heading"><a href="#react-native-hook-return-values" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Hook Return Values</h2>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>client</code></td>
+<td><code>SemaphorePayClient</code></td>
+<td>The API client instance</td>
+</tr>
+<tr>
+<td><code>ready</code></td>
+<td><code>boolean</code></td>
+<td>Whether setup is complete</td>
+</tr>
+<tr>
+<td><code>customerId</code></td>
+<td><code>string | null</code></td>
+<td>Current customer ID</td>
+</tr>
+<tr>
+<td><code>subscribed</code></td>
+<td><code>boolean</code></td>
+<td>Whether subscription is active</td>
+</tr>
+<tr>
+<td><code>subscriptionStatus</code></td>
+<td><code>string | null</code></td>
+<td>Current subscription status</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td><code>string | null</code></td>
+<td>Error message</td>
+</tr>
+<tr>
+<td><code>subscribe</code></td>
+<td><code>() =&gt; Promise&lt;any&gt;</code></td>
+<td>Subscribe to plan</td>
+</tr>
+<tr>
+<td><code>check</code></td>
+<td><code>(featureId, required?) =&gt; Promise&lt;any&gt;</code></td>
+<td>Check entitlement</td>
+</tr>
+<tr>
+<td><code>report</code></td>
+<td><code>(featureId, amount?) =&gt; Promise&lt;any&gt;</code></td>
+<td>Report usage</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="react-native-paywall-component" class="docmd-heading"><a href="#react-native-paywall-component" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Paywall Component</h2>
+<p>The <code>SemaphorePayPaywall</code> component hosts a WebView for Nomba checkout:</p>
+<pre class="hljs"><code class="language-tsx"><span class="hljs-keyword">import</span> { SemaphorePayPaywall } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/client/react-native&#039;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">BuyButton</span>() {
+  <span class="hljs-keyword">const</span> [link, setLink] <span class="hljs-punctuation">=</span> useState<span class="hljs-punctuation">&lt;</span>string <span class="hljs-punctuation">|</span> <span class="hljs-keyword">null</span><span class="hljs-punctuation">&gt;</span>(<span class="hljs-keyword">null</span>);
+
+  <span class="hljs-keyword">const</span> handleBuy <span class="hljs-punctuation">=</span> <span class="hljs-keyword">async</span> () <span class="hljs-punctuation">=&gt;</span> {
+    <span class="hljs-keyword">const</span> result <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">subscribeToPlan</span>({ customerId, planId });
+    <span class="hljs-keyword">if</span> (result.<span class="hljs-attr">checkout</span><span class="hljs-punctuation">?</span>.<span class="hljs-attr">checkoutLink</span>) {
+      <span class="hljs-title function_">setLink</span>(result.<span class="hljs-attr">checkout</span>.<span class="hljs-attr">checkoutLink</span>);
+    }
+  };
+
+  <span class="hljs-keyword">return</span> (
+    <span class="hljs-punctuation">&lt;&gt;</span>
+      <span class="hljs-punctuation">&lt;</span>Button title<span class="hljs-punctuation">=</span><span class="hljs-string">&quot;Buy Premium&quot;</span> onPress<span class="hljs-punctuation">=</span>{handleBuy} <span class="hljs-punctuation">/&gt;</span>
+      {link <span class="hljs-punctuation">&amp;&amp;</span> (
+        <span class="hljs-punctuation">&lt;</span>SemaphorePayPaywall
+          visible<span class="hljs-punctuation">=</span>{<span class="hljs-keyword">true</span>}
+          checkoutLink<span class="hljs-punctuation">=</span>{link}
+          callbackUrl<span class="hljs-punctuation">=</span><span class="hljs-string">&quot;https://your-api.example.com/webhook&quot;</span>
+          callbacks<span class="hljs-punctuation">=</span>{{
+            onSuccess<span class="hljs-punctuation">:</span> () <span class="hljs-punctuation">=&gt;</span> {
+              <span class="hljs-title function_">setLink</span>(<span class="hljs-keyword">null</span>);
+              console.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#039;Payment successful!&#039;</span>);
+            },
+            onCancel<span class="hljs-punctuation">:</span> () <span class="hljs-punctuation">=&gt;</span> <span class="hljs-title function_">setLink</span>(<span class="hljs-keyword">null</span>),
+            onError<span class="hljs-punctuation">:</span> (err) <span class="hljs-punctuation">=&gt;</span> console.<span class="hljs-title function_">error</span>(err),
+          }}
+        <span class="hljs-punctuation">/&gt;</span>
+      )}
+    <span class="hljs-punctuation">&lt;/&gt;</span>
+  );
+}
+</code></pre>
+<h3 id="react-native-paywall-component-paywall-props" class="docmd-heading"><a href="#react-native-paywall-component-paywall-props" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Paywall Props</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Prop</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>checkoutLink</code></td>
+<td>string</td>
+<td>yes</td>
+<td>Nomba checkout URL</td>
+</tr>
+<tr>
+<td><code>visible</code></td>
+<td>boolean</td>
+<td>yes</td>
+<td>Whether modal is visible</td>
+</tr>
+<tr>
+<td><code>callbacks</code></td>
+<td>object</td>
+<td>yes</td>
+<td><code>{ onSuccess, onCancel?, onError? }</code></td>
+</tr>
+<tr>
+<td><code>callbackUrl</code></td>
+<td>string</td>
+<td>no</td>
+<td>Success detection URL</td>
+</tr>
+<tr>
+<td><code>successUrlPrefix</code></td>
+<td>string</td>
+<td>no</td>
+<td>Override success detection</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="react-native-entitlement-guard" class="docmd-heading"><a href="#react-native-entitlement-guard" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Entitlement Guard</h2>
+<p>The <code>SemaphorePayEntitlementGuard</code> component gates content behind an entitlement:</p>
+<pre class="hljs"><code class="language-tsx"><span class="hljs-keyword">import</span> { SemaphorePayEntitlementGuard } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/client/react-native&#039;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ProDashboard</span>() {
+  <span class="hljs-keyword">return</span> (
+    <span class="hljs-punctuation">&lt;</span>SemaphorePayEntitlementGuard
+      client<span class="hljs-punctuation">=</span>{client}
+      featureId<span class="hljs-punctuation">=</span><span class="hljs-string">&quot;pro_mode&quot;</span>
+      customerId<span class="hljs-punctuation">=</span>{customerId}
+      denied<span class="hljs-punctuation">=</span>{
+        <span class="hljs-punctuation">&lt;</span>View<span class="hljs-punctuation">&gt;</span>
+          <span class="hljs-punctuation">&lt;</span>Text<span class="hljs-punctuation">&gt;</span>Upgrade to Pro to access <span class="hljs-keyword">this</span> dashboard.<span class="hljs-punctuation">&lt;/</span>Text<span class="hljs-punctuation">&gt;</span>
+          <span class="hljs-punctuation">&lt;</span>Button title<span class="hljs-punctuation">=</span><span class="hljs-string">&quot;Upgrade&quot;</span> onPress<span class="hljs-punctuation">=</span>{openPaywall} <span class="hljs-punctuation">/&gt;</span>
+        <span class="hljs-punctuation">&lt;/</span>View<span class="hljs-punctuation">&gt;</span>
+      }
+    <span class="hljs-punctuation">&gt;</span>
+      <span class="hljs-punctuation">&lt;</span>ProFeaturesScreen <span class="hljs-punctuation">/&gt;</span>
+    <span class="hljs-punctuation">&lt;/</span>SemaphorePayEntitlementGuard<span class="hljs-punctuation">&gt;</span>
+  );
+}
+</code></pre>
+<h3 id="react-native-entitlement-guard-guard-props" class="docmd-heading"><a href="#react-native-entitlement-guard-guard-props" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Guard Props</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Prop</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>client</code></td>
+<td>SemaphorePayClient</td>
+<td>yes</td>
+<td>API client instance</td>
+</tr>
+<tr>
+<td><code>featureId</code></td>
+<td>string</td>
+<td>yes</td>
+<td>Feature to check</td>
+</tr>
+<tr>
+<td><code>customerId</code></td>
+<td>string</td>
+<td>no</td>
+<td>Customer ID (falls back to client)</td>
+</tr>
+<tr>
+<td><code>required</code></td>
+<td>number</td>
+<td>no</td>
+<td>Units required (default: 1)</td>
+</tr>
+<tr>
+<td><code>fallback</code></td>
+<td>ReactNode</td>
+<td>no</td>
+<td>Loading state content</td>
+</tr>
+<tr>
+<td><code>denied</code></td>
+<td>ReactNode</td>
+<td>no</td>
+<td>Denied state content</td>
+</tr>
+<tr>
+<td><code>children</code></td>
+<td>ReactNode</td>
+<td>yes</td>
+<td>Content to render when allowed</td>
+</tr>
+<tr>
+<td><code>onChecked</code></td>
+<td><code>(allowed: boolean) =&gt; void</code></td>
+<td>no</td>
+<td>Callback after check</td>
 </tr>
 </tbody>
 </table>
@@ -1255,11 +1501,27 @@
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#react-native-deep-links" class="toc-link">Deep Links</a>
+          <a href="#react-native-hook-options" class="toc-link">Hook Options</a>
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#react-native-configuration" class="toc-link">Configuration</a>
+          <a href="#react-native-hook-return-values" class="toc-link">Hook Return Values</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#react-native-paywall-component" class="toc-link">Paywall Component</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#react-native-paywall-component-paywall-props" class="toc-link">Paywall Props</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#react-native-entitlement-guard" class="toc-link">Entitlement Guard</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#react-native-entitlement-guard-guard-props" class="toc-link">Guard Props</a>
         </li>
       
     </ul>
@@ -1269,6 +1531,38 @@
             </div>
             <div class="page-footer-actions">
               
+              
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
               
               <span class="git-spacer"></span>
               
@@ -1287,13 +1581,13 @@
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

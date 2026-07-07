@@ -3,10 +3,10 @@ type: concept
 title: "First API Call"
 source: "https://docs.semaphorepay.tech/quickstart/first-call/"
 path: /quickstart/first-call/
-updated: 2026-07-05
+updated: 2026-07-07
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-05T13:54:02.046Z"
+  generated_at: "2026-07-07T20:01:08.648Z"
 ---
 ---
 title: First API Call
@@ -16,101 +16,123 @@ title: First API Call
 
 Walk through creating a subscription from scratch.
 
-## Step 1: Create a Collection
+## Step 1: Initialize the Engine
 
 ```typescript
-import { createSemaphoreEngine } from '@semaphore-pay/server';
+import { initSemaphorePay } from '@semaphore-pay/server';
+import { drizzle } from 'drizzle-orm/d1';
+import * as sqliteSchema from '@semaphore-pay/server/schema/sqlite';
 
-const engine = createSemaphoreEngine({
-  db: env.SEMAPHORE_DB,
-  nomba: {
-    clientId: env.NOMBA_CLIENT_ID,
-    clientSecret: env.NOMBA_CLIENT_SECRET,
-    accountId: env.NOMBA_ACCOUNT_ID,
-  },
-  webhookSecret: env.NOMBA_WEBHOOK_SECRET,
-  callbackUrl: env.NOMBA_CHECKOUT_CALLBACK_URL,
+const db = drizzle(env.SEMAPHORE_DB, { schema: sqliteSchema });
+
+const engine = initSemaphorePay({
+  dialect: 'sqlite',
+  db,
+  supportsTransactions: false,
 });
-
-const collection = await engine.createCollection({
-  name: 'My SaaS App',
-  description: 'Production',
-});
-
-console.log(collection.id); // Use this for all subsequent calls
-console.log(collection.publicKey); // pk_... for client SDK
-console.log(collection.secretKey); // sk_... for server-side admin
 ```
 
-## Step 2: Create a Plan
+## Step 2: Create a Collection
+
+```typescript
+import { createCollection, createApiKey } from '@semaphore-pay/server';
+
+const collection = await createCollection(engine, 'My SaaS App', 'sandbox');
+
+console.log(collection.id); // Use this for all subsequent calls
+
+// Generate API keys
+const publicKey = await createApiKey(engine, {
+  collectionId: collection.id,
+  type: 'public',
+  environment: 'development',
+  userId: user.id,
+});
+
+console.log(publicKey.key); // pk_... for client SDK
+```
+
+## Step 3: Create a Plan
 
 Plans define pricing and billing intervals.
 
 ```typescript
-const plan = await engine.createPlan(collection.id, {
+import { create } from '@semaphore-pay/server';
+
+const plan = await create(engine, {
   name: 'Pro',
   description: 'Full access',
-  amount: 5000, // ₦50.00 in kobo
-  currency: 'NGN',
-  interval: 'month',
-  intervalCount: 1,
+  priceAmount: 5000, // ₦50.00 in kobo
+  priceCurrency: 'NGN',
+  interval: 'monthly',
   trialPeriodDays: 14,
+}, {
+  collectionId: collection.id,
+  environment: 'development',
 });
 ```
 
-## Step 3: Create a Product
+## Step 4: Create a Product
 
-Products are what customers subscribe to. Each product links to a plan.
+Products are what customers subscribe to. Each product has its own features.
 
 ```typescript
-const product = await engine.createProduct(collection.id, {
+import { createProduct } from '@semaphore-pay/server';
+
+const product = await createProduct(engine, {
   name: 'Pro Access',
   description: 'Unlimited access to all features',
-  planId: plan.id,
-  metadata: {
-    features: 'unlimited,api,export',
-  },
+  features: [
+    { featureId: 'api_calls', type: 'limit', limit: 10000 },
+    { featureId: 'export', type: 'boolean' },
+  ],
+}, {
+  collectionId: collection.id,
+  environment: 'development',
 });
 ```
 
-## Step 4: Create a Customer
+## Step 5: Create a Customer
 
 ```typescript
-const customer = await engine.upsertCustomer(collection.id, {
+import { upsertCustomer } from '@semaphore-pay/server';
+
+const customer = await upsertCustomer(engine, {
   userId: 'user_abc123',
   email: 'user@example.com',
   name: 'John Doe',
-  metadata: {
-    company: 'Acme Inc',
-  },
-});
+}, { collectionId: collection.id });
 ```
 
-## Step 5: Subscribe
+## Step 6: Subscribe
 
 ```typescript
-const subscription = await engine.subscribe(collection.id, {
+import { subscribe } from '@semaphore-pay/server';
+
+const subscription = await subscribe(engine, {
   customerId: customer.id,
-  productId: product.id,
-  paymentMethod: {
-    type: 'card',
-    token: 'tok_card_...', // From Nomba checkout
-  },
+  planId: plan.id,
+}, {
+  collectionId: collection.id,
+  environment: 'development',
 });
 
-console.log(subscription.status); // 'active'
-console.log(subscription.currentPeriodEnd); // Next billing date
+console.log(subscription.status); // 'active' or 'pending_payment'
+console.log(subscription.checkout?.checkoutLink); // Nomba checkout URL for paid plans
 ```
 
-## Step 6: Check Entitlement
+## Step 7: Check Entitlement
 
 ```typescript
-const entitlement = await engine.checkEntitlement(collection.id, {
-  customerId: customer.id,
-  feature: 'api_access',
-});
+import { check } from '@semaphore-pay/server';
 
-console.log(entitlement.entitled); // true/false
+const entitlement = await check(engine, {
+  customerId: customer.id,
+  featureId: 'api_calls',
+}, { collectionId: collection.id });
+
+console.log(entitlement.allowed); // true/false
+console.log(entitlement.balance); // { limit, remaining, resetAt, unlimited }
 ```
 
 ## Next Steps

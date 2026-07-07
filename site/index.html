@@ -105,10 +105,10 @@
       Semaphore — Subscription Billing for Nomba : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="./assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="./assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="./assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="./assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="./assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="./assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="./assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="./assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="./assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="./assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="./assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="./assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Semaphore%20%E2%80%94%20Subscription%20Billing%20for%20Nomba%0A---%0A%0A%23%20Semaphore%0A%0AA%20subscription%20billing%20engine%20built%20on%20top%20of%20Nomba.%20Multiple%20developers%20sign%20up%2C%20share%20one%20Nomba%20account%2C%20and%20manage%20their%20own%20subscription%20products%20with%20full%20lifecycle%20support.%0A%0A%23%23%20What%20Semaphore%20Provides%0A%0A-%20**Multi-tenant%20collections**%20%E2%80%94%20each%20developer%20gets%20their%20own%20isolated%20collection%20with%20API%20keys%0A-%20**Subscription%20management**%20%E2%80%94%20create%20plans%2C%20products%2C%20and%20manage%20recurring%20billing%0A-%20**Tokenized%20card%20billing**%20%E2%80%94%20charge%20saved%20cards%20on%20renewals%20automatically%0A-%20**Entitlements**%20%E2%80%94%20check%20and%20report%20usage-based%20access%0A-%20**Webhook%20events**%20%E2%80%94%20real-time%20notifications%20for%20subscription%20lifecycle%0A-%20**Client%20SDKs**%20%E2%80%94%20TypeScript%2FReact%20core%20%2B%20React%20Native%20support%0A%0A%23%23%20Architecture%0A%0A%60%60%60%0A%E2%94%8C%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%90%20%20%20%20%20%E2%94%8C%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%90%20%20%20%20%20%E2%94%8C%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%90%0A%E2%94%82%20%20Developer%20%20%20%E2%94%82%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%96%B6%E2%94%82%20%20%20Semaphore%20%20%E2%94%82%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%96%B6%E2%94%82%20%20%20%20Nomba%20%20%20%20%20%E2%94%82%0A%E2%94%82%20%20%20Dashboard%20%20%E2%94%82%20%20%20%20%20%E2%94%82%20%20%20Backend%20%20%20%20%E2%94%82%20%20%20%20%20%E2%94%82%20%20%20Payments%20%20%20%E2%94%82%0A%E2%94%94%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%98%20%20%20%20%20%E2%94%94%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%98%20%20%20%20%20%E2%94%94%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%98%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%82%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%8C%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%B4%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%90%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%82%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%82%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%8C%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%96%BC%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%90%20%E2%94%8C%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%96%BC%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%90%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%82%20%20End-User%20%20%E2%94%82%20%E2%94%82%20Webhook%20%E2%94%82%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%82%20%20%20Client%20%20%20%E2%94%82%20%E2%94%82%20Handler%20%E2%94%82%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%94%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%98%20%E2%94%94%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%98%0A%60%60%60%0A%0A%23%23%20Quick%20Links%0A%0A-%20%5BQuick%20Start%5D(%2Fquickstart)%20%E2%80%94%20get%20up%20and%20running%20in%205%20minutes%0A-%20%5BAPI%20Reference%5D(%2Fapi-reference)%20%E2%80%94%20explore%20all%20endpoints%0A-%20%5BGuides%5D(%2Fguides%2Fwebhooks)%20%E2%80%94%20implementation%20walkthroughs%0A-%20%5BDeploy%5D(%2Fdeploy%2Fcloudflare)%20%E2%80%94%20deploy%20to%20Cloudflare%0A%0A%23%23%20Two%20SDK%20Layers%0A%0A%7C%20Package%20%7C%20Layer%20%7C%20Purpose%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60%40semaphore-pay%2Fserver%60%20%7C%20Backend%20%7C%20Admin%20operations%2C%20collections%2C%20plans%2C%20products%20%7C%0A%7C%20%60%40semaphore-pay%2Fclient%60%20%7C%20Frontend%20%7C%20End-user%20operations%2C%20subscriptions%2C%20entitlements%20%7C%0A%0AThe%20server%20SDK%20is%20for%20your%20backend.%20The%20client%20SDK%20is%20for%20your%20users&#039;%20apps.%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Semaphore%20%E2%80%94%20Subscription%20Billing%20for%20Nomba%0A---%0A%0A%23%20Semaphore%0A%0AA%20subscription%20billing%20engine%20built%20on%20top%20of%20Nomba.%20Multiple%20developers%20sign%20up%2C%20share%20one%20Nomba%20account%2C%20and%20manage%20their%20own%20subscription%20products%20with%20full%20lifecycle%20support.%0A%0A%23%23%20What%20Semaphore%20Provides%0A%0A-%20**Multi-tenant%20collections**%20%E2%80%94%20each%20developer%20gets%20their%20own%20isolated%20collection%20with%20API%20keys%0A-%20**Subscription%20management**%20%E2%80%94%20create%20plans%2C%20products%2C%20and%20manage%20recurring%20billing%0A-%20**Tokenized%20card%20billing**%20%E2%80%94%20charge%20saved%20cards%20on%20renewals%20automatically%0A-%20**Bank%20transfer%20support**%20%E2%80%94%20accept%20bank%20transfers%20via%20Nomba%0A-%20**Entitlements**%20%E2%80%94%20check%20and%20report%20usage-based%20access%20with%20boolean%20and%20metered%20features%0A-%20**Webhook%20events**%20%E2%80%94%20real-time%20notifications%20for%20payment%20lifecycle%0A-%20**Payment%20verification**%20%E2%80%94%20fallback%20verification%20when%20webhooks%20aren&#039;t%20received%0A-%20**Client%20SDKs**%20%E2%80%94%20TypeScript%2FReact%20core%20%2B%20React%20Native%20support%0A%0A%23%23%20Architecture%0A%0A%60%60%60%0A%E2%94%8C%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%90%20%20%20%20%20%E2%94%8C%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%90%20%20%20%20%20%E2%94%8C%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%90%0A%E2%94%82%20%20Developer%20%20%20%E2%94%82%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%96%B6%E2%94%82%20%20%20Semaphore%20%20%E2%94%82%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%96%B6%E2%94%82%20%20%20%20Nomba%20%20%20%20%20%E2%94%82%0A%E2%94%82%20%20%20Dashboard%20%20%E2%94%82%20%20%20%20%20%E2%94%82%20%20%20Backend%20%20%20%20%E2%94%82%20%20%20%20%20%E2%94%82%20%20%20Payments%20%20%20%E2%94%82%0A%E2%94%94%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%98%20%20%20%20%20%E2%94%94%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%98%20%20%20%20%20%E2%94%94%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%98%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%82%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%8C%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%B4%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%90%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%82%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%82%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%8C%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%96%BC%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%90%20%E2%94%8C%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%96%BC%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%90%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%82%20%20End-User%20%20%E2%94%82%20%E2%94%82%20Webhook%20%E2%94%82%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%82%20%20%20Client%20%20%20%E2%94%82%20%E2%94%82%20Handler%20%E2%94%82%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%94%94%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%98%20%E2%94%94%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%80%E2%94%98%0A%60%60%60%0A%0A%23%23%20Quick%20Links%0A%0A-%20%5BQuick%20Start%5D(%2Fquickstart)%20%E2%80%94%20get%20up%20and%20running%20in%205%20minutes%0A-%20%5BAPI%20Reference%5D(%2Fapi-reference)%20%E2%80%94%20explore%20all%20endpoints%0A-%20%5BGuides%5D(%2Fguides%2Fwebhooks)%20%E2%80%94%20implementation%20walkthroughs%0A-%20%5BDeploy%5D(%2Fdeploy%2Fcloudflare)%20%E2%80%94%20deploy%20to%20Cloudflare%0A%0A%23%23%20Two%20SDK%20Layers%0A%0A%7C%20Package%20%7C%20Layer%20%7C%20Purpose%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60%40semaphore-pay%2Fserver%60%20%7C%20Backend%20%7C%20Admin%20operations%2C%20collections%2C%20plans%2C%20products%2C%20features%20%7C%0A%7C%20%60%40semaphore-pay%2Fclient%60%20%7C%20Frontend%20%7C%20End-user%20operations%2C%20subscriptions%2C%20entitlements%2C%20payment%20verification%20%7C%0A%0AThe%20server%20SDK%20is%20for%20your%20backend.%20The%20client%20SDK%20is%20for%20your%20users&#039;%20apps.%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1071,8 +1071,10 @@
 <li><strong>Multi-tenant collections</strong> — each developer gets their own isolated collection with API keys</li>
 <li><strong>Subscription management</strong> — create plans, products, and manage recurring billing</li>
 <li><strong>Tokenized card billing</strong> — charge saved cards on renewals automatically</li>
-<li><strong>Entitlements</strong> — check and report usage-based access</li>
-<li><strong>Webhook events</strong> — real-time notifications for subscription lifecycle</li>
+<li><strong>Bank transfer support</strong> — accept bank transfers via Nomba</li>
+<li><strong>Entitlements</strong> — check and report usage-based access with boolean and metered features</li>
+<li><strong>Webhook events</strong> — real-time notifications for payment lifecycle</li>
+<li><strong>Payment verification</strong> — fallback verification when webhooks aren’t received</li>
 <li><strong>Client SDKs</strong> — TypeScript/React core + React Native support</li>
 </ul>
 <h2 id="semaphore-architecture" class="docmd-heading"><a href="#semaphore-architecture" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Architecture</h2>
@@ -1108,12 +1110,12 @@
 <tr>
 <td><code>@semaphore-pay/server</code></td>
 <td>Backend</td>
-<td>Admin operations, collections, plans, products</td>
+<td>Admin operations, collections, plans, products, features</td>
 </tr>
 <tr>
 <td><code>@semaphore-pay/client</code></td>
 <td>Frontend</td>
-<td>End-user operations, subscriptions, entitlements</td>
+<td>End-user operations, subscriptions, entitlements, payment verification</td>
 </tr>
 </tbody>
 </table>
@@ -1204,6 +1206,38 @@
             <div class="page-footer-actions">
               
               
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
+              
               <span class="git-spacer"></span>
               
             </div>
@@ -1221,13 +1255,13 @@
         </div>
       </div>
       
-      <script src="./assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="./assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="./assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="./assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="./assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="./assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="./assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="./assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="./assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="./assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

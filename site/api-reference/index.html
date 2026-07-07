@@ -105,10 +105,10 @@
       API Reference : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20API%20Reference%0A---%0A%0A%23%20API%20Reference%0A%0AAll%20endpoints%20are%20under%20%60%2Fapi%2Fv1%2Fbilling%60.%20Authentication%20is%20required%20via%20session%20cookie%20or%20API%20key.%0A%0A%23%23%20Authentication%0A%0A%7C%20Method%20%7C%20Header%20%7C%20Purpose%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20Session%20%7C%20%60Cookie%3A%20semaphore.session%3D...%60%20%7C%20Developer%20dashboard%20%7C%0A%7C%20API%20Key%20%7C%20%60x-api-key%3A%20pk_...%60%20%7C%20End-user%20client%20SDK%20%7C%0A%7C%20API%20Key%20%7C%20%60x-api-key%3A%20sk_...%60%20%7C%20Server-side%20admin%20%7C%0A%0A%23%23%20Base%20URL%0A%0A%60%60%60%0Ahttps%3A%2F%2Fyour-api.example.com%2Fapi%2Fv1%2Fbilling%0A%60%60%60%0A%0A%23%23%20Collections%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%60%20%7C%20Create%20a%20collection%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%60%20%7C%20List%20all%20collections%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%60%20%7C%20Get%20a%20collection%20%7C%0A%7C%20%60DELETE%60%20%7C%20%60%2Fcollections%2F%3Aid%60%20%7C%20Delete%20a%20collection%20%7C%0A%0A%23%23%20Plans%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fplans%60%20%7C%20Create%20a%20plan%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fplans%60%20%7C%20List%20plans%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fplans%2F%3AplanId%60%20%7C%20Get%20a%20plan%20%7C%0A%0A%23%23%20Products%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fproducts%60%20%7C%20Create%20a%20product%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fproducts%60%20%7C%20List%20products%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fproducts%2F%3AproductId%60%20%7C%20Get%20a%20product%20%7C%0A%0A%23%23%20Customers%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fcustomers%60%20%7C%20Upsert%20a%20customer%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fcustomers%2F%3AcustomerId%60%20%7C%20Get%20a%20customer%20%7C%0A%0A%23%23%20Subscriptions%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fsubscriptions%2Fsubscribe%60%20%7C%20Subscribe%20a%20customer%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fsubscriptions%2F%3AsubId%2Fcancel%60%20%7C%20Cancel%20a%20subscription%20%7C%0A%0A%23%23%20Entitlements%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fentitlements%2Fcheck%60%20%7C%20Check%20entitlement%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fentitlements%2Freport%60%20%7C%20Report%20usage%20%7C%0A%0A%23%23%20Webhooks%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fwebhook%2Fnomba%60%20%7C%20Nomba%20webhook%20receiver%20%7C%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20API%20Reference%0A---%0A%0A%23%20API%20Reference%0A%0ASemaphore%20has%20two%20API%20layers%3A%20**Dashboard%20routes**%20(%60%2Fapi%2Fv1%2Fbilling%60)%20for%20admin%20operations%20via%20session%20auth%2C%20and%20**SDK%20routes**%20(%60%2Fclient%60)%20for%20end-user%20operations%20via%20API%20key%20auth.%0A%0A%23%23%20Authentication%0A%0A%23%23%23%20Dashboard%20Routes%20(%60%2Fapi%2Fv1%2Fbilling%60)%0A%0AUsed%20by%20the%20developer%20dashboard.%20Authentication%20via%20session%20cookie.%0A%0A%7C%20Method%20%7C%20Header%20%7C%20Purpose%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20Session%20%7C%20%60Cookie%3A%20semaphore.session%3D...%60%20%7C%20Developer%20dashboard%20%7C%0A%0A%23%23%23%20SDK%20Routes%20(%60%2Fclient%60)%0A%0AUsed%20by%20the%20client%20SDK%20in%20end-user%20apps.%20Authentication%20via%20API%20key.%0A%0A%7C%20Method%20%7C%20Header%20%7C%20Purpose%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20API%20Key%20%7C%20%60x-api-key%3A%20pk_...%60%20%7C%20Public%20key%20(client-side)%20%7C%0A%7C%20API%20Key%20%7C%20%60x-api-key%3A%20sk_...%60%20%7C%20Secret%20key%20(server-side)%20%7C%0A%0A%23%23%23%20Webhook%20Route%20(%60%2Fwebhook%60)%0A%0ANo%20auth%20required%20%E2%80%94%20verified%20by%20HMAC-SHA256%20signature%20from%20Nomba.%0A%0A%23%23%20Dashboard%20API%20(%60%2Fapi%2Fv1%2Fbilling%60)%0A%0A%23%23%23%20Collections%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%60%20%7C%20Create%20a%20collection%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%60%20%7C%20List%20all%20collections%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%60%20%7C%20Get%20a%20collection%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fanalytics%60%20%7C%20Get%20collection%20analytics%20%7C%0A%7C%20%60DELETE%60%20%7C%20%60%2Fcollections%2F%3Aid%60%20%7C%20Delete%20a%20collection%20%7C%0A%0A%23%23%23%20API%20Keys%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fapi-keys%60%20%7C%20List%20API%20keys%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fapi-keys%60%20%7C%20Generate%20a%20new%20API%20key%20%7C%0A%7C%20%60DELETE%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fapi-keys%2F%3Akey%60%20%7C%20Revoke%20an%20API%20key%20%7C%0A%0A%23%23%23%20Plans%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fplans%60%20%7C%20Create%20a%20plan%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fplans%60%20%7C%20List%20plans%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fplans%2F%3AplanId%60%20%7C%20Get%20a%20plan%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fplans%2F%3AplanId%2Fdeactivate%60%20%7C%20Deactivate%20a%20plan%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fplans%2F%3AplanId%2Freactivate%60%20%7C%20Reactivate%20a%20plan%20%7C%0A%7C%20%60DELETE%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fplans%2F%3AplanId%60%20%7C%20Delete%20a%20plan%20%7C%0A%0A%23%23%23%20Products%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fproducts%60%20%7C%20Create%20a%20product%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fproducts%60%20%7C%20List%20products%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fproducts%2F%3AproductId%60%20%7C%20Get%20a%20product%20%7C%0A%7C%20%60PUT%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fproducts%2F%3AproductId%60%20%7C%20Update%20a%20product%20%7C%0A%7C%20%60DELETE%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fproducts%2F%3AproductId%60%20%7C%20Delete%20a%20product%20%7C%0A%0A%23%23%23%20Customers%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fcustomers%60%20%7C%20Upsert%20a%20customer%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fcustomers%60%20%7C%20List%20customers%20(with%20search%2Fpagination)%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fcustomers%2F%3AcustomerId%60%20%7C%20Get%20a%20customer%20%7C%0A%0A%23%23%23%20Subscriptions%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fsubscriptions%2Fsubscribe%60%20%7C%20Subscribe%20a%20customer%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fsubscriptions%60%20%7C%20List%20subscriptions%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fsubscriptions%2F%3AsubId%60%20%7C%20Get%20a%20subscription%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fsubscriptions%2F%3AsubId%2Fcancel%60%20%7C%20Cancel%20a%20subscription%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fsubscriptions%2F%3AsubId%2Fpause%60%20%7C%20Pause%20a%20subscription%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fsubscriptions%2F%3AsubId%2Fresume%60%20%7C%20Resume%20a%20subscription%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fsubscriptions%2F%3AsubId%2Freactivate%60%20%7C%20Reactivate%20a%20subscription%20%7C%0A%0A%23%23%23%20Features%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Ffeatures%60%20%7C%20Create%20a%20feature%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Ffeatures%60%20%7C%20List%20features%20%7C%0A%7C%20%60DELETE%60%20%7C%20%60%2Fcollections%2F%3Aid%2Ffeatures%2F%3AfeatureId%60%20%7C%20Delete%20a%20feature%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Ffeatures%2Fattach-plan%60%20%7C%20Attach%20feature%20to%20a%20plan%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Ffeatures%2Fdetach-plan%60%20%7C%20Detach%20feature%20from%20a%20plan%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Ffeatures%2Fattach-product%60%20%7C%20Attach%20feature%20to%20a%20product%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Ffeatures%2Fdetach-product%60%20%7C%20Detach%20feature%20from%20a%20product%20%7C%0A%0A%23%23%23%20Entitlements%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fentitlements%2Fcheck%60%20%7C%20Check%20entitlement%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fentitlements%2Freport%60%20%7C%20Report%20usage%20%7C%0A%0A%23%23%23%20Metrics%20%26%20Balance%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fmetrics%2Ftrend%60%20%7C%20Get%20metric%20trend%20(current%20vs%20previous)%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fmetrics%2Fhistory%60%20%7C%20Get%20metric%20history%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcollections%2F%3Aid%2Fbalance%60%20%7C%20Get%20collection%20balance%20%7C%0A%0A%23%23%20Client%20SDK%20API%20(%60%2Fclient%60)%0A%0AThese%20endpoints%20are%20used%20by%20%60%40semaphore-pay%2Fclient%60.%20All%20require%20%60x-api-key%60%20header.%0A%0A%23%23%23%20Customers%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fcustomers%2Fme%60%20%7C%20Get%20current%20customer%20(from%20key&#039;s%20userId)%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fcustomers%60%20%7C%20Create%2Fupdate%20a%20customer%20%7C%0A%0A%23%23%23%20Plans%20%26%20Products%20(read-only)%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fplans%60%20%7C%20List%20plans%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fplans%2F%3AplanId%60%20%7C%20Get%20a%20plan%20%7C%0A%7C%20%60GET%60%20%7C%20%60%2Fproducts%60%20%7C%20List%20products%20%7C%0A%0A%23%23%23%20Subscriptions%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fsubscriptions%2Fsubscribe%60%20%7C%20Subscribe%20to%20a%20plan%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fsubscriptions%2F%3Aid%2Fcancel%60%20%7C%20Cancel%20a%20subscription%20%7C%0A%0A%23%23%23%20Products%20(purchase)%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fproducts%2Fpurchase%60%20%7C%20Purchase%20a%20product%20(one-time)%20%7C%0A%0A%23%23%23%20Entitlements%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fentitlements%2Fcheck%60%20%7C%20Check%20entitlement%20%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fentitlements%2Freport%60%20%7C%20Report%20usage%20%7C%0A%0A%23%23%23%20Payments%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fpayments%2Fverify%60%20%7C%20Verify%20a%20payment%20by%20order%20reference%20%7C%0A%0A%23%23%20Webhook%0A%0A%7C%20Method%20%7C%20Endpoint%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60POST%60%20%7C%20%60%2Fwebhook%60%20%7C%20Nomba%20webhook%20receiver%20%7C%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1089,8 +1089,10 @@
                 </div>
                 
                 <h1 id="api-reference" class="docmd-heading"><a href="#api-reference" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>API Reference</h1>
-<p>All endpoints are under <code>/api/v1/billing</code>. Authentication is required via session cookie or API key.</p>
+<p>Semaphore has two API layers: <strong>Dashboard routes</strong> (<code>/api/v1/billing</code>) for admin operations via session auth, and <strong>SDK routes</strong> (<code>/client</code>) for end-user operations via API key auth.</p>
 <h2 id="api-reference-authentication" class="docmd-heading"><a href="#api-reference-authentication" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Authentication</h2>
+<h3 id="api-reference-authentication-dashboard-routes-apiv1billing" class="docmd-heading"><a href="#api-reference-authentication-dashboard-routes-apiv1billing" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Dashboard Routes (<code>/api/v1/billing</code>)</h3>
+<p>Used by the developer dashboard. Authentication via session cookie.</p>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
@@ -1105,22 +1107,35 @@
 <td><code>Cookie: semaphore.session=...</code></td>
 <td>Developer dashboard</td>
 </tr>
+</tbody>
+</table>
+</div><h3 id="api-reference-authentication-sdk-routes-client" class="docmd-heading"><a href="#api-reference-authentication-sdk-routes-client" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>SDK Routes (<code>/client</code>)</h3>
+<p>Used by the client SDK in end-user apps. Authentication via API key.</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Header</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td>API Key</td>
 <td><code>x-api-key: pk_...</code></td>
-<td>End-user client SDK</td>
+<td>Public key (client-side)</td>
 </tr>
 <tr>
 <td>API Key</td>
 <td><code>x-api-key: sk_...</code></td>
-<td>Server-side admin</td>
+<td>Secret key (server-side)</td>
 </tr>
 </tbody>
 </table>
-</div><h2 id="api-reference-base-url" class="docmd-heading"><a href="#api-reference-base-url" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Base URL</h2>
-<pre class="hljs"><code>https<span class="hljs-punctuation">://</span>your<span class="hljs-punctuation">-</span>api.<span class="hljs-attr">example</span>.<span class="hljs-attr">com</span><span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing
-</code></pre>
-<h2 id="api-reference-collections" class="docmd-heading"><a href="#api-reference-collections" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Collections</h2>
+</div><h3 id="api-reference-authentication-webhook-route-webhook" class="docmd-heading"><a href="#api-reference-authentication-webhook-route-webhook" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Webhook Route (<code>/webhook</code>)</h3>
+<p>No auth required — verified by HMAC-SHA256 signature from Nomba.</p>
+<h2 id="api-reference-dashboard-api-apiv1billing" class="docmd-heading"><a href="#api-reference-dashboard-api-apiv1billing" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Dashboard API (<code>/api/v1/billing</code>)</h2>
+<h3 id="api-reference-dashboard-api-apiv1billing-collections" class="docmd-heading"><a href="#api-reference-dashboard-api-apiv1billing-collections" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Collections</h3>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
@@ -1146,13 +1161,45 @@
 <td>Get a collection</td>
 </tr>
 <tr>
+<td><code>GET</code></td>
+<td><code>/collections/:id/analytics</code></td>
+<td>Get collection analytics</td>
+</tr>
+<tr>
 <td><code>DELETE</code></td>
 <td><code>/collections/:id</code></td>
 <td>Delete a collection</td>
 </tr>
 </tbody>
 </table>
-</div><h2 id="api-reference-plans" class="docmd-heading"><a href="#api-reference-plans" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Plans</h2>
+</div><h3 id="api-reference-dashboard-api-apiv1billing-api-keys" class="docmd-heading"><a href="#api-reference-dashboard-api-apiv1billing-api-keys" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>API Keys</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/collections/:id/api-keys</code></td>
+<td>List API keys</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/collections/:id/api-keys</code></td>
+<td>Generate a new API key</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/collections/:id/api-keys/:key</code></td>
+<td>Revoke an API key</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="api-reference-dashboard-api-apiv1billing-plans" class="docmd-heading"><a href="#api-reference-dashboard-api-apiv1billing-plans" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Plans</h3>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
@@ -1177,9 +1224,24 @@
 <td><code>/collections/:id/plans/:planId</code></td>
 <td>Get a plan</td>
 </tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/collections/:id/plans/:planId/deactivate</code></td>
+<td>Deactivate a plan</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/collections/:id/plans/:planId/reactivate</code></td>
+<td>Reactivate a plan</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/collections/:id/plans/:planId</code></td>
+<td>Delete a plan</td>
+</tr>
 </tbody>
 </table>
-</div><h2 id="api-reference-products" class="docmd-heading"><a href="#api-reference-products" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Products</h2>
+</div><h3 id="api-reference-dashboard-api-apiv1billing-products" class="docmd-heading"><a href="#api-reference-dashboard-api-apiv1billing-products" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Products</h3>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
@@ -1204,9 +1266,19 @@
 <td><code>/collections/:id/products/:productId</code></td>
 <td>Get a product</td>
 </tr>
+<tr>
+<td><code>PUT</code></td>
+<td><code>/collections/:id/products/:productId</code></td>
+<td>Update a product</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/collections/:id/products/:productId</code></td>
+<td>Delete a product</td>
+</tr>
 </tbody>
 </table>
-</div><h2 id="api-reference-customers" class="docmd-heading"><a href="#api-reference-customers" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Customers</h2>
+</div><h3 id="api-reference-dashboard-api-apiv1billing-customers" class="docmd-heading"><a href="#api-reference-dashboard-api-apiv1billing-customers" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Customers</h3>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
@@ -1223,12 +1295,17 @@
 </tr>
 <tr>
 <td><code>GET</code></td>
+<td><code>/collections/:id/customers</code></td>
+<td>List customers (with search/pagination)</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
 <td><code>/collections/:id/customers/:customerId</code></td>
 <td>Get a customer</td>
 </tr>
 </tbody>
 </table>
-</div><h2 id="api-reference-subscriptions" class="docmd-heading"><a href="#api-reference-subscriptions" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Subscriptions</h2>
+</div><h3 id="api-reference-dashboard-api-apiv1billing-subscriptions" class="docmd-heading"><a href="#api-reference-dashboard-api-apiv1billing-subscriptions" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Subscriptions</h3>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
@@ -1244,13 +1321,85 @@
 <td>Subscribe a customer</td>
 </tr>
 <tr>
+<td><code>GET</code></td>
+<td><code>/collections/:id/subscriptions</code></td>
+<td>List subscriptions</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/collections/:id/subscriptions/:subId</code></td>
+<td>Get a subscription</td>
+</tr>
+<tr>
 <td><code>POST</code></td>
 <td><code>/collections/:id/subscriptions/:subId/cancel</code></td>
 <td>Cancel a subscription</td>
 </tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/collections/:id/subscriptions/:subId/pause</code></td>
+<td>Pause a subscription</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/collections/:id/subscriptions/:subId/resume</code></td>
+<td>Resume a subscription</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/collections/:id/subscriptions/:subId/reactivate</code></td>
+<td>Reactivate a subscription</td>
+</tr>
 </tbody>
 </table>
-</div><h2 id="api-reference-entitlements" class="docmd-heading"><a href="#api-reference-entitlements" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Entitlements</h2>
+</div><h3 id="api-reference-dashboard-api-apiv1billing-features" class="docmd-heading"><a href="#api-reference-dashboard-api-apiv1billing-features" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Features</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><code>/collections/:id/features</code></td>
+<td>Create a feature</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/collections/:id/features</code></td>
+<td>List features</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/collections/:id/features/:featureId</code></td>
+<td>Delete a feature</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/collections/:id/features/attach-plan</code></td>
+<td>Attach feature to a plan</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/collections/:id/features/detach-plan</code></td>
+<td>Detach feature from a plan</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/collections/:id/features/attach-product</code></td>
+<td>Attach feature to a product</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/collections/:id/features/detach-product</code></td>
+<td>Detach feature from a product</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="api-reference-dashboard-api-apiv1billing-entitlements" class="docmd-heading"><a href="#api-reference-dashboard-api-apiv1billing-entitlements" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Entitlements</h3>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
@@ -1272,7 +1421,85 @@
 </tr>
 </tbody>
 </table>
-</div><h2 id="api-reference-webhooks" class="docmd-heading"><a href="#api-reference-webhooks" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Webhooks</h2>
+</div><h3 id="api-reference-dashboard-api-apiv1billing-metrics-balance" class="docmd-heading"><a href="#api-reference-dashboard-api-apiv1billing-metrics-balance" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Metrics &amp; Balance</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/collections/:id/metrics/trend</code></td>
+<td>Get metric trend (current vs previous)</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/collections/:id/metrics/history</code></td>
+<td>Get metric history</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/collections/:id/balance</code></td>
+<td>Get collection balance</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="api-reference-client-sdk-api-client" class="docmd-heading"><a href="#api-reference-client-sdk-api-client" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Client SDK API (<code>/client</code>)</h2>
+<p>These endpoints are used by <code>@semaphore-pay/client</code>. All require <code>x-api-key</code> header.</p>
+<h3 id="api-reference-client-sdk-api-client-customers" class="docmd-heading"><a href="#api-reference-client-sdk-api-client-customers" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Customers</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/customers/me</code></td>
+<td>Get current customer (from key’s userId)</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/customers</code></td>
+<td>Create/update a customer</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="api-reference-client-sdk-api-client-plans-products-read-only" class="docmd-heading"><a href="#api-reference-client-sdk-api-client-plans-products-read-only" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Plans &amp; Products (read-only)</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/plans</code></td>
+<td>List plans</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/plans/:planId</code></td>
+<td>Get a plan</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/products</code></td>
+<td>List products</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="api-reference-client-sdk-api-client-subscriptions" class="docmd-heading"><a href="#api-reference-client-sdk-api-client-subscriptions" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Subscriptions</h3>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
@@ -1284,7 +1511,85 @@
 <tbody>
 <tr>
 <td><code>POST</code></td>
-<td><code>/webhook/nomba</code></td>
+<td><code>/subscriptions/subscribe</code></td>
+<td>Subscribe to a plan</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/subscriptions/:id/cancel</code></td>
+<td>Cancel a subscription</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="api-reference-client-sdk-api-client-products-purchase" class="docmd-heading"><a href="#api-reference-client-sdk-api-client-products-purchase" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Products (purchase)</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><code>/products/purchase</code></td>
+<td>Purchase a product (one-time)</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="api-reference-client-sdk-api-client-entitlements" class="docmd-heading"><a href="#api-reference-client-sdk-api-client-entitlements" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Entitlements</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><code>/entitlements/check</code></td>
+<td>Check entitlement</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/entitlements/report</code></td>
+<td>Report usage</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="api-reference-client-sdk-api-client-payments" class="docmd-heading"><a href="#api-reference-client-sdk-api-client-payments" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Payments</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><code>/payments/verify</code></td>
+<td>Verify a payment by order reference</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="api-reference-webhook" class="docmd-heading"><a href="#api-reference-webhook" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Webhook</h2>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><code>/webhook</code></td>
 <td>Nomba webhook receiver</td>
 </tr>
 </tbody>
@@ -1375,36 +1680,88 @@
           <a href="#api-reference-authentication" class="toc-link">Authentication</a>
         </li>
       
-        <li class="toc-item toc-level-2">
-          <a href="#api-reference-base-url" class="toc-link">Base URL</a>
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-authentication-dashboard-routes-apiv1billing" class="toc-link">Dashboard Routes (/api/v1/billing)</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-authentication-sdk-routes-client" class="toc-link">SDK Routes (/client)</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-authentication-webhook-route-webhook" class="toc-link">Webhook Route (/webhook)</a>
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#api-reference-collections" class="toc-link">Collections</a>
+          <a href="#api-reference-dashboard-api-apiv1billing" class="toc-link">Dashboard API (/api/v1/billing)</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-dashboard-api-apiv1billing-collections" class="toc-link">Collections</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-dashboard-api-apiv1billing-api-keys" class="toc-link">API Keys</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-dashboard-api-apiv1billing-plans" class="toc-link">Plans</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-dashboard-api-apiv1billing-products" class="toc-link">Products</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-dashboard-api-apiv1billing-customers" class="toc-link">Customers</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-dashboard-api-apiv1billing-subscriptions" class="toc-link">Subscriptions</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-dashboard-api-apiv1billing-features" class="toc-link">Features</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-dashboard-api-apiv1billing-entitlements" class="toc-link">Entitlements</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-dashboard-api-apiv1billing-metrics-balance" class="toc-link">Metrics &amp; Balance</a>
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#api-reference-plans" class="toc-link">Plans</a>
+          <a href="#api-reference-client-sdk-api-client" class="toc-link">Client SDK API (/client)</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-client-sdk-api-client-customers" class="toc-link">Customers</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-client-sdk-api-client-plans-products-read-only" class="toc-link">Plans &amp; Products (read-only)</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-client-sdk-api-client-subscriptions" class="toc-link">Subscriptions</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-client-sdk-api-client-products-purchase" class="toc-link">Products (purchase)</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-client-sdk-api-client-entitlements" class="toc-link">Entitlements</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#api-reference-client-sdk-api-client-payments" class="toc-link">Payments</a>
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#api-reference-products" class="toc-link">Products</a>
-        </li>
-      
-        <li class="toc-item toc-level-2">
-          <a href="#api-reference-customers" class="toc-link">Customers</a>
-        </li>
-      
-        <li class="toc-item toc-level-2">
-          <a href="#api-reference-subscriptions" class="toc-link">Subscriptions</a>
-        </li>
-      
-        <li class="toc-item toc-level-2">
-          <a href="#api-reference-entitlements" class="toc-link">Entitlements</a>
-        </li>
-      
-        <li class="toc-item toc-level-2">
-          <a href="#api-reference-webhooks" class="toc-link">Webhooks</a>
+          <a href="#api-reference-webhook" class="toc-link">Webhook</a>
         </li>
       
     </ul>
@@ -1414,6 +1771,38 @@
             </div>
             <div class="page-footer-actions">
               
+              
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
               
               <span class="git-spacer"></span>
               
@@ -1432,13 +1821,13 @@
         </div>
       </div>
       
-      <script src="../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

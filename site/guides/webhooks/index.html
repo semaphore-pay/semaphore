@@ -105,10 +105,10 @@
       Webhooks : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Webhooks%0A---%0A%0A%23%20Webhooks%0A%0AWebhooks%20notify%20your%20backend%20when%20subscription%20events%20occur.%20Semaphore%20receives%20events%20from%20Nomba%20and%20forwards%20them%20to%20your%20handler.%0A%0A%23%23%20Setting%20Up%0A%0A%60%60%60bash%0A%23%20Environment%20variable%0ANOMBA_CHECKOUT_CALLBACK_URL%3Dhttps%3A%2F%2Fyour-api.example.com%2Fwebhook%2Fnomba%0A%60%60%60%0A%0A%23%23%20Webhook%20Endpoint%0A%0A%60%60%60typescript%0A%2F%2F%20In%20your%20Cloudflare%20Worker%0Aapp.post(&#039;%2Fwebhook%2Fnomba&#039;%2C%20async%20(c)%20%3D%3E%20%7B%0A%20%20const%20event%20%3D%20await%20engine.handleWebhook(c.req.raw)%3B%0A%20%20%0A%20%20switch%20(event.type)%20%7B%0A%20%20%20%20case%20&#039;checkout.completed&#039;%3A%0A%20%20%20%20%20%20%2F%2F%20Payment%20successful%2C%20subscription%20activated%0A%20%20%20%20%20%20console.log(&#039;Subscription%3A&#039;%2C%20event.data.subscriptionId)%3B%0A%20%20%20%20%20%20break%3B%0A%20%20%20%20%20%20%0A%20%20%20%20case%20&#039;subscription.renewed&#039;%3A%0A%20%20%20%20%20%20%2F%2F%20Recurring%20payment%20succeeded%0A%20%20%20%20%20%20console.log(&#039;Renewed%20until%3A&#039;%2C%20event.data.currentPeriodEnd)%3B%0A%20%20%20%20%20%20break%3B%0A%20%20%20%20%20%20%0A%20%20%20%20case%20&#039;subscription.canceled&#039;%3A%0A%20%20%20%20%20%20%2F%2F%20Subscription%20canceled%0A%20%20%20%20%20%20console.log(&#039;Cancels%20at%3A&#039;%2C%20event.data.currentPeriodEnd)%3B%0A%20%20%20%20%20%20break%3B%0A%20%20%7D%0A%20%20%0A%20%20return%20c.json(%7B%20received%3A%20true%20%7D)%3B%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Event%20Types%0A%0A%7C%20Event%20%7C%20Trigger%20%7C%0A%7C---%7C---%7C%0A%7C%20%60checkout.completed%60%20%7C%20Initial%20payment%20successful%20%7C%0A%7C%20%60subscription.renewed%60%20%7C%20Recurring%20payment%20successful%20%7C%0A%7C%20%60subscription.canceled%60%20%7C%20Subscription%20canceled%20%7C%0A%7C%20%60payment.failed%60%20%7C%20Payment%20failed%2C%20entering%20dunning%20%7C%0A%0A%23%23%20Verifying%20Webhooks%0A%0ASemaphore%20automatically%20verifies%20webhook%20signatures%20before%20processing.%20Invalid%20signatures%20are%20rejected%20with%20400.%0A%0A%23%23%20Retry%20Policy%0A%0AFailed%20webhook%20deliveries%20are%20retried%20with%20exponential%20backoff%3A%0A-%201st%20retry%3A%201%20minute%0A-%202nd%20retry%3A%205%20minutes%0A-%203rd%20retry%3A%2030%20minutes%0A-%204th%20retry%3A%202%20hours%0A-%205th%20retry%3A%2024%20hours%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Webhooks%0A---%0A%0A%23%20Webhooks%0A%0AWebhooks%20notify%20your%20backend%20when%20payment%20events%20occur.%20Semaphore%20receives%20events%20from%20Nomba%20and%20forwards%20them%20to%20your%20handler.%0A%0A%23%23%20Setting%20Up%0A%0A%60%60%60bash%0A%23%20Environment%20variable%0ANOMBA_CHECKOUT_CALLBACK_URL%3Dhttps%3A%2F%2Fyour-api.example.com%2Fwebhook%0A%60%60%60%0A%0A%23%23%20Webhook%20Endpoint%0A%0A%60%60%60typescript%0Aimport%20%7B%20Hono%20%7D%20from%20&#039;hono&#039;%3B%0Aimport%20%7B%20handleWebhook%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20app%20%3D%20new%20Hono()%3B%0A%0Aapp.post(&#039;%2Fwebhook&#039;%2C%20async%20(c)%20%3D%3E%20%7B%0A%20%20const%20rawBody%20%3D%20await%20c.req.text()%3B%0A%20%20const%20signature%20%3D%20c.req.header(&#039;nomba-signature&#039;)%20%3F%3F%20&#039;&#039;%3B%0A%20%20const%20nombaTimestamp%20%3D%20c.req.header(&#039;nomba-timestamp&#039;)%20%3F%3F%20&#039;&#039;%3B%0A%0A%20%20const%20result%20%3D%20await%20handleWebhook(engine%2C%20%7B%0A%20%20%20%20rawBody%2C%0A%20%20%20%20signature%2C%0A%20%20%20%20webhookSecret%3A%20c.env.NOMBA_WEBHOOK_SECRET%2C%0A%20%20%20%20nombaTimestamp%2C%0A%20%20%7D)%3B%0A%0A%20%20return%20c.json(result)%3B%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Event%20Types%0A%0A%7C%20Event%20%7C%20Trigger%20%7C%0A%7C---%7C---%7C%0A%7C%20%60payment_success%60%20%7C%20Payment%20successful%20(initial%20or%20renewal)%20%7C%0A%7C%20%60payment_failed%60%20%7C%20Payment%20failed%20%7C%0A%7C%20%60mandate.debit_success%60%20%7C%20Recurring%20mandate%20debit%20successful%20%7C%0A%0A%23%23%20Verifying%20Webhooks%0A%0ASemaphore%20automatically%20verifies%20webhook%20signatures%20using%20HMAC-SHA256%20before%20processing.%20Invalid%20signatures%20are%20rejected%20with%20400.%0A%0AThe%20signature%20is%20computed%20over%20colon-joined%20fields%3A%0A%0A%60%60%60%0Aevent_type%3ArequestId%3AuserId%3AwalletId%3AtransactionId%3Atype%3Atime%3AresponseCode%3Anomba-timestamp%0A%60%60%60%0A%0A%23%23%20Payment%20Verification%20Fallback%0A%0AIf%20webhooks%20aren&#039;t%20received%20(e.g.%20during%20development)%2C%20use%20the%20payment%20verification%20endpoint%3A%0A%0A%60%60%60typescript%0A%2F%2F%20Client%20SDK%0Aconst%20result%20%3D%20await%20client.verifyPayment(&#039;order_abc123&#039;)%3B%0Aconsole.log(result.status)%3B%20%2F%2F%20&#039;success&#039;%2C%20&#039;pending&#039;%2C%20&#039;failed&#039;%0Aconsole.log(result.processed)%3B%20%2F%2F%20true%20if%20just%20processed%0A%60%60%60%0A%0AOr%20poll%20with%20exponential%20backoff%3A%0A%0A%60%60%60typescript%0Aconst%20result%20%3D%20await%20client.waitForPayment(&#039;order_abc123&#039;%2C%20%7B%0A%20%20maxAttempts%3A%206%2C%0A%20%20delays%3A%20%5B0%2C%205000%2C%2020000%2C%2040000%2C%2080000%2C%20160000%5D%2C%20%2F%2F%20~5%20min%20total%0A%20%20onAttempt%3A%20(attempt%2C%20result)%20%3D%3E%20%7B%0A%20%20%20%20console.log(%60Attempt%20%24%7Battempt%7D%3A%20%24%7Bresult.status%7D%60)%3B%0A%20%20%7D%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Webhook%20Response%0A%0AAlways%20return%20%60200%60%20to%20acknowledge%20receipt.%20Semaphore%20processes%20the%20event%20asynchronously.%0A%0A%60%60%60json%0A%7B%0A%20%20%22status%22%3A%20%22processed%22%0A%7D%0A%60%60%60%0A%0A%23%23%20Testing%20Webhooks%0A%0AUse%20the%20mock%20webhook%20script%20for%20local%20development%3A%0A%0A%60%60%60bash%0Acd%20packages%2Fserver%0Anpx%20tsx%20mock-webhook.ts%0A%60%60%60%0A%0AThis%20sends%20a%20signed%20%60payment_success%60%20event%20to%20%60http%3A%2F%2Flocalhost%3A8787%2Fwebhook%60.%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1089,34 +1089,30 @@
                 </div>
                 
                 <h1 id="webhooks" class="docmd-heading"><a href="#webhooks" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Webhooks</h1>
-<p>Webhooks notify your backend when subscription events occur. Semaphore receives events from Nomba and forwards them to your handler.</p>
+<p>Webhooks notify your backend when payment events occur. Semaphore receives events from Nomba and forwards them to your handler.</p>
 <h2 id="webhooks-setting-up" class="docmd-heading"><a href="#webhooks-setting-up" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Setting Up</h2>
 <pre class="hljs"><code class="language-bash"><span class="hljs-comment"># Environment variable</span>
-NOMBA_CHECKOUT_CALLBACK_URL<span class="hljs-punctuation">=</span>https<span class="hljs-punctuation">://</span>your<span class="hljs-punctuation">-</span>api.<span class="hljs-attr">example</span>.<span class="hljs-attr">com</span><span class="hljs-punctuation">/</span>webhook<span class="hljs-punctuation">/</span>nomba
+NOMBA_CHECKOUT_CALLBACK_URL<span class="hljs-punctuation">=</span>https<span class="hljs-punctuation">://</span>your<span class="hljs-punctuation">-</span>api.<span class="hljs-attr">example</span>.<span class="hljs-attr">com</span><span class="hljs-punctuation">/</span>webhook
 </code></pre>
 <h2 id="webhooks-webhook-endpoint" class="docmd-heading"><a href="#webhooks-webhook-endpoint" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Webhook Endpoint</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-comment">// In your Cloudflare Worker</span>
-app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#039;/webhook/nomba&#039;</span>, <span class="hljs-keyword">async</span> (c) <span class="hljs-punctuation">=&gt;</span> {
-  <span class="hljs-keyword">const</span> event <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">handleWebhook</span>(c.<span class="hljs-attr">req</span>.<span class="hljs-attr">raw</span>);
-  
-  <span class="hljs-keyword">switch</span> (event.<span class="hljs-keyword">type</span>) {
-    <span class="hljs-keyword">case</span> <span class="hljs-string">&#039;checkout.completed&#039;</span><span class="hljs-punctuation">:</span>
-      <span class="hljs-comment">// Payment successful, subscription activated</span>
-      console.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#039;Subscription:&#039;</span>, event.<span class="hljs-attr">data</span>.<span class="hljs-attr">subscriptionId</span>);
-      <span class="hljs-keyword">break</span>;
-      
-    <span class="hljs-keyword">case</span> <span class="hljs-string">&#039;subscription.renewed&#039;</span><span class="hljs-punctuation">:</span>
-      <span class="hljs-comment">// Recurring payment succeeded</span>
-      console.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#039;Renewed until:&#039;</span>, event.<span class="hljs-attr">data</span>.<span class="hljs-attr">currentPeriodEnd</span>);
-      <span class="hljs-keyword">break</span>;
-      
-    <span class="hljs-keyword">case</span> <span class="hljs-string">&#039;subscription.canceled&#039;</span><span class="hljs-punctuation">:</span>
-      <span class="hljs-comment">// Subscription canceled</span>
-      console.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#039;Cancels at:&#039;</span>, event.<span class="hljs-attr">data</span>.<span class="hljs-attr">currentPeriodEnd</span>);
-      <span class="hljs-keyword">break</span>;
-  }
-  
-  <span class="hljs-keyword">return</span> c.<span class="hljs-title function_">json</span>({ received<span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span> });
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { Hono } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;hono&#039;</span>;
+<span class="hljs-keyword">import</span> { handleWebhook } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">const</span> app <span class="hljs-punctuation">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">Hono</span>();
+
+app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#039;/webhook&#039;</span>, <span class="hljs-keyword">async</span> (c) <span class="hljs-punctuation">=&gt;</span> {
+  <span class="hljs-keyword">const</span> rawBody <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> c.<span class="hljs-attr">req</span>.<span class="hljs-title function_">text</span>();
+  <span class="hljs-keyword">const</span> signature <span class="hljs-punctuation">=</span> c.<span class="hljs-attr">req</span>.<span class="hljs-title function_">header</span>(<span class="hljs-string">&#039;nomba-signature&#039;</span>) <span class="hljs-punctuation">??</span> <span class="hljs-string">&#039;&#039;</span>;
+  <span class="hljs-keyword">const</span> nombaTimestamp <span class="hljs-punctuation">=</span> c.<span class="hljs-attr">req</span>.<span class="hljs-title function_">header</span>(<span class="hljs-string">&#039;nomba-timestamp&#039;</span>) <span class="hljs-punctuation">??</span> <span class="hljs-string">&#039;&#039;</span>;
+
+  <span class="hljs-keyword">const</span> result <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">handleWebhook</span>(engine, {
+    rawBody,
+    signature,
+    webhookSecret<span class="hljs-punctuation">:</span> c.<span class="hljs-attr">env</span>.<span class="hljs-attr">NOMBA_WEBHOOK_SECRET</span>,
+    nombaTimestamp,
+  });
+
+  <span class="hljs-keyword">return</span> c.<span class="hljs-title function_">json</span>(result);
 });
 </code></pre>
 <h2 id="webhooks-event-types" class="docmd-heading"><a href="#webhooks-event-types" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Event Types</h2>
@@ -1129,34 +1125,52 @@ app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#0
 </thead>
 <tbody>
 <tr>
-<td><code>checkout.completed</code></td>
-<td>Initial payment successful</td>
+<td><code>payment_success</code></td>
+<td>Payment successful (initial or renewal)</td>
 </tr>
 <tr>
-<td><code>subscription.renewed</code></td>
-<td>Recurring payment successful</td>
+<td><code>payment_failed</code></td>
+<td>Payment failed</td>
 </tr>
 <tr>
-<td><code>subscription.canceled</code></td>
-<td>Subscription canceled</td>
-</tr>
-<tr>
-<td><code>payment.failed</code></td>
-<td>Payment failed, entering dunning</td>
+<td><code>mandate.debit_success</code></td>
+<td>Recurring mandate debit successful</td>
 </tr>
 </tbody>
 </table>
 </div><h2 id="webhooks-verifying-webhooks" class="docmd-heading"><a href="#webhooks-verifying-webhooks" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Verifying Webhooks</h2>
-<p>Semaphore automatically verifies webhook signatures before processing. Invalid signatures are rejected with 400.</p>
-<h2 id="webhooks-retry-policy" class="docmd-heading"><a href="#webhooks-retry-policy" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Retry Policy</h2>
-<p>Failed webhook deliveries are retried with exponential backoff:</p>
-<ul>
-<li>1st retry: 1 minute</li>
-<li>2nd retry: 5 minutes</li>
-<li>3rd retry: 30 minutes</li>
-<li>4th retry: 2 hours</li>
-<li>5th retry: 24 hours</li>
-</ul>
+<p>Semaphore automatically verifies webhook signatures using HMAC-SHA256 before processing. Invalid signatures are rejected with 400.</p>
+<p>The signature is computed over colon-joined fields:</p>
+<pre class="hljs"><code>event_type<span class="hljs-punctuation">:</span>requestId<span class="hljs-punctuation">:</span>userId<span class="hljs-punctuation">:</span>walletId<span class="hljs-punctuation">:</span>transactionId<span class="hljs-punctuation">:</span><span class="hljs-keyword">type</span><span class="hljs-punctuation">:</span>time<span class="hljs-punctuation">:</span>responseCode<span class="hljs-punctuation">:</span>nomba<span class="hljs-punctuation">-</span>timestamp
+</code></pre>
+<h2 id="webhooks-payment-verification-fallback" class="docmd-heading"><a href="#webhooks-payment-verification-fallback" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Payment Verification Fallback</h2>
+<p>If webhooks aren’t received (e.g. during development), use the payment verification endpoint:</p>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-comment">// Client SDK</span>
+<span class="hljs-keyword">const</span> result <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">verifyPayment</span>(<span class="hljs-string">&#039;order_abc123&#039;</span>);
+console.<span class="hljs-title function_">log</span>(result.<span class="hljs-attr">status</span>); <span class="hljs-comment">// &#039;success&#039;, &#039;pending&#039;, &#039;failed&#039;</span>
+console.<span class="hljs-title function_">log</span>(result.<span class="hljs-attr">processed</span>); <span class="hljs-comment">// true if just processed</span>
+</code></pre>
+<p>Or poll with exponential backoff:</p>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> result <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">waitForPayment</span>(<span class="hljs-string">&#039;order_abc123&#039;</span>, {
+  maxAttempts<span class="hljs-punctuation">:</span> <span class="hljs-number">6</span>,
+  delays<span class="hljs-punctuation">:</span> [<span class="hljs-number">0</span>, <span class="hljs-number">5000</span>, <span class="hljs-number">20000</span>, <span class="hljs-number">40000</span>, <span class="hljs-number">80000</span>, <span class="hljs-number">160000</span>], <span class="hljs-comment">// ~5 min total</span>
+  onAttempt<span class="hljs-punctuation">:</span> (attempt, result) <span class="hljs-punctuation">=&gt;</span> {
+    console.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Attempt ${attempt}: ${result.status}`</span>);
+  },
+});
+</code></pre>
+<h2 id="webhooks-webhook-response" class="docmd-heading"><a href="#webhooks-webhook-response" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Webhook Response</h2>
+<p>Always return <code>200</code> to acknowledge receipt. Semaphore processes the event asynchronously.</p>
+<pre class="hljs"><code class="language-json">{
+  <span class="hljs-string">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;processed&quot;</span>
+}
+</code></pre>
+<h2 id="webhooks-testing-webhooks" class="docmd-heading"><a href="#webhooks-testing-webhooks" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Testing Webhooks</h2>
+<p>Use the mock webhook script for local development:</p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-keyword">cd</span> packages<span class="hljs-punctuation">/</span>server
+npx tsx mock<span class="hljs-punctuation">-</span>webhook.<span class="hljs-attr">ts</span>
+</code></pre>
+<p>This sends a signed <code>payment_success</code> event to <code>http://localhost:8787/webhook</code>.</p>
 
                 
                   <div class="page-navigation">
@@ -1256,7 +1270,15 @@ app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#0
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#webhooks-retry-policy" class="toc-link">Retry Policy</a>
+          <a href="#webhooks-payment-verification-fallback" class="toc-link">Payment Verification Fallback</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#webhooks-webhook-response" class="toc-link">Webhook Response</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#webhooks-testing-webhooks" class="toc-link">Testing Webhooks</a>
         </li>
       
     </ul>
@@ -1266,6 +1288,38 @@ app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#0
             </div>
             <div class="page-footer-actions">
               
+              
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
               
               <span class="git-spacer"></span>
               
@@ -1284,13 +1338,13 @@ app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#0
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

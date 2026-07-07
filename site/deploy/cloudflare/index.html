@@ -105,10 +105,10 @@
       Deploy to Cloudflare : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Deploy%20to%20Cloudflare%0A---%0A%0A%23%20Deploy%20to%20Cloudflare%0A%0ASemaphore%20runs%20on%20Cloudflare%20Workers%20with%20D1%20database.%0A%0A%23%23%20Prerequisites%0A%0A-%20Cloudflare%20account%0A-%20Wrangler%20CLI%20installed%0A-%20D1%20database%20created%0A%0A%23%23%201.%20Create%20D1%20Database%0A%0A%60%60%60bash%0Anpx%20wrangler%20d1%20create%20semaphore-db%0A%60%60%60%0A%0ACopy%20the%20%60database_id%60%20to%20%60wrangler.jsonc%60.%0A%0A%23%23%202.%20Configure%20Wrangler%0A%0A%60wrangler.jsonc%60%3A%0A%0A%60%60%60json%0A%7B%0A%20%20%22name%22%3A%20%22semaphore-api%22%2C%0A%20%20%22main%22%3A%20%22src%2Findex.ts%22%2C%0A%20%20%22compatibility_date%22%3A%20%222024-12-01%22%2C%0A%20%20%22d1_databases%22%3A%20%5B%0A%20%20%20%20%7B%0A%20%20%20%20%20%20%22binding%22%3A%20%22SEMAPHORE_DB%22%2C%0A%20%20%20%20%20%20%22database_name%22%3A%20%22semaphore-db%22%2C%0A%20%20%20%20%20%20%22database_id%22%3A%20%22your-d1-id%22%0A%20%20%20%20%7D%0A%20%20%5D%0A%7D%0A%60%60%60%0A%0A%23%23%203.%20Set%20Environment%20Variables%0A%0A%60%60%60bash%0Anpx%20wrangler%20secret%20put%20BETTER_AUTH_SECRET%0Anpx%20wrangler%20secret%20put%20BETTER_AUTH_URL%0Anpx%20wrangler%20secret%20put%20NOMBA_SANDBOX_CLIENT_ID%0Anpx%20wrangler%20secret%20put%20NOMBA_SANDBOX_CLIENT_SECRET%0Anpx%20wrangler%20secret%20put%20NOMBA_SANDBOX_ACCOUNT_ID%0Anpx%20wrangler%20secret%20put%20NOMBA_WEBHOOK_SECRET%0Anpx%20wrangler%20secret%20put%20NOMBA_CHECKOUT_CALLBACK_URL%0Anpx%20wrangler%20secret%20put%20FRONTEND_URL%0A%60%60%60%0A%0A%23%23%204.%20Run%20Migrations%0A%0A%60%60%60bash%0Anpx%20wrangler%20d1%20execute%20semaphore-db%20--remote%20--file%3D.%2Fmigrations%2Fsqlite%2F0001_watery_wild_child.sql%0A%60%60%60%0A%0A%23%23%205.%20Deploy%0A%0A%60%60%60bash%0Anpx%20wrangler%20deploy%0A%60%60%60%0A%0A%23%23%206.%20Custom%20Domain%0A%0AIn%20Cloudflare%20Dashboard%3A%0A1.%20Go%20to%20Workers%20%26%20Pages%0A2.%20Select%20your%20worker%0A3.%20Settings%20%E2%86%92%20Triggers%20%E2%86%92%20Custom%20Domains%0A4.%20Add%20%60api.yourdomain.com%60%0A%0A%23%23%20Static%20Files%20(Client%20SDK)%0A%0AFor%20the%20client%20SDK%20documentation%20site%3A%0A%0A%60%60%60bash%0Acd%20docs%0Anpx%20%40docmd%2Fcore%20build%0A%60%60%60%0A%0AOutput%20is%20in%20%60site%2F%60%20directory.%20Upload%20to%20Cloudflare%20Pages%3A%0A%0A%60%60%60bash%0Anpx%20wrangler%20pages%20deploy%20site%20--project-name%3Dsemaphore-docs%0A%60%60%60%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Deploy%20to%20Cloudflare%0A---%0A%0A%23%20Deploy%20to%20Cloudflare%0A%0ASemaphore%20runs%20on%20Cloudflare%20Workers%20with%20D1%20database.%0A%0A%23%23%20Prerequisites%0A%0A-%20Cloudflare%20account%0A-%20Wrangler%20CLI%20installed%0A-%20D1%20database%20created%0A%0A%23%23%201.%20Create%20D1%20Database%0A%0A%60%60%60bash%0Anpx%20wrangler%20d1%20create%20semaphore-db%0A%60%60%60%0A%0ACopy%20the%20%60database_id%60%20to%20%60wrangler.jsonc%60.%0A%0A%23%23%202.%20Configure%20Wrangler%0A%0A%60wrangler.jsonc%60%3A%0A%0A%60%60%60json%0A%7B%0A%20%20%22name%22%3A%20%22semaphore-api%22%2C%0A%20%20%22main%22%3A%20%22src%2Findex.ts%22%2C%0A%20%20%22compatibility_date%22%3A%20%222024-12-01%22%2C%0A%20%20%22compatibility_flags%22%3A%20%5B%22nodejs_compat%22%5D%2C%0A%20%20%22d1_databases%22%3A%20%5B%0A%20%20%20%20%7B%0A%20%20%20%20%20%20%22binding%22%3A%20%22semaphore_db%22%2C%0A%20%20%20%20%20%20%22database_name%22%3A%20%22semaphore-db%22%2C%0A%20%20%20%20%20%20%22database_id%22%3A%20%22your-d1-id%22%0A%20%20%20%20%7D%0A%20%20%5D%2C%0A%20%20%22crons%22%3A%20%5B%220%20*%20*%20*%20*%22%2C%20%220%200%20*%20*%20*%22%5D%2C%0A%20%20%22routes%22%3A%20%5B%0A%20%20%20%20%7B%20%22pattern%22%3A%20%22api.semaphorepay.tech%22%2C%20%22zone_name%22%3A%20%22semaphorepay.tech%22%20%7D%0A%20%20%5D%0A%7D%0A%60%60%60%0A%0A%23%23%203.%20Set%20Environment%20Variables%0A%0A%60%60%60bash%0A%23%20Better%20Auth%0Anpx%20wrangler%20secret%20put%20BETTER_AUTH_SECRET%0Anpx%20wrangler%20secret%20put%20BETTER_AUTH_URL%0A%0A%23%20Nomba%20(sandbox)%0Anpx%20wrangler%20secret%20put%20NOMBA_SANDBOX_CLIENT_ID%0Anpx%20wrangler%20secret%20put%20NOMBA_SANDBOX_CLIENT_SECRET%0Anpx%20wrangler%20secret%20put%20NOMBA_SANDBOX_ACCOUNT_ID%0A%0A%23%20Nomba%20(production)%0Anpx%20wrangler%20secret%20put%20NOMBA_LIVE_CLIENT_ID%0Anpx%20wrangler%20secret%20put%20NOMBA_LIVE_CLIENT_SECRET%0Anpx%20wrangler%20secret%20put%20NOMBA_LIVE_ACCOUNT_ID%0A%0A%23%20Nomba%20(shared)%0Anpx%20wrangler%20secret%20put%20NOMBA_WEBHOOK_SECRET%0Anpx%20wrangler%20secret%20put%20NOMBA_CHECKOUT_CALLBACK_URL%0A%0A%23%20CORS%0Anpx%20wrangler%20secret%20put%20FRONTEND_URL%0A%0A%23%20Cloudflare%20(for%20D1%20access)%0Anpx%20wrangler%20secret%20put%20CLOUDFLARE_ACCOUNT_ID%0Anpx%20wrangler%20secret%20put%20CLOUDFLARE_DATABASE_ID%0Anpx%20wrangler%20secret%20put%20CLOUDFLARE_D1_TOKEN%0A%60%60%60%0A%0A%23%23%204.%20Run%20Migrations%0A%0A%60%60%60bash%0A%23%20Run%20all%20migrations%20in%20order%0Anpx%20wrangler%20d1%20execute%20semaphore-db%20--remote%20--file%3D.%2Fmigrations%2Fsqlite%2F0001_watery_wild_child.sql%0Anpx%20wrangler%20d1%20execute%20semaphore-db%20--remote%20--file%3D.%2Fmigrations%2Fsqlite%2F0002_*.sql%0Anpx%20wrangler%20d1%20execute%20semaphore-db%20--remote%20--file%3D.%2Fmigrations%2Fsqlite%2F0003_*.sql%0Anpx%20wrangler%20d1%20execute%20semaphore-db%20--remote%20--file%3D.%2Fmigrations%2Fsqlite%2F0004_*.sql%0Anpx%20wrangler%20d1%20execute%20semaphore-db%20--remote%20--file%3D.%2Fmigrations%2Fsqlite%2F0005_*.sql%0Anpx%20wrangler%20d1%20execute%20semaphore-db%20--remote%20--file%3D.%2Fmigrations%2Fsqlite%2F0006_*.sql%0Anpx%20wrangler%20d1%20execute%20semaphore-db%20--remote%20--file%3D.%2Fmigrations%2Fsqlite%2F0007_*.sql%0Anpx%20wrangler%20d1%20execute%20semaphore-db%20--remote%20--file%3D.%2Fmigrations%2Fsqlite%2F0008_add_webhook_event.sql%0A%60%60%60%0A%0A%23%23%205.%20Deploy%0A%0A%60%60%60bash%0Anpx%20wrangler%20deploy%0A%60%60%60%0A%0A%23%23%206.%20Custom%20Domain%0A%0AIn%20Cloudflare%20Dashboard%3A%0A1.%20Go%20to%20Workers%20%26%20Pages%0A2.%20Select%20your%20worker%0A3.%20Settings%20%E2%86%92%20Triggers%20%E2%86%92%20Custom%20Domains%0A4.%20Add%20%60api.semaphorepay.tech%60%0A%0A%23%23%20Static%20Files%20(Documentation%20Site)%0A%0AFor%20the%20documentation%20site%3A%0A%0A%60%60%60bash%0Acd%20docs%0Anpx%20%40docmd%2Fcore%20build%0A%60%60%60%0A%0AOutput%20is%20in%20%60site%2F%60%20directory.%20Upload%20to%20Cloudflare%20Pages%3A%0A%0A%60%60%60bash%0Anpx%20wrangler%20pages%20deploy%20site%20--project-name%3Dsemaphore-docs%0A%60%60%60%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1106,27 +1106,57 @@
   <span class="hljs-string">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;semaphore-api&quot;</span>,
   <span class="hljs-string">&quot;main&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;src/index.ts&quot;</span>,
   <span class="hljs-string">&quot;compatibility_date&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2024-12-01&quot;</span>,
+  <span class="hljs-string">&quot;compatibility_flags&quot;</span><span class="hljs-punctuation">:</span> [<span class="hljs-string">&quot;nodejs_compat&quot;</span>],
   <span class="hljs-string">&quot;d1_databases&quot;</span><span class="hljs-punctuation">:</span> [
     {
-      <span class="hljs-string">&quot;binding&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;SEMAPHORE_DB&quot;</span>,
+      <span class="hljs-string">&quot;binding&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;semaphore_db&quot;</span>,
       <span class="hljs-string">&quot;database_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;semaphore-db&quot;</span>,
       <span class="hljs-string">&quot;database_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;your-d1-id&quot;</span>
     }
+  ],
+  <span class="hljs-string">&quot;crons&quot;</span><span class="hljs-punctuation">:</span> [<span class="hljs-string">&quot;0 * * * *&quot;</span>, <span class="hljs-string">&quot;0 0 * * *&quot;</span>],
+  <span class="hljs-string">&quot;routes&quot;</span><span class="hljs-punctuation">:</span> [
+    { <span class="hljs-string">&quot;pattern&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;api.semaphorepay.tech&quot;</span>, <span class="hljs-string">&quot;zone_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;semaphorepay.tech&quot;</span> }
   ]
 }
 </code></pre>
 <h2 id="deploy-to-cloudflare-3-set-environment-variables" class="docmd-heading"><a href="#deploy-to-cloudflare-3-set-environment-variables" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>3. Set Environment Variables</h2>
-<pre class="hljs"><code class="language-bash">npx wrangler secret put BETTER_AUTH_SECRET
+<pre class="hljs"><code class="language-bash"><span class="hljs-comment"># Better Auth</span>
+npx wrangler secret put BETTER_AUTH_SECRET
 npx wrangler secret put BETTER_AUTH_URL
+
+<span class="hljs-comment"># Nomba (sandbox)</span>
 npx wrangler secret put NOMBA_SANDBOX_CLIENT_ID
 npx wrangler secret put NOMBA_SANDBOX_CLIENT_SECRET
 npx wrangler secret put NOMBA_SANDBOX_ACCOUNT_ID
+
+<span class="hljs-comment"># Nomba (production)</span>
+npx wrangler secret put NOMBA_LIVE_CLIENT_ID
+npx wrangler secret put NOMBA_LIVE_CLIENT_SECRET
+npx wrangler secret put NOMBA_LIVE_ACCOUNT_ID
+
+<span class="hljs-comment"># Nomba (shared)</span>
 npx wrangler secret put NOMBA_WEBHOOK_SECRET
 npx wrangler secret put NOMBA_CHECKOUT_CALLBACK_URL
+
+<span class="hljs-comment"># CORS</span>
 npx wrangler secret put FRONTEND_URL
+
+<span class="hljs-comment"># Cloudflare (for D1 access)</span>
+npx wrangler secret put CLOUDFLARE_ACCOUNT_ID
+npx wrangler secret put CLOUDFLARE_DATABASE_ID
+npx wrangler secret put CLOUDFLARE_D1_TOKEN
 </code></pre>
 <h2 id="deploy-to-cloudflare-4-run-migrations" class="docmd-heading"><a href="#deploy-to-cloudflare-4-run-migrations" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>4. Run Migrations</h2>
-<pre class="hljs"><code class="language-bash">npx wrangler d1 execute semaphore<span class="hljs-punctuation">-</span>db <span class="hljs-punctuation">--</span>remote <span class="hljs-punctuation">--</span>file<span class="hljs-punctuation">=</span>.<span class="hljs-punctuation">/</span>migrations<span class="hljs-punctuation">/</span>sqlite<span class="hljs-punctuation">/</span>0001_watery_wild_child.<span class="hljs-attr">sql</span>
+<pre class="hljs"><code class="language-bash"><span class="hljs-comment"># Run all migrations in order</span>
+npx wrangler d1 execute semaphore<span class="hljs-punctuation">-</span>db <span class="hljs-punctuation">--</span>remote <span class="hljs-punctuation">--</span>file<span class="hljs-punctuation">=</span>.<span class="hljs-punctuation">/</span>migrations<span class="hljs-punctuation">/</span>sqlite<span class="hljs-punctuation">/</span>0001_watery_wild_child.<span class="hljs-attr">sql</span>
+npx wrangler d1 execute semaphore<span class="hljs-punctuation">-</span>db <span class="hljs-punctuation">--</span>remote <span class="hljs-punctuation">--</span>file<span class="hljs-punctuation">=</span>.<span class="hljs-punctuation">/</span>migrations<span class="hljs-punctuation">/</span>sqlite<span class="hljs-punctuation">/</span>0002_<span class="hljs-punctuation">*</span>.<span class="hljs-attr">sql</span>
+npx wrangler d1 execute semaphore<span class="hljs-punctuation">-</span>db <span class="hljs-punctuation">--</span>remote <span class="hljs-punctuation">--</span>file<span class="hljs-punctuation">=</span>.<span class="hljs-punctuation">/</span>migrations<span class="hljs-punctuation">/</span>sqlite<span class="hljs-punctuation">/</span>0003_<span class="hljs-punctuation">*</span>.<span class="hljs-attr">sql</span>
+npx wrangler d1 execute semaphore<span class="hljs-punctuation">-</span>db <span class="hljs-punctuation">--</span>remote <span class="hljs-punctuation">--</span>file<span class="hljs-punctuation">=</span>.<span class="hljs-punctuation">/</span>migrations<span class="hljs-punctuation">/</span>sqlite<span class="hljs-punctuation">/</span>0004_<span class="hljs-punctuation">*</span>.<span class="hljs-attr">sql</span>
+npx wrangler d1 execute semaphore<span class="hljs-punctuation">-</span>db <span class="hljs-punctuation">--</span>remote <span class="hljs-punctuation">--</span>file<span class="hljs-punctuation">=</span>.<span class="hljs-punctuation">/</span>migrations<span class="hljs-punctuation">/</span>sqlite<span class="hljs-punctuation">/</span>0005_<span class="hljs-punctuation">*</span>.<span class="hljs-attr">sql</span>
+npx wrangler d1 execute semaphore<span class="hljs-punctuation">-</span>db <span class="hljs-punctuation">--</span>remote <span class="hljs-punctuation">--</span>file<span class="hljs-punctuation">=</span>.<span class="hljs-punctuation">/</span>migrations<span class="hljs-punctuation">/</span>sqlite<span class="hljs-punctuation">/</span>0006_<span class="hljs-punctuation">*</span>.<span class="hljs-attr">sql</span>
+npx wrangler d1 execute semaphore<span class="hljs-punctuation">-</span>db <span class="hljs-punctuation">--</span>remote <span class="hljs-punctuation">--</span>file<span class="hljs-punctuation">=</span>.<span class="hljs-punctuation">/</span>migrations<span class="hljs-punctuation">/</span>sqlite<span class="hljs-punctuation">/</span>0007_<span class="hljs-punctuation">*</span>.<span class="hljs-attr">sql</span>
+npx wrangler d1 execute semaphore<span class="hljs-punctuation">-</span>db <span class="hljs-punctuation">--</span>remote <span class="hljs-punctuation">--</span>file<span class="hljs-punctuation">=</span>.<span class="hljs-punctuation">/</span>migrations<span class="hljs-punctuation">/</span>sqlite<span class="hljs-punctuation">/</span>0008_add_webhook_event.<span class="hljs-attr">sql</span>
 </code></pre>
 <h2 id="deploy-to-cloudflare-5-deploy" class="docmd-heading"><a href="#deploy-to-cloudflare-5-deploy" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>5. Deploy</h2>
 <pre class="hljs"><code class="language-bash">npx wrangler deploy
@@ -1137,10 +1167,10 @@ npx wrangler secret put FRONTEND_URL
 <li>Go to Workers &amp; Pages</li>
 <li>Select your worker</li>
 <li>Settings → Triggers → Custom Domains</li>
-<li>Add <code>api.yourdomain.com</code></li>
+<li>Add <code>api.semaphorepay.tech</code></li>
 </ol>
-<h2 id="deploy-to-cloudflare-static-files-client-sdk" class="docmd-heading"><a href="#deploy-to-cloudflare-static-files-client-sdk" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Static Files (Client SDK)</h2>
-<p>For the client SDK documentation site:</p>
+<h2 id="deploy-to-cloudflare-static-files-documentation-site" class="docmd-heading"><a href="#deploy-to-cloudflare-static-files-documentation-site" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Static Files (Documentation Site)</h2>
+<p>For the documentation site:</p>
 <pre class="hljs"><code class="language-bash"><span class="hljs-keyword">cd</span> docs
 npx @docmd<span class="hljs-punctuation">/</span>core build
 </code></pre>
@@ -1258,7 +1288,7 @@ npx @docmd<span class="hljs-punctuation">/</span>core build
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#deploy-to-cloudflare-static-files-client-sdk" class="toc-link">Static Files (Client SDK)</a>
+          <a href="#deploy-to-cloudflare-static-files-documentation-site" class="toc-link">Static Files (Documentation Site)</a>
         </li>
       
     </ul>
@@ -1268,6 +1298,38 @@ npx @docmd<span class="hljs-punctuation">/</span>core build
             </div>
             <div class="page-footer-actions">
               
+              
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
               
               <span class="git-spacer"></span>
               
@@ -1286,13 +1348,13 @@ npx @docmd<span class="hljs-punctuation">/</span>core build
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

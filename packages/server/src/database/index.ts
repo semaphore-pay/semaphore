@@ -96,7 +96,7 @@ export class SemaphorePayEngine<T extends "pg" | "sqlite"> {
     email: string | null;
     name: string | null;
     collectionId: string;
-  }) {
+  }): Promise<string> {
     const targetSchema = this.dialect === "pg" ? pgSchema : sqliteSchema;
     const customerId = crypto.randomUUID();
 

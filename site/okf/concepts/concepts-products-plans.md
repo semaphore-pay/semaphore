@@ -3,10 +3,10 @@ type: concept
 title: "Products & Plans"
 source: "https://docs.semaphorepay.tech/concepts/products-plans/"
 path: /concepts/products-plans/
-updated: 2026-07-05
+updated: 2026-07-07
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-05T13:54:02.040Z"
+  generated_at: "2026-07-07T20:01:08.640Z"
 ---
 ---
 title: Products & Plans
@@ -14,21 +14,25 @@ title: Products & Plans
 
 # Products & Plans
 
-Plans define pricing. Products are what customers subscribe to.
+Plans define pricing. Products are what customers actually use.
 
 ## Plans
 
 A plan defines how much to charge and how often.
 
 ```typescript
-const plan = await engine.createPlan(collectionId, {
+import { create } from '@semaphore-pay/server';
+
+const plan = await create(engine, {
   name: 'Pro',
   description: 'Full access',
-  amount: 5000, // ₦50.00 in kobo
-  currency: 'NGN',
-  interval: 'month',
-  intervalCount: 1,
+  priceAmount: 5000, // ₦50.00 in kobo
+  priceCurrency: 'NGN',
+  interval: 'monthly',
   trialPeriodDays: 14,
+}, {
+  collectionId: 'col_abc123',
+  environment: 'development',
 });
 ```
 
@@ -38,24 +42,41 @@ const plan = await engine.createPlan(collectionId, {
 |---|---|---|
 | `name` | string | Display name |
 | `description` | string | Optional description |
-| `amount` | number | Price in smallest currency unit (kobo for NGN) |
-| `currency` | string | ISO 4217 currency code |
-| `interval` | string | `day`, `week`, `month`, or `year` |
-| `intervalCount` | number | Billing frequency (e.g., 3 for every 3 months) |
+| `priceAmount` | number | Price in smallest currency unit (kobo for NGN) |
+| `priceCurrency` | string | ISO 4217 currency code |
+| `interval` | string | `"monthly"`, `"yearly"`, or `"none"` |
 | `trialPeriodDays` | number | Optional trial length |
+| `badge` | string | Optional display badge (e.g. `"Most Popular"`) |
+| `ctaText` | string | Optional call-to-action text |
+| `sortOrder` | number | Display order (lower = first) |
+
+### Plan ID Format
+
+Plan IDs are auto-generated: `plan_{sanitized_name}_{interval}`
+
+Examples:
+- `plan_pro_monthly`
+- `plan_enterprise_yearly`
+- `plan_basic_none`
 
 ## Products
 
-Products are what customers actually subscribe to. Each product links to one or more plans.
+Products are what customers subscribe to or purchase. Each product has its own features.
 
 ```typescript
-const product = await engine.createProduct(collectionId, {
+import { createProduct } from '@semaphore-pay/server';
+
+const product = await createProduct(engine, {
   name: 'Pro Access',
   description: 'Unlimited access to all features',
-  planId: plan.id,
-  metadata: {
-    features: 'unlimited,api,export,priority_support',
-  },
+  features: [
+    { featureId: 'api_calls', type: 'limit', limit: 10000 },
+    { featureId: 'export', type: 'boolean' },
+    { featureId: 'pro_mode', type: 'boolean' },
+  ],
+}, {
+  collectionId: 'col_abc123',
+  environment: 'development',
 });
 ```
 
@@ -65,22 +86,59 @@ const product = await engine.createProduct(collectionId, {
 |---|---|---|
 | `name` | string | Display name |
 | `description` | string | Optional description |
-| `planId` | string | ID of the associated plan |
-| `metadata` | object | Key-value pairs for custom data |
+| `features` | FeatureInput[] | Features attached to this product |
+
+### FeatureInput
+
+| Field | Type | Description |
+|---|---|---|
+| `featureId` | string | Feature identifier (e.g. `"api_calls"`) |
+| `type` | string | `"boolean"` for on/off, `"limit"` for metered |
+| `limit` | number | Max units for metered features |
+| `resetInterval` | string | `"day"`, `"week"`, `"month"`, or `"year"` |
 
 ## Listing
 
 ```typescript
+import { list } from '@semaphore-pay/server';
+import { listProducts } from '@semaphore-pay/server';
+
 // List plans
-const plans = await engine.listPlans(collectionId);
+const plans = await list(engine, {}, {
+  collectionId: 'col_abc123',
+  environment: 'development',
+});
 
 // List products
-const products = await engine.listProducts(collectionId);
+const products = await listProducts(engine, {
+  collectionId: 'col_abc123',
+  environment: 'development',
+});
 ```
 
 ## Getting by ID
 
 ```typescript
-const plan = await engine.getPlan(collectionId, 'plan_abc123');
-const product = await engine.getProduct(collectionId, 'prod_xyz789');
+import { get } from '@semaphore-pay/server';
+import { getProduct } from '@semaphore-pay/server';
+
+const plan = await get(engine, { planId: 'plan_pro_monthly' }, {
+  collectionId: 'col_abc123',
+  environment: 'development',
+});
+
+const product = await getProduct(engine, {
+  productId: 'prod_xyz789',
+  collectionId: 'col_abc123',
+  environment: 'development',
+});
 ```
+
+## Plans vs Products
+
+| Aspect | Plan | Product |
+|---|---|---|
+| Purpose | Defines pricing & billing | Defines features & access |
+| Price | Has `priceAmount` | No price (links to plan via subscription) |
+| Features | Can have features attached | Has features directly |
+| Subscription | Customer subscribes to plan | Customer gets access via plan subscription |

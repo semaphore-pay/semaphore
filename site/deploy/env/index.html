@@ -105,10 +105,10 @@
       Environment Variables : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Environment%20Variables%0A---%0A%0A%23%20Environment%20Variables%0A%0AAll%20environment%20variables%20needed%20for%20deployment.%0A%0A%23%23%20Nomba%0A%0A%60%60%60bash%0A%23%20Sandbox%20(development)%0ANOMBA_SANDBOX_CLIENT_ID%3D%0ANOMBA_SANDBOX_CLIENT_SECRET%3D%0ANOMBA_SANDBOX_ACCOUNT_ID%3D%0A%0A%23%20Production%0ANOMBA_LIVE_CLIENT_ID%3D%0ANOMBA_LIVE_CLIENT_SECRET%3D%0ANOMBA_LIVE_ACCOUNT_ID%3D%0A%0A%23%20Shared%0ANOMBA_WEBHOOK_SECRET%3D%0ANOMBA_CHECKOUT_CALLBACK_URL%3Dhttps%3A%2F%2Fyour-api.example.com%2Fwebhook%2Fnomba%0A%60%60%60%0A%0A%23%23%20Better%20Auth%0A%0A%60%60%60bash%0ABETTER_AUTH_SECRET%3Dyour-secret-key%0ABETTER_AUTH_URL%3Dhttps%3A%2F%2Fyour-api.example.com%0A%60%60%60%0A%0A%23%23%20CORS%0A%0A%60%60%60bash%0AFRONTEND_URL%3Dhttps%3A%2F%2Fyour-frontend.com%0A%60%60%60%0A%0A%3A%3A%3A%20warning%0ANever%20commit%20secrets%20to%20version%20control.%20Use%20Cloudflare%20Secrets%20or%20%60.dev.vars%60%20for%20local%20development.%0A%3A%3A%3A%0A%0A%23%23%20Local%20Development%0A%0ACreate%20%60.dev.vars%60%20in%20your%20project%20root%3A%0A%0A%60%60%60bash%0ABETTER_AUTH_SECRET%3Ddev-secret%0ABETTER_AUTH_URL%3Dhttp%3A%2F%2Flocalhost%3A8787%0AFRONTEND_URL%3Dhttp%3A%2F%2Flocalhost%3A3000%0ANOMBA_SANDBOX_CLIENT_ID%3D...%0ANOMBA_SANDBOX_CLIENT_SECRET%3D...%0ANOMBA_SANDBOX_ACCOUNT_ID%3D...%0ANOMBA_WEBHOOK_SECRET%3D...%0ANOMBA_CHECKOUT_CALLBACK_URL%3Dhttp%3A%2F%2Flocalhost%3A8787%2Fwebhook%2Fnomba%0A%60%60%60%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Environment%20Variables%0A---%0A%0A%23%20Environment%20Variables%0A%0AAll%20environment%20variables%20needed%20for%20deployment.%0A%0A%23%23%20Nomba%0A%0A%60%60%60bash%0A%23%20Sandbox%20(development)%0ANOMBA_SANDBOX_CLIENT_ID%3D%0ANOMBA_SANDBOX_CLIENT_SECRET%3D%0ANOMBA_SANDBOX_ACCOUNT_ID%3D%0A%0A%23%20Production%0ANOMBA_LIVE_CLIENT_ID%3D%0ANOMBA_LIVE_CLIENT_SECRET%3D%0ANOMBA_LIVE_ACCOUNT_ID%3D%0A%0A%23%20Shared%0ANOMBA_WEBHOOK_SECRET%3D%0ANOMBA_CHECKOUT_CALLBACK_URL%3Dhttps%3A%2F%2Fyour-api.example.com%2Fwebhook%0A%60%60%60%0A%0A%23%23%20Better%20Auth%0A%0A%60%60%60bash%0ABETTER_AUTH_SECRET%3Dyour-secret-key%0ABETTER_AUTH_URL%3Dhttps%3A%2F%2Fyour-api.example.com%0A%60%60%60%0A%0A%23%23%20CORS%0A%0A%60%60%60bash%0AFRONTEND_URL%3Dhttps%3A%2F%2Fyour-frontend.com%0A%60%60%60%0A%0A%23%23%20Cloudflare%0A%0A%60%60%60bash%0ACLOUDFLARE_ACCOUNT_ID%3D%0ACLOUDFLARE_DATABASE_ID%3D%0ACLOUDFLARE_D1_TOKEN%3D%0A%60%60%60%0A%0A%3A%3A%3A%20warning%0ANever%20commit%20secrets%20to%20version%20control.%20Use%20Cloudflare%20Secrets%20or%20%60.dev.vars%60%20for%20local%20development.%0A%3A%3A%3A%0A%0A%23%23%20Local%20Development%0A%0ACreate%20%60.dev.vars%60%20in%20your%20project%20root%3A%0A%0A%60%60%60bash%0ABETTER_AUTH_SECRET%3Ddev-secret%0ABETTER_AUTH_URL%3Dhttp%3A%2F%2Flocalhost%3A8787%0AFRONTEND_URL%3Dhttp%3A%2F%2Flocalhost%3A3000%0A%0A%23%20Nomba%20(sandbox)%0ANOMBA_SANDBOX_CLIENT_ID%3D...%0ANOMBA_SANDBOX_CLIENT_SECRET%3D...%0ANOMBA_SANDBOX_ACCOUNT_ID%3D...%0A%0A%23%20Nomba%20(production)%0ANOMBA_LIVE_CLIENT_ID%3D...%0ANOMBA_LIVE_CLIENT_SECRET%3D...%0ANOMBA_LIVE_ACCOUNT_ID%3D...%0A%0A%23%20Nomba%20(shared)%0ANOMBA_WEBHOOK_SECRET%3D...%0ANOMBA_CHECKOUT_CALLBACK_URL%3Dhttp%3A%2F%2Flocalhost%3A8787%2Fwebhook%0A%0A%23%20Cloudflare%20(for%20D1%20access)%0ACLOUDFLARE_ACCOUNT_ID%3D...%0ACLOUDFLARE_DATABASE_ID%3D...%0ACLOUDFLARE_D1_TOKEN%3D...%0A%60%60%60%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1103,7 +1103,7 @@ NOMBA_LIVE_ACCOUNT_ID<span class="hljs-punctuation">=</span>
 
 <span class="hljs-comment"># Shared</span>
 NOMBA_WEBHOOK_SECRET<span class="hljs-punctuation">=</span>
-NOMBA_CHECKOUT_CALLBACK_URL<span class="hljs-punctuation">=</span>https<span class="hljs-punctuation">://</span>your<span class="hljs-punctuation">-</span>api.<span class="hljs-attr">example</span>.<span class="hljs-attr">com</span><span class="hljs-punctuation">/</span>webhook<span class="hljs-punctuation">/</span>nomba
+NOMBA_CHECKOUT_CALLBACK_URL<span class="hljs-punctuation">=</span>https<span class="hljs-punctuation">://</span>your<span class="hljs-punctuation">-</span>api.<span class="hljs-attr">example</span>.<span class="hljs-attr">com</span><span class="hljs-punctuation">/</span>webhook
 </code></pre>
 <h2 id="environment-variables-better-auth" class="docmd-heading"><a href="#environment-variables-better-auth" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Better Auth</h2>
 <pre class="hljs"><code class="language-bash">BETTER_AUTH_SECRET<span class="hljs-punctuation">=</span>your<span class="hljs-punctuation">-</span>secret<span class="hljs-punctuation">-</span>key
@@ -1111,6 +1111,11 @@ BETTER_AUTH_URL<span class="hljs-punctuation">=</span>https<span class="hljs-pun
 </code></pre>
 <h2 id="environment-variables-cors" class="docmd-heading"><a href="#environment-variables-cors" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>CORS</h2>
 <pre class="hljs"><code class="language-bash">FRONTEND_URL<span class="hljs-punctuation">=</span>https<span class="hljs-punctuation">://</span>your<span class="hljs-punctuation">-</span>frontend.<span class="hljs-attr">com</span>
+</code></pre>
+<h2 id="environment-variables-cloudflare" class="docmd-heading"><a href="#environment-variables-cloudflare" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Cloudflare</h2>
+<pre class="hljs"><code class="language-bash">CLOUDFLARE_ACCOUNT_ID<span class="hljs-punctuation">=</span>
+CLOUDFLARE_DATABASE_ID<span class="hljs-punctuation">=</span>
+CLOUDFLARE_D1_TOKEN<span class="hljs-punctuation">=</span>
 </code></pre>
 <div class="docmd-container callout callout-warning"><div class="callout-content">
 <p>Never commit secrets to version control. Use Cloudflare Secrets or <code>.dev.vars</code> for local development.</p>
@@ -1120,11 +1125,25 @@ BETTER_AUTH_URL<span class="hljs-punctuation">=</span>https<span class="hljs-pun
 <pre class="hljs"><code class="language-bash">BETTER_AUTH_SECRET<span class="hljs-punctuation">=</span>dev<span class="hljs-punctuation">-</span>secret
 BETTER_AUTH_URL<span class="hljs-punctuation">=</span>http<span class="hljs-punctuation">://</span>localhost<span class="hljs-punctuation">:</span><span class="hljs-number">8787</span>
 FRONTEND_URL<span class="hljs-punctuation">=</span>http<span class="hljs-punctuation">://</span>localhost<span class="hljs-punctuation">:</span><span class="hljs-number">3000</span>
+
+<span class="hljs-comment"># Nomba (sandbox)</span>
 NOMBA_SANDBOX_CLIENT_ID<span class="hljs-punctuation">=</span>...
 NOMBA_SANDBOX_CLIENT_SECRET<span class="hljs-punctuation">=</span>...
 NOMBA_SANDBOX_ACCOUNT_ID<span class="hljs-punctuation">=</span>...
+
+<span class="hljs-comment"># Nomba (production)</span>
+NOMBA_LIVE_CLIENT_ID<span class="hljs-punctuation">=</span>...
+NOMBA_LIVE_CLIENT_SECRET<span class="hljs-punctuation">=</span>...
+NOMBA_LIVE_ACCOUNT_ID<span class="hljs-punctuation">=</span>...
+
+<span class="hljs-comment"># Nomba (shared)</span>
 NOMBA_WEBHOOK_SECRET<span class="hljs-punctuation">=</span>...
-NOMBA_CHECKOUT_CALLBACK_URL<span class="hljs-punctuation">=</span>http<span class="hljs-punctuation">://</span>localhost<span class="hljs-punctuation">:</span><span class="hljs-number">8787</span><span class="hljs-punctuation">/</span>webhook<span class="hljs-punctuation">/</span>nomba
+NOMBA_CHECKOUT_CALLBACK_URL<span class="hljs-punctuation">=</span>http<span class="hljs-punctuation">://</span>localhost<span class="hljs-punctuation">:</span><span class="hljs-number">8787</span><span class="hljs-punctuation">/</span>webhook
+
+<span class="hljs-comment"># Cloudflare (for D1 access)</span>
+CLOUDFLARE_ACCOUNT_ID<span class="hljs-punctuation">=</span>...
+CLOUDFLARE_DATABASE_ID<span class="hljs-punctuation">=</span>...
+CLOUDFLARE_D1_TOKEN<span class="hljs-punctuation">=</span>...
 </code></pre>
 
                 
@@ -1200,6 +1219,10 @@ NOMBA_CHECKOUT_CALLBACK_URL<span class="hljs-punctuation">=</span>http<span clas
         </li>
       
         <li class="toc-item toc-level-2">
+          <a href="#environment-variables-cloudflare" class="toc-link">Cloudflare</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
           <a href="#environment-variables-local-development" class="toc-link">Local Development</a>
         </li>
       
@@ -1210,6 +1233,38 @@ NOMBA_CHECKOUT_CALLBACK_URL<span class="hljs-punctuation">=</span>http<span clas
             </div>
             <div class="page-footer-actions">
               
+              
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
               
               <span class="git-spacer"></span>
               
@@ -1228,13 +1283,13 @@ NOMBA_CHECKOUT_CALLBACK_URL<span class="hljs-punctuation">=</span>http<span clas
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

@@ -3,10 +3,10 @@ type: concept
 title: Collections
 source: "https://docs.semaphorepay.tech/concepts/collections/"
 path: /concepts/collections/
-updated: 2026-07-05
+updated: 2026-07-07
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-05T13:54:02.039Z"
+  generated_at: "2026-07-07T20:01:08.638Z"
 ---
 ---
 title: Collections
@@ -20,13 +20,14 @@ A collection is an isolated tenant within Semaphore. Think of it like a RevenueC
 
 ```
 Semaphore Account (Nomba)
-├── Collection: "My SaaS App"
+├── Collection: "My SaaS App" (sandbox)
 │   ├── Plans: Pro, Enterprise
 │   ├── Products: Pro Access, Enterprise Access
+│   ├── Features: api_calls, export, pro_mode
 │   ├── Customers: 1,234
 │   └── Subscriptions: 892 active
 │
-├── Collection: "Another App"
+├── Collection: "Another App" (production)
 │   ├── Plans: Basic, Premium
 │   ├── Products: Basic Access, Premium Access
 │   ├── Customers: 567
@@ -38,10 +39,9 @@ Each collection is completely isolated. Data, API keys, and billing are separate
 ## Creating a Collection
 
 ```typescript
-const collection = await engine.createCollection({
-  name: 'My App',
-  description: 'Production environment',
-});
+import { createCollection } from '@semaphore-pay/server';
+
+const collection = await createCollection(engine, 'My App', 'sandbox');
 ```
 
 Response:
@@ -50,21 +50,28 @@ Response:
 {
   "id": "col_abc123",
   "name": "My App",
-  "description": "Production environment",
-  "publicKey": "pk_col_abc123_xyz",
-  "secretKey": "sk_col_abc123_def",
+  "environment": "sandbox",
   "createdAt": "2026-07-05T12:00:00Z"
 }
 ```
 
+## Environments
+
+Each collection has an environment:
+
+| Environment | Purpose | Nomba Keys |
+|---|---|---|
+| `sandbox` | Development and testing | `NOMBA_SANDBOX_*` |
+| `production` | Live payments | `NOMBA_LIVE_*` |
+
 ## API Keys
 
-Each collection has two API keys:
+Each collection has API keys for authentication:
 
-| Key | Prefix | Purpose |
+| Key Type | Prefix | Purpose |
 |---|---|---|
-| Public Key | `pk_` | Client-side SDK (end-user apps) |
-| Secret Key | `sk_` | Server-side admin operations |
+| Public Key | `sem_pk_test_*` / `sem_pk_live_*` | Client-side SDK (end-user apps) |
+| Secret Key | `sem_sk_test_*` / `sem_sk_live_*` | Server-side admin operations |
 
 ::: warning
 Never expose secret keys in client-side code. Use public keys for end-user applications.
@@ -73,15 +80,19 @@ Never expose secret keys in client-side code. Use public keys for end-user appli
 ## Listing Collections
 
 ```typescript
-const collections = await engine.listCollections();
+// Dashboard API returns collections with stats
+const collections = await fetch('/api/v1/billing/collections');
+// Returns: [{ id, name, environment, plans, products, customers, activeSubscriptions }]
 ```
 
 ## Deleting a Collection
 
 ```typescript
-await engine.deleteCollection('col_abc123');
+import { deleteCollection } from '@semaphore-pay/server';
+
+await deleteCollection(engine, 'col_abc123');
 ```
 
 ::: danger
-Deleting a collection removes all associated plans, products, customers, and subscriptions. This action is irreversible.
+Deleting a collection removes all associated API keys. This action is irreversible.
 :::

@@ -4,13 +4,15 @@ title: Subscriptions
 
 # Subscriptions
 
-Subscriptions represent a customer's access to a product. They track billing status, renewal dates, and cancellation state.
+Subscriptions represent a customer's access to a plan. They track billing status, renewal dates, and cancellation state.
 
 ## Subscription Lifecycle
 
 ```
 created → active → past_due → canceled
                  ↘ trialed ↗
+                      ↓
+                   paused → active (resumed)
 ```
 
 | Status | Description |
@@ -19,18 +21,24 @@ created → active → past_due → canceled
 | `trialing` | In free trial period |
 | `past_due` | Payment failed, in dunning period |
 | `canceled` | Subscription ended (either immediately or at period end) |
+| `paused` | Subscription temporarily paused |
+| `pending_payment` | Awaiting initial payment (checkout in progress) |
 
 ## Creating a Subscription
 
 ```typescript
-const subscription = await engine.subscribe(collectionId, {
+import { subscribe } from '@semaphore-pay/server';
+
+const result = await subscribe(engine, {
   customerId: 'cust_abc123',
-  productId: 'prod_xyz789',
-  paymentMethod: {
-    type: 'card',
-    token: 'tok_...',
-  },
+  planId: 'plan_pro_monthly',
+}, {
+  collectionId: 'col_abc123',
+  environment: 'development',
 });
+
+console.log(result.status); // 'active' for free, 'pending_payment' for paid
+console.log(result.checkout?.checkoutLink); // Nomba checkout URL
 ```
 
 ## Canceling a Subscription
@@ -39,17 +47,28 @@ End users can cancel their own subscriptions:
 
 ```typescript
 // Client SDK
-const result = await client.cancelSubscription({
-  subscriptionId: 'sub_abc123',
-});
-
-console.log(result.cancelAtPeriodEnd); // true
-console.log(result.currentPeriodEnd); // When access ends
+const result = await client.cancelSubscription('sub_abc123');
 ```
 
 ::: info
 Canceling sets `cancelAtPeriodEnd: true`. The subscription remains active until the current period ends.
 :::
+
+## Pausing a Subscription
+
+```typescript
+import { pause } from '@semaphore-pay/server/subscription';
+
+await pause(engine, 'sub_abc123', { collectionId: 'col_abc123' });
+```
+
+## Resuming a Subscription
+
+```typescript
+import { resume } from '@semaphore-pay/server/subscription';
+
+await resume(engine, 'sub_abc123', { collectionId: 'col_abc123' });
+```
 
 ## Renewals
 
@@ -62,12 +81,14 @@ Renewals are handled automatically via cron job. When a subscription's `currentP
 ## Checking Entitlements
 
 ```typescript
-const check = await engine.checkEntitlement(collectionId, {
-  customerId: 'cust_abc123',
-  feature: 'api_access',
-});
+import { check } from '@semaphore-pay/server';
 
-if (check.entitled) {
+const entitlement = await check(engine, {
+  customerId: 'cust_abc123',
+  featureId: 'api_access',
+}, { collectionId: 'col_abc123' });
+
+if (entitlement.allowed) {
   // Grant access
 }
 ```
@@ -77,17 +98,22 @@ if (check.entitled) {
 For metered billing:
 
 ```typescript
-await engine.reportUsage(collectionId, {
+import { report } from '@semaphore-pay/server';
+
+await report(engine, {
   customerId: 'cust_abc123',
-  feature: 'api_calls',
-  quantity: 150,
-});
+  featureId: 'api_calls',
+  amount: 150,
+}, { collectionId: 'col_abc123' });
 ```
 
 ## Fetching Subscriptions
 
 ```typescript
-// Get customer's subscriptions
-const subscriptions = await engine.getCustomer(collectionId, 'cust_abc123');
-// Returns active, trialing, and past_due subscriptions
+import { list as listSubscriptions } from '@semaphore-pay/server/subscription';
+
+const subscriptions = await listSubscriptions(engine, {
+  status: 'active',
+  limit: 20,
+}, { collectionId: 'col_abc123' });
 ```

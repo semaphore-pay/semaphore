@@ -3,10 +3,10 @@ type: concept
 title: "Plans API"
 source: "https://docs.semaphorepay.tech/api-reference/plans/"
 path: /api-reference/plans/
-updated: 2026-07-05
+updated: 2026-07-07
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-05T13:54:02.034Z"
+  generated_at: "2026-07-07T20:01:08.631Z"
 ---
 ---
 title: Plans API
@@ -17,7 +17,7 @@ title: Plans API
 ## Create Plan
 
 ```http
-POST /api/v1/billing/collections/:id/plans
+POST /api/v1/billing/collections/:collectionId/plans
 Content-Type: application/json
 Cookie: semaphore.session=...
 ```
@@ -26,10 +26,9 @@ Cookie: semaphore.session=...
 {
   "name": "Pro",
   "description": "Full access",
-  "amount": 5000,
-  "currency": "NGN",
-  "interval": "month",
-  "intervalCount": 1,
+  "priceAmount": 5000,
+  "priceCurrency": "NGN",
+  "interval": "monthly",
   "trialPeriodDays": 14
 }
 ```
@@ -40,36 +39,86 @@ Cookie: semaphore.session=...
 |---|---|---|---|
 | `name` | string | yes | Plan name |
 | `description` | string | no | Plan description |
-| `amount` | number | yes | Price in kobo (₦50.00 = 5000) |
-| `currency` | string | yes | ISO 4217 code |
-| `interval` | string | yes | `day`, `week`, `month`, `year` |
-| `intervalCount` | number | yes | Billing frequency |
-| `trialPeriodDays` | number | no | Free trial length |
+| `priceAmount` | number | yes | Price in kobo (₦50.00 = 5000) |
+| `priceCurrency` | string | yes | ISO 4217 code (e.g. `"NGN"`) |
+| `interval` | string | yes | `"monthly"`, `"yearly"`, or `"none"` |
+| `trialPeriodDays` | number | no | Free trial length in days |
+| `badge` | string | no | Display badge (e.g. `"Most Popular"`) |
+| `ctaText` | string | no | Call-to-action text (e.g. `"Start Free Trial"`) |
+| `sortOrder` | number | no | Display order (lower = first) |
 
 ### Response
 
 ```json
 {
-  "id": "plan_abc123",
+  "id": "plan_pro_monthly",
+  "collectionId": "col_abc123",
+  "environment": "development",
   "name": "Pro",
-  "amount": 5000,
-  "currency": "NGN",
-  "interval": "month",
-  "intervalCount": 1,
-  "trialPeriodDays": 14
+  "description": "Full access",
+  "priceAmount": 5000,
+  "priceCurrency": "NGN",
+  "interval": "monthly",
+  "trialPeriodDays": 14,
+  "badge": null,
+  "ctaText": null,
+  "sortOrder": 0,
+  "isActive": true,
+  "createdAt": "2026-07-05T12:00:00Z",
+  "updatedAt": "2026-07-05T12:00:00Z"
 }
 ```
+
+::: info
+Plan IDs are auto-generated from name + interval: `plan_{sanitized_name}_{interval}` (e.g. `plan_pro_monthly`).
+:::
 
 ## List Plans
 
 ```http
-GET /api/v1/billing/collections/:id/plans
+GET /api/v1/billing/collections/:collectionId/plans
 Cookie: semaphore.session=...
 ```
 
 ## Get Plan
 
 ```http
-GET /api/v1/billing/collections/:id/plans/:planId
+GET /api/v1/billing/collections/:collectionId/plans/:planId
 Cookie: semaphore.session=...
 ```
+
+## Deactivate Plan
+
+```http
+POST /api/v1/billing/collections/:collectionId/plans/:planId/deactivate
+Content-Type: application/json
+Cookie: semaphore.session=...
+```
+
+```json
+{
+  "cancelRenewals": true
+}
+```
+
+::: info
+Deactivating a plan stops new subscriptions but existing ones continue until canceled or period ends.
+:::
+
+## Reactivate Plan
+
+```http
+POST /api/v1/billing/collections/:collectionId/plans/:planId/reactivate
+Cookie: semaphore.session=...
+```
+
+## Delete Plan
+
+```http
+DELETE /api/v1/billing/collections/:collectionId/plans/:planId
+Cookie: semaphore.session=...
+```
+
+::: danger
+This permanently deletes the plan. Active subscriptions using this plan will be affected.
+:::

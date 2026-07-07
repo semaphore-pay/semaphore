@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.1.26
+
+- Fixed `SemaphorePayEngine` type compatibility — annotated `createCustomer` return type as `Promise<string>` to resolve `SemaphorePayEngine<"sqlite">` vs `SemaphorePayEngine<any>` mismatch
+
+## 0.1.25
+
+- Added sub-path exports for every module (`./api`, `./plan`, `./product`, `./customer`, `./feature`, `./entitlement`, `./webhook`, `./nomba`)
+- Backend now imports from `@semaphore-pay/server/plan`, `@semaphore-pay/server/customer`, etc. — no more root `export *` collisions
+
+## 0.1.24
+
+- Fixed `exports` field in package.json — `types` condition now comes first in all entries (required for TypeScript `moduleResolution: "Bundler"` to resolve type declarations correctly)
+
+## 0.1.23
+
+- Fixed all missing exports from index.ts — replaced `export *` with explicit named re-exports
+- Resolved TypeScript `export *` name collision issues that silently dropped `deactivate`, `reactivatePlanApi`, `remove`, `listCustomersApi`, `sqliteSchema`, `NombaClient`
+- All API functions now correctly exported: plans, products, customers, features, entitlements
+
+## 0.1.22
+
+- Exported `getProduct`, `updateProduct`, `deleteProduct` from `product.api.ts`
+- All product API functions now accessible from `@semaphore-pay/server`
+
 ## 0.1.21
 
 - Added `POST /payments/verify` endpoint — verify payment by orderReference (webhook fallback)

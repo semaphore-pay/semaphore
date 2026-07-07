@@ -3,10 +3,10 @@ type: concept
 title: "Semaphore — Subscription Billing for Nomba"
 source: "https://docs.semaphorepay.tech/"
 path: /
-updated: 2026-07-05
+updated: 2026-07-07
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-05T13:54:02.044Z"
+  generated_at: "2026-07-07T20:01:08.647Z"
 ---
 ---
 title: Semaphore — Subscription Billing for Nomba
@@ -21,8 +21,10 @@ A subscription billing engine built on top of Nomba. Multiple developers sign up
 - **Multi-tenant collections** — each developer gets their own isolated collection with API keys
 - **Subscription management** — create plans, products, and manage recurring billing
 - **Tokenized card billing** — charge saved cards on renewals automatically
-- **Entitlements** — check and report usage-based access
-- **Webhook events** — real-time notifications for subscription lifecycle
+- **Bank transfer support** — accept bank transfers via Nomba
+- **Entitlements** — check and report usage-based access with boolean and metered features
+- **Webhook events** — real-time notifications for payment lifecycle
+- **Payment verification** — fallback verification when webhooks aren't received
 - **Client SDKs** — TypeScript/React core + React Native support
 
 ## Architecture
@@ -52,7 +54,7 @@ A subscription billing engine built on top of Nomba. Multiple developers sign up
 
 | Package | Layer | Purpose |
 |---|---|---|
-| `@semaphore-pay/server` | Backend | Admin operations, collections, plans, products |
-| `@semaphore-pay/client` | Frontend | End-user operations, subscriptions, entitlements |
+| `@semaphore-pay/server` | Backend | Admin operations, collections, plans, products, features |
+| `@semaphore-pay/client` | Frontend | End-user operations, subscriptions, entitlements, payment verification |
 
 The server SDK is for your backend. The client SDK is for your users' apps.

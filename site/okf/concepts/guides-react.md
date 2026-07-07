@@ -3,10 +3,10 @@ type: guide
 title: "React Integration"
 source: "https://docs.semaphorepay.tech/guides/react/"
 path: /guides/react/
-updated: 2026-07-05
+updated: 2026-07-07
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-05T13:54:02.043Z"
+  generated_at: "2026-07-07T20:01:08.644Z"
 ---
 ---
 title: React Integration
@@ -25,60 +25,66 @@ npm install @semaphore-pay/client zustand
 ## Setup
 
 ```tsx
-import { SemaphorePayProvider, useSemaphorePay } from '@semaphore-pay/client/react';
+import { useSemaphorePayStore } from '@semaphore-pay/client/react';
 
-function App() {
+// Initialize once (e.g. in App.tsx)
+useSemaphorePayStore.getState().initialize({
+  baseUrl: 'https://your-api.example.com',
+  apiKey: 'pk_your_key',
+  collectionId: 'col_abc123',
+});
+```
+
+## Using the Store
+
+```tsx
+import { useSemaphorePayStore } from '@semaphore-pay/client/react';
+
+function Dashboard() {
+  const { customerId, subscribed, subscriptionStatus, error } = useSemaphorePayStore();
+
+  if (error) return <div>Error: {error}</div>;
+
   return (
-    <SemaphorePayProvider
-      config={{
-        baseUrl: 'https://your-api.example.com',
-        apiKey: 'pk_your_key',
-        collectionId: 'col_abc123',
-      }}
-    >
-      <Dashboard />
-    </SemaphorePayProvider>
+    <div>
+      <h2>Subscription Status</h2>
+      <p>Customer: {customerId}</p>
+      <p>Subscribed: {subscribed ? 'Yes' : 'No'}</p>
+      <p>Status: {subscriptionStatus}</p>
+    </div>
   );
 }
 ```
 
-## Using the Hook
+## Setting Customer ID
+
+After creating a customer, set the ID in the store:
 
 ```tsx
-function Dashboard() {
-  const {
-    customer,
-    subscriptions,
-    entitlements,
-    isLoading,
-    error,
-    subscribe,
-    cancelSubscription,
-    checkEntitlement,
-  } = useSemaphorePay();
+import { useSemaphorePayStore } from '@semaphore-pay/client/react';
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+function LoginButton() {
+  const { initialize, setCustomerId } = useSemaphorePayStore();
 
-  return (
-    <div>
-      <h2>Subscriptions</h2>
-      {subscriptions.map((sub) => (
-        <div key={sub.productId}>
-          {sub.productInternalId} — {sub.status}
-          {sub.cancelAtPeriodEnd && ' (cancels at period end)'}
-        </div>
-      ))}
+  const handleLogin = async () => {
+    // Initialize client
+    initialize({
+      baseUrl: 'https://your-api.example.com',
+      apiKey: 'pk_your_key',
+      collectionId: 'col_abc123',
+    });
 
-      <h2>Features</h2>
-      <button
-        onClick={() => checkEntitlement('api_access')}
-        disabled={!entitlements?.api_access}
-      >
-        {entitlements?.api_access ? 'Access Granted' : 'Upgrade Required'}
-      </button>
-    </div>
-  );
+    // Create or get customer
+    const client = useSemaphorePayStore.getState().client;
+    const customer = await client.createCustomer({
+      userId: 'user_123',
+      email: 'user@example.com',
+    });
+
+    setCustomerId(customer.id);
+  };
+
+  return <button onClick={handleLogin}>Login</button>;
 }
 ```
 
@@ -86,8 +92,19 @@ function Dashboard() {
 
 | Property | Type | Description |
 |---|---|---|
-| `customer` | `Customer \| null` | Current customer data |
-| `subscriptions` | `CustomerSubscription[]` | Active subscriptions |
-| `entitlements` | `Record<string, boolean>` | Feature access map |
-| `isLoading` | `boolean` | Loading state |
-| `error` | `Error \| null` | Last error |
+| `client` | `SemaphorePayClient \| null` | The API client instance |
+| `ready` | `boolean` | Whether the client is initialized |
+| `customerId` | `string \| null` | Current customer ID |
+| `subscriptionStatus` | `string \| null` | Current subscription status |
+| `subscribed` | `boolean` | Whether user has active subscription |
+| `error` | `string \| null` | Last error message |
+
+## Available Actions
+
+| Action | Parameters | Description |
+|---|---|---|
+| `initialize` | `{ baseUrl, apiKey, collectionId }` | Initialize the client |
+| `setCustomerId` | `id: string` | Set the current customer ID |
+| `setSubscriptionStatus` | `status: string \| null` | Set subscription status |
+| `setError` | `error: string \| null` | Set error message |
+| `reset` | — | Reset the store |

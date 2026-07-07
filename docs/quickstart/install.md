@@ -14,7 +14,10 @@ npm install @semaphore-pay/server
 
 ### Peer Dependencies
 
-- `better-sqlite3` (SQLite) or `@cloudflare/workers-types` (D1)
+- `better-auth` — authentication
+- `drizzle-orm` — database ORM
+- `hono` — HTTP framework
+- `ioredis` — Redis client (optional, for caching)
 
 ### TypeScript Setup
 
@@ -38,15 +41,17 @@ npm install @semaphore-pay/client
 
 ### Peer Dependencies
 
-- `react` (optional, for zustand store)
+- `react` (optional, for React hooks)
+- `react-native` (optional, for React Native components)
+- `react-native-webview` (optional, for React Native paywall)
 
 ### Framework Support
 
 | Framework | Package | Import |
 |---|---|---|
-| Vanilla TS | `@semaphore-pay/client` | `import SemaphorePayClient` |
-| React | `@semaphore-pay/client/react` | `import { useSemaphorePay }` |
-| React Native | `@semaphore-pay/client/react-native` | `import { useSemaphorePay }` |
+| Vanilla TS | `@semaphore-pay/client` | `import { SemaphorePayClient }` |
+| React | `@semaphore-pay/client/react` | `import { useSemaphorePayStore }` |
+| React Native | `@semaphore-pay/client/react-native` | `import { useSemaphorePay, SemaphorePayPaywall, SemaphorePayEntitlementGuard }` |
 
 ## Cloudflare Worker Setup
 
@@ -64,25 +69,34 @@ npm install wrangler --save-dev
   "name": "semaphore-api",
   "main": "src/index.ts",
   "compatibility_date": "2024-12-01",
+  "compatibility_flags": ["nodejs_compat"],
   "d1_databases": [
     {
-      "binding": "SEMAPHORE_DB",
+      "binding": "semaphore_db",
       "database_name": "semaphore-db",
       "database_id": "your-d1-id"
     }
-  ]
+  ],
+  "crons": ["0 * * * *", "0 0 * * *"]
 }
 ```
 
 ## Environment Variables
 
 ```bash
-# Nomba
+# Nomba (sandbox)
 NOMBA_SANDBOX_CLIENT_ID=
 NOMBA_SANDBOX_CLIENT_SECRET=
 NOMBA_SANDBOX_ACCOUNT_ID=
+
+# Nomba (production)
+NOMBA_LIVE_CLIENT_ID=
+NOMBA_LIVE_CLIENT_SECRET=
+NOMBA_LIVE_ACCOUNT_ID=
+
+# Nomba (shared)
 NOMBA_WEBHOOK_SECRET=
-NOMBA_CHECKOUT_CALLBACK_URL=
+NOMBA_CHECKOUT_CALLBACK_URL=https://your-api.example.com/webhook
 
 # Better Auth
 BETTER_AUTH_SECRET=
@@ -90,4 +104,9 @@ BETTER_AUTH_URL=
 
 # CORS
 FRONTEND_URL=https://your-frontend.com
+
+# Cloudflare (for D1 access)
+CLOUDFLARE_ACCOUNT_ID=
+CLOUDFLARE_DATABASE_ID=
+CLOUDFLARE_D1_TOKEN=
 ```

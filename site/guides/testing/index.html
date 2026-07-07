@@ -105,10 +105,10 @@
       Testing : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Testing%0A---%0A%0A%23%20Testing%0A%0ATest%20your%20integration%20in%20Nomba&#039;s%20sandbox%20environment.%0A%0A%23%23%20Sandbox%20Mode%0A%0AUse%20sandbox%20API%20keys%20for%20development%3A%0A%0A%60%60%60bash%0ANOMBA_SANDBOX_CLIENT_ID%3Dyour_sandbox_client_id%0ANOMBA_SANDBOX_CLIENT_SECRET%3Dyour_sandbox_client_secret%0ANOMBA_SANDBOX_ACCOUNT_ID%3Dyour_sandbox_account_id%0A%60%60%60%0A%0A%23%23%20Test%20Cards%0A%0AUse%20Nomba&#039;s%20test%20card%20numbers%3A%0A%0A%7C%20Card%20%7C%20Result%20%7C%0A%7C---%7C---%7C%0A%7C%20%604111111111111111%60%20%7C%20Success%20%7C%0A%7C%20%604000000000000002%60%20%7C%20Declined%20%7C%0A%7C%20%604000000000009995%60%20%7C%20Insufficient%20funds%20%7C%0A%0A%23%23%20Smoke%20Test%0A%0ARun%20the%20client%20SDK%20smoke%20test%3A%0A%0A%60%60%60bash%0Acd%20packages%2Fclient%0Anpx%20tsx%20scripts%2Fsmoke-test.ts%0A%60%60%60%0A%0AThis%20tests%3A%0A-%20Collection%20creation%0A-%20Plan%20creation%0A-%20Product%20creation%0A-%20Customer%20creation%0A-%20Subscription%20flow%0A-%20Entitlement%20checks%0A%0A%23%23%20Unit%20Testing%0A%0A%60%60%60typescript%0Aimport%20%7B%20createSemaphoreEngine%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0A%2F%2F%20Use%20in-memory%20SQLite%20for%20tests%0Aconst%20engine%20%3D%20createSemaphoreEngine(%7B%0A%20%20db%3A%20&#039;%3Amemory%3A&#039;%2C%0A%20%20nomba%3A%20%7B%0A%20%20%20%20clientId%3A%20&#039;test&#039;%2C%0A%20%20%20%20clientSecret%3A%20&#039;test&#039;%2C%0A%20%20%20%20accountId%3A%20&#039;test&#039;%2C%0A%20%20%7D%2C%0A%20%20webhookSecret%3A%20&#039;test&#039;%2C%0A%20%20callbackUrl%3A%20&#039;http%3A%2F%2Flocalhost%3A3000%2Fwebhook&#039;%2C%0A%7D)%3B%0A%0A%2F%2F%20Test%20subscription%20flow%0Aconst%20collection%20%3D%20await%20engine.createCollection(%7B%20name%3A%20&#039;Test&#039;%20%7D)%3B%0Aconst%20plan%20%3D%20await%20engine.createPlan(collection.id%2C%20%7B%0A%20%20name%3A%20&#039;Test%20Plan&#039;%2C%0A%20%20amount%3A%201000%2C%0A%20%20currency%3A%20&#039;NGN&#039;%2C%0A%20%20interval%3A%20&#039;month&#039;%2C%0A%20%20intervalCount%3A%201%2C%0A%7D)%3B%0A%60%60%60%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Testing%0A---%0A%0A%23%20Testing%0A%0ATest%20your%20integration%20in%20Nomba&#039;s%20sandbox%20environment.%0A%0A%23%23%20Sandbox%20Mode%0A%0AUse%20sandbox%20API%20keys%20for%20development%3A%0A%0A%60%60%60bash%0ANOMBA_SANDBOX_CLIENT_ID%3Dyour_sandbox_client_id%0ANOMBA_SANDBOX_CLIENT_SECRET%3Dyour_sandbox_client_secret%0ANOMBA_SANDBOX_ACCOUNT_ID%3Dyour_sandbox_account_id%0ANOMBA_WEBHOOK_SECRET%3Dyour_webhook_secret%0ANOMBA_CHECKOUT_CALLBACK_URL%3Dhttp%3A%2F%2Flocalhost%3A8787%2Fwebhook%0A%60%60%60%0A%0A%23%23%20Smoke%20Test%0A%0ARun%20the%20client%20SDK%20smoke%20test%3A%0A%0A%60%60%60bash%0Acd%20packages%2Fclient%0Anpx%20tsx%20scripts%2Fsmoke-test.ts%0A%60%60%60%0A%0AThis%20tests%3A%0A-%20Collection%20creation%0A-%20Plan%20creation%0A-%20Product%20creation%0A-%20Customer%20creation%0A-%20Subscription%20flow%0A-%20Entitlement%20checks%0A%0A%23%23%20Full%20Test%20Suite%0A%0ARun%20the%20comprehensive%20test%20suite%3A%0A%0A%60%60%60bash%0Acd%20packages%2Fserver%0Anpx%20tsx%20test-client.ts%0A%60%60%60%0A%0AAll%2010%20SDK%20methods%20are%20tested%3A%0A-%20%60createCustomer%60%0A-%20%60getMe%60%0A-%20%60listPlans%60%0A-%20%60getPlan%60%0A-%20%60listProducts%60%0A-%20%60subscribeToPlan%60%0A-%20%60cancelSubscription%60%0A-%20%60purchaseProduct%60%0A-%20%60checkEntitlement%60%0A-%20%60reportEntitlement%60%0A%0A%23%23%20Payment%20Flow%20Tests%0A%0ATest%20the%20complete%20payment%20flow%20including%20webhooks%20and%20verification%3A%0A%0A%60%60%60bash%0Acd%20packages%2Fserver%0Anpx%20tsx%20test-payment-flow.ts%0A%60%60%60%0A%0A14%20test%20suites%20covering%3A%0A-%20Webhook%20processing%0A-%20Payment%20verification%0A-%20Deduplication%0A-%20Bad%20signature%20handling%0A-%20Missing%20fields%0A-%20Invalid%20references%0A-%20Already%20active%20subscriptions%0A-%20%60waitForPayment%60%20polling%0A-%20Product%20purchases%0A-%20Edge%20cases%0A%0A%23%23%20Mock%20Webhook%0A%0ATest%20webhook%20handling%20locally%3A%0A%0A%60%60%60bash%0Acd%20packages%2Fserver%0Anpx%20tsx%20mock-webhook.ts%0A%60%60%60%0A%0ASends%20a%20signed%20%60payment_success%60%20event%20to%20%60http%3A%2F%2Flocalhost%3A8787%2Fwebhook%60.%0A%0A%23%23%20Unit%20Testing%0A%0A%60%60%60typescript%0Aimport%20%7B%20initSemaphorePay%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0Aimport%20%7B%20drizzle%20%7D%20from%20&#039;drizzle-orm%2Fbetter-sqlite3&#039;%3B%0Aimport%20*%20as%20sqliteSchema%20from%20&#039;%40semaphore-pay%2Fserver%2Fschema%2Fsqlite&#039;%3B%0A%0A%2F%2F%20Use%20in-memory%20SQLite%20for%20tests%0Aconst%20sqlite%20%3D%20require(&#039;better-sqlite3&#039;)(&#039;%3Amemory%3A&#039;)%3B%0Aconst%20db%20%3D%20drizzle(sqlite%2C%20%7B%20schema%3A%20sqliteSchema%20%7D)%3B%0A%0Aconst%20engine%20%3D%20initSemaphorePay(%7B%0A%20%20dialect%3A%20&#039;sqlite&#039;%2C%0A%20%20db%2C%0A%20%20supportsTransactions%3A%20true%2C%0A%7D)%3B%0A%0A%2F%2F%20Test%20subscription%20flow%0Aimport%20%7B%20createCollection%2C%20create%2C%20createProduct%2C%20upsertCustomer%2C%20subscribe%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20collection%20%3D%20await%20createCollection(engine%2C%20&#039;Test&#039;%2C%20&#039;sandbox&#039;)%3B%0Aconst%20plan%20%3D%20await%20create(engine%2C%20%7B%0A%20%20name%3A%20&#039;Test%20Plan&#039;%2C%0A%20%20priceAmount%3A%201000%2C%0A%20%20priceCurrency%3A%20&#039;NGN&#039;%2C%0A%20%20interval%3A%20&#039;monthly&#039;%2C%0A%7D%2C%20%7B%0A%20%20collectionId%3A%20collection.id%2C%0A%20%20environment%3A%20&#039;development&#039;%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Test%20Cards%0A%0ANomba%20sandbox%20provides%20test%20card%20numbers%20for%20development.%20Refer%20to%20Nomba%20documentation%20for%20current%20test%20card%20numbers.%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1095,32 +1095,10 @@
 <pre class="hljs"><code class="language-bash">NOMBA_SANDBOX_CLIENT_ID<span class="hljs-punctuation">=</span>your_sandbox_client_id
 NOMBA_SANDBOX_CLIENT_SECRET<span class="hljs-punctuation">=</span>your_sandbox_client_secret
 NOMBA_SANDBOX_ACCOUNT_ID<span class="hljs-punctuation">=</span>your_sandbox_account_id
+NOMBA_WEBHOOK_SECRET<span class="hljs-punctuation">=</span>your_webhook_secret
+NOMBA_CHECKOUT_CALLBACK_URL<span class="hljs-punctuation">=</span>http<span class="hljs-punctuation">://</span>localhost<span class="hljs-punctuation">:</span><span class="hljs-number">8787</span><span class="hljs-punctuation">/</span>webhook
 </code></pre>
-<h2 id="testing-test-cards" class="docmd-heading"><a href="#testing-test-cards" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Test Cards</h2>
-<p>Use Nomba’s test card numbers:</p>
-<div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>Card</th>
-<th>Result</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>4111111111111111</code></td>
-<td>Success</td>
-</tr>
-<tr>
-<td><code>4000000000000002</code></td>
-<td>Declined</td>
-</tr>
-<tr>
-<td><code>4000000000009995</code></td>
-<td>Insufficient funds</td>
-</tr>
-</tbody>
-</table>
-</div><h2 id="testing-smoke-test" class="docmd-heading"><a href="#testing-smoke-test" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Smoke Test</h2>
+<h2 id="testing-smoke-test" class="docmd-heading"><a href="#testing-smoke-test" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Smoke Test</h2>
 <p>Run the client SDK smoke test:</p>
 <pre class="hljs"><code class="language-bash"><span class="hljs-keyword">cd</span> packages<span class="hljs-punctuation">/</span>client
 npx tsx scripts<span class="hljs-punctuation">/</span>smoke<span class="hljs-punctuation">-</span>test.<span class="hljs-attr">ts</span>
@@ -1134,31 +1112,79 @@ npx tsx scripts<span class="hljs-punctuation">/</span>smoke<span class="hljs-pun
 <li>Subscription flow</li>
 <li>Entitlement checks</li>
 </ul>
+<h2 id="testing-full-test-suite" class="docmd-heading"><a href="#testing-full-test-suite" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Full Test Suite</h2>
+<p>Run the comprehensive test suite:</p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-keyword">cd</span> packages<span class="hljs-punctuation">/</span>server
+npx tsx test<span class="hljs-punctuation">-</span>client.<span class="hljs-attr">ts</span>
+</code></pre>
+<p>All 10 SDK methods are tested:</p>
+<ul>
+<li><code>createCustomer</code></li>
+<li><code>getMe</code></li>
+<li><code>listPlans</code></li>
+<li><code>getPlan</code></li>
+<li><code>listProducts</code></li>
+<li><code>subscribeToPlan</code></li>
+<li><code>cancelSubscription</code></li>
+<li><code>purchaseProduct</code></li>
+<li><code>checkEntitlement</code></li>
+<li><code>reportEntitlement</code></li>
+</ul>
+<h2 id="testing-payment-flow-tests" class="docmd-heading"><a href="#testing-payment-flow-tests" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Payment Flow Tests</h2>
+<p>Test the complete payment flow including webhooks and verification:</p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-keyword">cd</span> packages<span class="hljs-punctuation">/</span>server
+npx tsx test<span class="hljs-punctuation">-</span>payment<span class="hljs-punctuation">-</span>flow.<span class="hljs-attr">ts</span>
+</code></pre>
+<p>14 test suites covering:</p>
+<ul>
+<li>Webhook processing</li>
+<li>Payment verification</li>
+<li>Deduplication</li>
+<li>Bad signature handling</li>
+<li>Missing fields</li>
+<li>Invalid references</li>
+<li>Already active subscriptions</li>
+<li><code>waitForPayment</code> polling</li>
+<li>Product purchases</li>
+<li>Edge cases</li>
+</ul>
+<h2 id="testing-mock-webhook" class="docmd-heading"><a href="#testing-mock-webhook" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Mock Webhook</h2>
+<p>Test webhook handling locally:</p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-keyword">cd</span> packages<span class="hljs-punctuation">/</span>server
+npx tsx mock<span class="hljs-punctuation">-</span>webhook.<span class="hljs-attr">ts</span>
+</code></pre>
+<p>Sends a signed <code>payment_success</code> event to <code>http://localhost:8787/webhook</code>.</p>
 <h2 id="testing-unit-testing" class="docmd-heading"><a href="#testing-unit-testing" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Unit Testing</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { createSemaphoreEngine } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { initSemaphorePay } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+<span class="hljs-keyword">import</span> { drizzle } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;drizzle-orm/better-sqlite3&#039;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-punctuation">*</span> <span class="hljs-keyword">as</span> sqliteSchema <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server/schema/sqlite&#039;</span>;
 
 <span class="hljs-comment">// Use in-memory SQLite for tests</span>
-<span class="hljs-keyword">const</span> engine <span class="hljs-punctuation">=</span> <span class="hljs-title function_">createSemaphoreEngine</span>({
-  db<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;:memory:&#039;</span>,
-  nomba<span class="hljs-punctuation">:</span> {
-    clientId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;test&#039;</span>,
-    clientSecret<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;test&#039;</span>,
-    accountId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;test&#039;</span>,
-  },
-  webhookSecret<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;test&#039;</span>,
-  callbackUrl<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;http://localhost:3000/webhook&#039;</span>,
+<span class="hljs-keyword">const</span> sqlite <span class="hljs-punctuation">=</span> <span class="hljs-keyword">require</span>(<span class="hljs-string">&#039;better-sqlite3&#039;</span>)(<span class="hljs-string">&#039;:memory:&#039;</span>);
+<span class="hljs-keyword">const</span> db <span class="hljs-punctuation">=</span> <span class="hljs-title function_">drizzle</span>(sqlite, { schema<span class="hljs-punctuation">:</span> sqliteSchema });
+
+<span class="hljs-keyword">const</span> engine <span class="hljs-punctuation">=</span> <span class="hljs-title function_">initSemaphorePay</span>({
+  dialect<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;sqlite&#039;</span>,
+  db,
+  supportsTransactions<span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span>,
 });
 
 <span class="hljs-comment">// Test subscription flow</span>
-<span class="hljs-keyword">const</span> collection <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">createCollection</span>({ name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Test&#039;</span> });
-<span class="hljs-keyword">const</span> plan <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">createPlan</span>(collection.<span class="hljs-keyword">id</span>, {
+<span class="hljs-keyword">import</span> { createCollection, create, createProduct, upsertCustomer, subscribe } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">const</span> collection <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">createCollection</span>(engine, <span class="hljs-string">&#039;Test&#039;</span>, <span class="hljs-string">&#039;sandbox&#039;</span>);
+<span class="hljs-keyword">const</span> plan <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">create</span>(engine, {
   name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Test Plan&#039;</span>,
-  amount<span class="hljs-punctuation">:</span> <span class="hljs-number">1000</span>,
-  currency<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;NGN&#039;</span>,
-  interval<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;month&#039;</span>,
-  intervalCount<span class="hljs-punctuation">:</span> <span class="hljs-number">1</span>,
+  priceAmount<span class="hljs-punctuation">:</span> <span class="hljs-number">1000</span>,
+  priceCurrency<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;NGN&#039;</span>,
+  interval<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;monthly&#039;</span>,
+}, {
+  collectionId<span class="hljs-punctuation">:</span> collection.<span class="hljs-keyword">id</span>,
+  environment<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;development&#039;</span>,
 });
 </code></pre>
+<h2 id="testing-test-cards" class="docmd-heading"><a href="#testing-test-cards" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Test Cards</h2>
+<p>Nomba sandbox provides test card numbers for development. Refer to Nomba documentation for current test card numbers.</p>
 
                 
                   <div class="page-navigation">
@@ -1246,15 +1272,27 @@ npx tsx scripts<span class="hljs-punctuation">/</span>smoke<span class="hljs-pun
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#testing-test-cards" class="toc-link">Test Cards</a>
-        </li>
-      
-        <li class="toc-item toc-level-2">
           <a href="#testing-smoke-test" class="toc-link">Smoke Test</a>
         </li>
       
         <li class="toc-item toc-level-2">
+          <a href="#testing-full-test-suite" class="toc-link">Full Test Suite</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#testing-payment-flow-tests" class="toc-link">Payment Flow Tests</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#testing-mock-webhook" class="toc-link">Mock Webhook</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
           <a href="#testing-unit-testing" class="toc-link">Unit Testing</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#testing-test-cards" class="toc-link">Test Cards</a>
         </li>
       
     </ul>
@@ -1264,6 +1302,38 @@ npx tsx scripts<span class="hljs-punctuation">/</span>smoke<span class="hljs-pun
             </div>
             <div class="page-footer-actions">
               
+              
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
               
               <span class="git-spacer"></span>
               
@@ -1282,13 +1352,13 @@ npx tsx scripts<span class="hljs-punctuation">/</span>smoke<span class="hljs-pun
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

@@ -105,10 +105,10 @@
       Plans API : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Plans%20API%0A---%0A%0A%23%20Plans%20API%0A%0A%23%23%20Create%20Plan%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3Aid%2Fplans%0AContent-Type%3A%20application%2Fjson%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%60%60%60json%0A%7B%0A%20%20%22name%22%3A%20%22Pro%22%2C%0A%20%20%22description%22%3A%20%22Full%20access%22%2C%0A%20%20%22amount%22%3A%205000%2C%0A%20%20%22currency%22%3A%20%22NGN%22%2C%0A%20%20%22interval%22%3A%20%22month%22%2C%0A%20%20%22intervalCount%22%3A%201%2C%0A%20%20%22trialPeriodDays%22%3A%2014%0A%7D%0A%60%60%60%0A%0A%23%23%23%20Parameters%0A%0A%7C%20Field%20%7C%20Type%20%7C%20Required%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C---%7C%0A%7C%20%60name%60%20%7C%20string%20%7C%20yes%20%7C%20Plan%20name%20%7C%0A%7C%20%60description%60%20%7C%20string%20%7C%20no%20%7C%20Plan%20description%20%7C%0A%7C%20%60amount%60%20%7C%20number%20%7C%20yes%20%7C%20Price%20in%20kobo%20(%E2%82%A650.00%20%3D%205000)%20%7C%0A%7C%20%60currency%60%20%7C%20string%20%7C%20yes%20%7C%20ISO%204217%20code%20%7C%0A%7C%20%60interval%60%20%7C%20string%20%7C%20yes%20%7C%20%60day%60%2C%20%60week%60%2C%20%60month%60%2C%20%60year%60%20%7C%0A%7C%20%60intervalCount%60%20%7C%20number%20%7C%20yes%20%7C%20Billing%20frequency%20%7C%0A%7C%20%60trialPeriodDays%60%20%7C%20number%20%7C%20no%20%7C%20Free%20trial%20length%20%7C%0A%0A%23%23%23%20Response%0A%0A%60%60%60json%0A%7B%0A%20%20%22id%22%3A%20%22plan_abc123%22%2C%0A%20%20%22name%22%3A%20%22Pro%22%2C%0A%20%20%22amount%22%3A%205000%2C%0A%20%20%22currency%22%3A%20%22NGN%22%2C%0A%20%20%22interval%22%3A%20%22month%22%2C%0A%20%20%22intervalCount%22%3A%201%2C%0A%20%20%22trialPeriodDays%22%3A%2014%0A%7D%0A%60%60%60%0A%0A%23%23%20List%20Plans%0A%0A%60%60%60http%0AGET%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3Aid%2Fplans%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%20Get%20Plan%0A%0A%60%60%60http%0AGET%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3Aid%2Fplans%2F%3AplanId%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Plans%20API%0A---%0A%0A%23%20Plans%20API%0A%0A%23%23%20Create%20Plan%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fplans%0AContent-Type%3A%20application%2Fjson%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%60%60%60json%0A%7B%0A%20%20%22name%22%3A%20%22Pro%22%2C%0A%20%20%22description%22%3A%20%22Full%20access%22%2C%0A%20%20%22priceAmount%22%3A%205000%2C%0A%20%20%22priceCurrency%22%3A%20%22NGN%22%2C%0A%20%20%22interval%22%3A%20%22monthly%22%2C%0A%20%20%22trialPeriodDays%22%3A%2014%0A%7D%0A%60%60%60%0A%0A%23%23%23%20Parameters%0A%0A%7C%20Field%20%7C%20Type%20%7C%20Required%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C---%7C%0A%7C%20%60name%60%20%7C%20string%20%7C%20yes%20%7C%20Plan%20name%20%7C%0A%7C%20%60description%60%20%7C%20string%20%7C%20no%20%7C%20Plan%20description%20%7C%0A%7C%20%60priceAmount%60%20%7C%20number%20%7C%20yes%20%7C%20Price%20in%20kobo%20(%E2%82%A650.00%20%3D%205000)%20%7C%0A%7C%20%60priceCurrency%60%20%7C%20string%20%7C%20yes%20%7C%20ISO%204217%20code%20(e.g.%20%60%22NGN%22%60)%20%7C%0A%7C%20%60interval%60%20%7C%20string%20%7C%20yes%20%7C%20%60%22monthly%22%60%2C%20%60%22yearly%22%60%2C%20or%20%60%22none%22%60%20%7C%0A%7C%20%60trialPeriodDays%60%20%7C%20number%20%7C%20no%20%7C%20Free%20trial%20length%20in%20days%20%7C%0A%7C%20%60badge%60%20%7C%20string%20%7C%20no%20%7C%20Display%20badge%20(e.g.%20%60%22Most%20Popular%22%60)%20%7C%0A%7C%20%60ctaText%60%20%7C%20string%20%7C%20no%20%7C%20Call-to-action%20text%20(e.g.%20%60%22Start%20Free%20Trial%22%60)%20%7C%0A%7C%20%60sortOrder%60%20%7C%20number%20%7C%20no%20%7C%20Display%20order%20(lower%20%3D%20first)%20%7C%0A%0A%23%23%23%20Response%0A%0A%60%60%60json%0A%7B%0A%20%20%22id%22%3A%20%22plan_pro_monthly%22%2C%0A%20%20%22collectionId%22%3A%20%22col_abc123%22%2C%0A%20%20%22environment%22%3A%20%22development%22%2C%0A%20%20%22name%22%3A%20%22Pro%22%2C%0A%20%20%22description%22%3A%20%22Full%20access%22%2C%0A%20%20%22priceAmount%22%3A%205000%2C%0A%20%20%22priceCurrency%22%3A%20%22NGN%22%2C%0A%20%20%22interval%22%3A%20%22monthly%22%2C%0A%20%20%22trialPeriodDays%22%3A%2014%2C%0A%20%20%22badge%22%3A%20null%2C%0A%20%20%22ctaText%22%3A%20null%2C%0A%20%20%22sortOrder%22%3A%200%2C%0A%20%20%22isActive%22%3A%20true%2C%0A%20%20%22createdAt%22%3A%20%222026-07-05T12%3A00%3A00Z%22%2C%0A%20%20%22updatedAt%22%3A%20%222026-07-05T12%3A00%3A00Z%22%0A%7D%0A%60%60%60%0A%0A%3A%3A%3A%20info%0APlan%20IDs%20are%20auto-generated%20from%20name%20%2B%20interval%3A%20%60plan_%7Bsanitized_name%7D_%7Binterval%7D%60%20(e.g.%20%60plan_pro_monthly%60).%0A%3A%3A%3A%0A%0A%23%23%20List%20Plans%0A%0A%60%60%60http%0AGET%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fplans%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%20Get%20Plan%0A%0A%60%60%60http%0AGET%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fplans%2F%3AplanId%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%20Deactivate%20Plan%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fplans%2F%3AplanId%2Fdeactivate%0AContent-Type%3A%20application%2Fjson%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%60%60%60json%0A%7B%0A%20%20%22cancelRenewals%22%3A%20true%0A%7D%0A%60%60%60%0A%0A%3A%3A%3A%20info%0ADeactivating%20a%20plan%20stops%20new%20subscriptions%20but%20existing%20ones%20continue%20until%20canceled%20or%20period%20ends.%0A%3A%3A%3A%0A%0A%23%23%20Reactivate%20Plan%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fplans%2F%3AplanId%2Freactivate%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%20Delete%20Plan%0A%0A%60%60%60http%0ADELETE%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fplans%2F%3AplanId%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%3A%3A%3A%20danger%0AThis%20permanently%20deletes%20the%20plan.%20Active%20subscriptions%20using%20this%20plan%20will%20be%20affected.%0A%3A%3A%3A%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1090,17 +1090,16 @@
                 
                 <h1 id="plans-api" class="docmd-heading"><a href="#plans-api" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Plans API</h1>
 <h2 id="plans-api-create-plan" class="docmd-heading"><a href="#plans-api-create-plan" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Create Plan</h2>
-<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span><span class="hljs-keyword">id</span><span class="hljs-punctuation">/</span>plans
+<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>plans
 Content<span class="hljs-punctuation">-</span>Type<span class="hljs-punctuation">:</span> application<span class="hljs-punctuation">/</span>json
 Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
 </code></pre>
 <pre class="hljs"><code class="language-json">{
   <span class="hljs-string">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Pro&quot;</span>,
   <span class="hljs-string">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Full access&quot;</span>,
-  <span class="hljs-string">&quot;amount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5000</span>,
-  <span class="hljs-string">&quot;currency&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NGN&quot;</span>,
-  <span class="hljs-string">&quot;interval&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;month&quot;</span>,
-  <span class="hljs-string">&quot;intervalCount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span>,
+  <span class="hljs-string">&quot;priceAmount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5000</span>,
+  <span class="hljs-string">&quot;priceCurrency&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NGN&quot;</span>,
+  <span class="hljs-string">&quot;interval&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;monthly&quot;</span>,
   <span class="hljs-string">&quot;trialPeriodDays&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">14</span>
 }
 </code></pre>
@@ -1128,56 +1127,102 @@ Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">
 <td>Plan description</td>
 </tr>
 <tr>
-<td><code>amount</code></td>
+<td><code>priceAmount</code></td>
 <td>number</td>
 <td>yes</td>
 <td>Price in kobo (₦50.00 = 5000)</td>
 </tr>
 <tr>
-<td><code>currency</code></td>
+<td><code>priceCurrency</code></td>
 <td>string</td>
 <td>yes</td>
-<td>ISO 4217 code</td>
+<td>ISO 4217 code (e.g. <code>&quot;NGN&quot;</code>)</td>
 </tr>
 <tr>
 <td><code>interval</code></td>
 <td>string</td>
 <td>yes</td>
-<td><code>day</code>, <code>week</code>, <code>month</code>, <code>year</code></td>
-</tr>
-<tr>
-<td><code>intervalCount</code></td>
-<td>number</td>
-<td>yes</td>
-<td>Billing frequency</td>
+<td><code>&quot;monthly&quot;</code>, <code>&quot;yearly&quot;</code>, or <code>&quot;none&quot;</code></td>
 </tr>
 <tr>
 <td><code>trialPeriodDays</code></td>
 <td>number</td>
 <td>no</td>
-<td>Free trial length</td>
+<td>Free trial length in days</td>
+</tr>
+<tr>
+<td><code>badge</code></td>
+<td>string</td>
+<td>no</td>
+<td>Display badge (e.g. <code>&quot;Most Popular&quot;</code>)</td>
+</tr>
+<tr>
+<td><code>ctaText</code></td>
+<td>string</td>
+<td>no</td>
+<td>Call-to-action text (e.g. <code>&quot;Start Free Trial&quot;</code>)</td>
+</tr>
+<tr>
+<td><code>sortOrder</code></td>
+<td>number</td>
+<td>no</td>
+<td>Display order (lower = first)</td>
 </tr>
 </tbody>
 </table>
 </div><h3 id="plans-api-create-plan-response" class="docmd-heading"><a href="#plans-api-create-plan-response" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Response</h3>
 <pre class="hljs"><code class="language-json">{
-  <span class="hljs-string">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;plan_abc123&quot;</span>,
+  <span class="hljs-string">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;plan_pro_monthly&quot;</span>,
+  <span class="hljs-string">&quot;collectionId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;col_abc123&quot;</span>,
+  <span class="hljs-string">&quot;environment&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;development&quot;</span>,
   <span class="hljs-string">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Pro&quot;</span>,
-  <span class="hljs-string">&quot;amount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5000</span>,
-  <span class="hljs-string">&quot;currency&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NGN&quot;</span>,
-  <span class="hljs-string">&quot;interval&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;month&quot;</span>,
-  <span class="hljs-string">&quot;intervalCount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span>,
-  <span class="hljs-string">&quot;trialPeriodDays&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">14</span>
+  <span class="hljs-string">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Full access&quot;</span>,
+  <span class="hljs-string">&quot;priceAmount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5000</span>,
+  <span class="hljs-string">&quot;priceCurrency&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NGN&quot;</span>,
+  <span class="hljs-string">&quot;interval&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;monthly&quot;</span>,
+  <span class="hljs-string">&quot;trialPeriodDays&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">14</span>,
+  <span class="hljs-string">&quot;badge&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">null</span>,
+  <span class="hljs-string">&quot;ctaText&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">null</span>,
+  <span class="hljs-string">&quot;sortOrder&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span>,
+  <span class="hljs-string">&quot;isActive&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span>,
+  <span class="hljs-string">&quot;createdAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2026-07-05T12:00:00Z&quot;</span>,
+  <span class="hljs-string">&quot;updatedAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2026-07-05T12:00:00Z&quot;</span>
 }
 </code></pre>
+<div class="docmd-container callout callout-info"><div class="callout-content">
+<p>Plan IDs are auto-generated from name + interval: <code>plan_{sanitized_name}_{interval}</code> (e.g. <code>plan_pro_monthly</code>).</p>
+</div></div>
 <h2 id="plans-api-list-plans" class="docmd-heading"><a href="#plans-api-list-plans" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>List Plans</h2>
-<pre class="hljs"><code class="language-http">GET <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span><span class="hljs-keyword">id</span><span class="hljs-punctuation">/</span>plans
+<pre class="hljs"><code class="language-http">GET <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>plans
 Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
 </code></pre>
 <h2 id="plans-api-get-plan" class="docmd-heading"><a href="#plans-api-get-plan" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Get Plan</h2>
-<pre class="hljs"><code class="language-http">GET <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span><span class="hljs-keyword">id</span><span class="hljs-punctuation">/</span>plans<span class="hljs-punctuation">/:</span>planId
+<pre class="hljs"><code class="language-http">GET <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>plans<span class="hljs-punctuation">/:</span>planId
 Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
 </code></pre>
+<h2 id="plans-api-deactivate-plan" class="docmd-heading"><a href="#plans-api-deactivate-plan" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Deactivate Plan</h2>
+<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>plans<span class="hljs-punctuation">/:</span>planId<span class="hljs-punctuation">/</span>deactivate
+Content<span class="hljs-punctuation">-</span>Type<span class="hljs-punctuation">:</span> application<span class="hljs-punctuation">/</span>json
+Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
+</code></pre>
+<pre class="hljs"><code class="language-json">{
+  <span class="hljs-string">&quot;cancelRenewals&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span>
+}
+</code></pre>
+<div class="docmd-container callout callout-info"><div class="callout-content">
+<p>Deactivating a plan stops new subscriptions but existing ones continue until canceled or period ends.</p>
+</div></div>
+<h2 id="plans-api-reactivate-plan" class="docmd-heading"><a href="#plans-api-reactivate-plan" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Reactivate Plan</h2>
+<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>plans<span class="hljs-punctuation">/:</span>planId<span class="hljs-punctuation">/</span>reactivate
+Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
+</code></pre>
+<h2 id="plans-api-delete-plan" class="docmd-heading"><a href="#plans-api-delete-plan" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Delete Plan</h2>
+<pre class="hljs"><code class="language-http">DELETE <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>plans<span class="hljs-punctuation">/:</span>planId
+Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
+</code></pre>
+<div class="docmd-container callout callout-danger"><div class="callout-content">
+<p>This permanently deletes the plan. Active subscriptions using this plan will be affected.</p>
+</div></div>
 
                 
                   <div class="page-navigation">
@@ -1280,6 +1325,18 @@ Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">
           <a href="#plans-api-get-plan" class="toc-link">Get Plan</a>
         </li>
       
+        <li class="toc-item toc-level-2">
+          <a href="#plans-api-deactivate-plan" class="toc-link">Deactivate Plan</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#plans-api-reactivate-plan" class="toc-link">Reactivate Plan</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#plans-api-delete-plan" class="toc-link">Delete Plan</a>
+        </li>
+      
     </ul>
   </div>
 
@@ -1287,6 +1344,38 @@ Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">
             </div>
             <div class="page-footer-actions">
               
+              
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
               
               <span class="git-spacer"></span>
               
@@ -1305,13 +1394,13 @@ Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

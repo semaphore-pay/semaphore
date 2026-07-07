@@ -105,10 +105,10 @@
       Products API : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Products%20API%0A---%0A%0A%23%20Products%20API%0A%0A%23%23%20Create%20Product%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3Aid%2Fproducts%0AContent-Type%3A%20application%2Fjson%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%60%60%60json%0A%7B%0A%20%20%22name%22%3A%20%22Pro%20Access%22%2C%0A%20%20%22description%22%3A%20%22Unlimited%20access%22%2C%0A%20%20%22planId%22%3A%20%22plan_abc123%22%2C%0A%20%20%22metadata%22%3A%20%7B%0A%20%20%20%20%22features%22%3A%20%22api%2Cexport%2Cpriority_support%22%0A%20%20%7D%0A%7D%0A%60%60%60%0A%0A%23%23%23%20Parameters%0A%0A%7C%20Field%20%7C%20Type%20%7C%20Required%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C---%7C%0A%7C%20%60name%60%20%7C%20string%20%7C%20yes%20%7C%20Product%20name%20%7C%0A%7C%20%60description%60%20%7C%20string%20%7C%20no%20%7C%20Product%20description%20%7C%0A%7C%20%60planId%60%20%7C%20string%20%7C%20yes%20%7C%20Associated%20plan%20ID%20%7C%0A%7C%20%60metadata%60%20%7C%20object%20%7C%20no%20%7C%20Custom%20key-value%20pairs%20%7C%0A%0A%23%23%23%20Response%0A%0A%60%60%60json%0A%7B%0A%20%20%22id%22%3A%20%22prod_xyz789%22%2C%0A%20%20%22name%22%3A%20%22Pro%20Access%22%2C%0A%20%20%22planId%22%3A%20%22plan_abc123%22%2C%0A%20%20%22metadata%22%3A%20%7B%0A%20%20%20%20%22features%22%3A%20%22api%2Cexport%2Cpriority_support%22%0A%20%20%7D%0A%7D%0A%60%60%60%0A%0A%23%23%20List%20Products%0A%0A%60%60%60http%0AGET%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3Aid%2Fproducts%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%20Get%20Product%0A%0A%60%60%60http%0AGET%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3Aid%2Fproducts%2F%3AproductId%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Products%20API%0A---%0A%0A%23%20Products%20API%0A%0A%23%23%20Create%20Product%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fproducts%0AContent-Type%3A%20application%2Fjson%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%60%60%60json%0A%7B%0A%20%20%22name%22%3A%20%22Pro%20Access%22%2C%0A%20%20%22description%22%3A%20%22Unlimited%20access%22%2C%0A%20%20%22features%22%3A%20%5B%0A%20%20%20%20%7B%20%22featureId%22%3A%20%22api_calls%22%2C%20%22type%22%3A%20%22limit%22%2C%20%22limit%22%3A%2010000%20%7D%2C%0A%20%20%20%20%7B%20%22featureId%22%3A%20%22export%22%2C%20%22type%22%3A%20%22boolean%22%20%7D%0A%20%20%5D%0A%7D%0A%60%60%60%0A%0A%23%23%23%20Parameters%0A%0A%7C%20Field%20%7C%20Type%20%7C%20Required%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C---%7C%0A%7C%20%60name%60%20%7C%20string%20%7C%20yes%20%7C%20Product%20name%20%7C%0A%7C%20%60description%60%20%7C%20string%20%7C%20no%20%7C%20Product%20description%20%7C%0A%7C%20%60features%60%20%7C%20FeatureInput%5B%5D%20%7C%20no%20%7C%20Features%20attached%20to%20this%20product%20%7C%0A%0A%23%23%23%20FeatureInput%0A%0A%7C%20Field%20%7C%20Type%20%7C%20Required%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C---%7C%0A%7C%20%60featureId%60%20%7C%20string%20%7C%20yes%20%7C%20Feature%20identifier%20(e.g.%20%60%22api_calls%22%60)%20%7C%0A%7C%20%60type%60%20%7C%20string%20%7C%20yes%20%7C%20%60%22boolean%22%60%20for%20on%2Foff%2C%20%60%22limit%22%60%20for%20metered%20%7C%0A%7C%20%60limit%60%20%7C%20number%20%7C%20no%20%7C%20Max%20units%20for%20metered%20features%20%7C%0A%7C%20%60resetInterval%60%20%7C%20string%20%7C%20no%20%7C%20%60%22day%22%60%2C%20%60%22week%22%60%2C%20%60%22month%22%60%2C%20or%20%60%22year%22%60%20%7C%0A%0A%23%23%23%20Response%0A%0A%60%60%60json%0A%7B%0A%20%20%22internalId%22%3A%20%22prod_a1b2c3d4%22%2C%0A%20%20%22id%22%3A%20%22prod_xyz789%22%2C%0A%20%20%22collectionId%22%3A%20%22col_abc123%22%2C%0A%20%20%22environment%22%3A%20%22development%22%2C%0A%20%20%22version%22%3A%201%2C%0A%20%20%22name%22%3A%20%22Pro%20Access%22%2C%0A%20%20%22group%22%3A%20%22default%22%2C%0A%20%20%22isDefault%22%3A%20false%2C%0A%20%20%22priceAmount%22%3A%20null%2C%0A%20%20%22priceCurrency%22%3A%20%22NGN%22%2C%0A%20%20%22priceInterval%22%3A%20null%2C%0A%20%20%22features%22%3A%20%5B%0A%20%20%20%20%7B%20%22featureId%22%3A%20%22api_calls%22%2C%20%22type%22%3A%20%22limit%22%2C%20%22limit%22%3A%2010000%20%7D%0A%20%20%5D%2C%0A%20%20%22createdAt%22%3A%20%222026-07-05T12%3A00%3A00Z%22%2C%0A%20%20%22updatedAt%22%3A%20%222026-07-05T12%3A00%3A00Z%22%0A%7D%0A%60%60%60%0A%0A%23%23%20List%20Products%0A%0A%60%60%60http%0AGET%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fproducts%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%20Get%20Product%0A%0A%60%60%60http%0AGET%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fproducts%2F%3AproductId%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%20Update%20Product%0A%0A%60%60%60http%0APUT%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fproducts%2F%3AproductId%0AContent-Type%3A%20application%2Fjson%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%60%60%60json%0A%7B%0A%20%20%22name%22%3A%20%22Pro%20Access%20Updated%22%2C%0A%20%20%22features%22%3A%20%5B%0A%20%20%20%20%7B%20%22featureId%22%3A%20%22api_calls%22%2C%20%22type%22%3A%20%22limit%22%2C%20%22limit%22%3A%2020000%20%7D%0A%20%20%5D%0A%7D%0A%60%60%60%0A%0A%23%23%20Delete%20Product%0A%0A%60%60%60http%0ADELETE%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fproducts%2F%3AproductId%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%3A%3A%3A%20danger%0AThis%20permanently%20deletes%20the%20product.%20Customers%20with%20active%20access%20via%20this%20product%20will%20be%20affected.%0A%3A%3A%3A%0A%0A%23%23%20Purchase%20Product%20(Client%20SDK)%0A%0A%60%60%60http%0APOST%20%2Fclient%2Fproducts%2Fpurchase%0AContent-Type%3A%20application%2Fjson%0Ax-api-key%3A%20pk_...%0A%60%60%60%0A%0A%60%60%60json%0A%7B%0A%20%20%22customerId%22%3A%20%22cust_abc123%22%2C%0A%20%20%22productInternalId%22%3A%20%22prod_a1b2c3d4%22%0A%7D%0A%60%60%60%0A%0A%23%23%23%20Response%0A%0A%60%60%60json%0A%7B%0A%20%20%22id%22%3A%20%22purch_xyz789%22%2C%0A%20%20%22status%22%3A%20%22pending%22%2C%0A%20%20%22checkout%22%3A%20%7B%0A%20%20%20%20%22checkoutLink%22%3A%20%22https%3A%2F%2Fsandbox.nomba.com%2Fcheckout%2F...%22%2C%0A%20%20%20%20%22orderReference%22%3A%20%22order_abc123%22%0A%20%20%7D%0A%7D%0A%60%60%60%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1090,17 +1090,17 @@
                 
                 <h1 id="products-api" class="docmd-heading"><a href="#products-api" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Products API</h1>
 <h2 id="products-api-create-product" class="docmd-heading"><a href="#products-api-create-product" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Create Product</h2>
-<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span><span class="hljs-keyword">id</span><span class="hljs-punctuation">/</span>products
+<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>products
 Content<span class="hljs-punctuation">-</span>Type<span class="hljs-punctuation">:</span> application<span class="hljs-punctuation">/</span>json
 Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
 </code></pre>
 <pre class="hljs"><code class="language-json">{
   <span class="hljs-string">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Pro Access&quot;</span>,
   <span class="hljs-string">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Unlimited access&quot;</span>,
-  <span class="hljs-string">&quot;planId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;plan_abc123&quot;</span>,
-  <span class="hljs-string">&quot;metadata&quot;</span><span class="hljs-punctuation">:</span> {
-    <span class="hljs-string">&quot;features&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;api,export,priority_support&quot;</span>
-  }
+  <span class="hljs-string">&quot;features&quot;</span><span class="hljs-punctuation">:</span> [
+    { <span class="hljs-string">&quot;featureId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;api_calls&quot;</span>, <span class="hljs-string">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;limit&quot;</span>, <span class="hljs-string">&quot;limit&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10000</span> },
+    { <span class="hljs-string">&quot;featureId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;export&quot;</span>, <span class="hljs-string">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;boolean&quot;</span> }
+  ]
 }
 </code></pre>
 <h3 id="products-api-create-product-parameters" class="docmd-heading"><a href="#products-api-create-product-parameters" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Parameters</h3>
@@ -1127,36 +1127,116 @@ Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">
 <td>Product description</td>
 </tr>
 <tr>
-<td><code>planId</code></td>
+<td><code>features</code></td>
+<td>FeatureInput[]</td>
+<td>no</td>
+<td>Features attached to this product</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="products-api-create-product-featureinput" class="docmd-heading"><a href="#products-api-create-product-featureinput" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>FeatureInput</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>featureId</code></td>
 <td>string</td>
 <td>yes</td>
-<td>Associated plan ID</td>
+<td>Feature identifier (e.g. <code>&quot;api_calls&quot;</code>)</td>
 </tr>
 <tr>
-<td><code>metadata</code></td>
-<td>object</td>
+<td><code>type</code></td>
+<td>string</td>
+<td>yes</td>
+<td><code>&quot;boolean&quot;</code> for on/off, <code>&quot;limit&quot;</code> for metered</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>number</td>
 <td>no</td>
-<td>Custom key-value pairs</td>
+<td>Max units for metered features</td>
+</tr>
+<tr>
+<td><code>resetInterval</code></td>
+<td>string</td>
+<td>no</td>
+<td><code>&quot;day&quot;</code>, <code>&quot;week&quot;</code>, <code>&quot;month&quot;</code>, or <code>&quot;year&quot;</code></td>
 </tr>
 </tbody>
 </table>
 </div><h3 id="products-api-create-product-response" class="docmd-heading"><a href="#products-api-create-product-response" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Response</h3>
 <pre class="hljs"><code class="language-json">{
+  <span class="hljs-string">&quot;internalId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;prod_a1b2c3d4&quot;</span>,
   <span class="hljs-string">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;prod_xyz789&quot;</span>,
+  <span class="hljs-string">&quot;collectionId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;col_abc123&quot;</span>,
+  <span class="hljs-string">&quot;environment&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;development&quot;</span>,
+  <span class="hljs-string">&quot;version&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span>,
   <span class="hljs-string">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Pro Access&quot;</span>,
-  <span class="hljs-string">&quot;planId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;plan_abc123&quot;</span>,
-  <span class="hljs-string">&quot;metadata&quot;</span><span class="hljs-punctuation">:</span> {
-    <span class="hljs-string">&quot;features&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;api,export,priority_support&quot;</span>
-  }
+  <span class="hljs-string">&quot;group&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;default&quot;</span>,
+  <span class="hljs-string">&quot;isDefault&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span>,
+  <span class="hljs-string">&quot;priceAmount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">null</span>,
+  <span class="hljs-string">&quot;priceCurrency&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NGN&quot;</span>,
+  <span class="hljs-string">&quot;priceInterval&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">null</span>,
+  <span class="hljs-string">&quot;features&quot;</span><span class="hljs-punctuation">:</span> [
+    { <span class="hljs-string">&quot;featureId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;api_calls&quot;</span>, <span class="hljs-string">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;limit&quot;</span>, <span class="hljs-string">&quot;limit&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10000</span> }
+  ],
+  <span class="hljs-string">&quot;createdAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2026-07-05T12:00:00Z&quot;</span>,
+  <span class="hljs-string">&quot;updatedAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2026-07-05T12:00:00Z&quot;</span>
 }
 </code></pre>
 <h2 id="products-api-list-products" class="docmd-heading"><a href="#products-api-list-products" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>List Products</h2>
-<pre class="hljs"><code class="language-http">GET <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span><span class="hljs-keyword">id</span><span class="hljs-punctuation">/</span>products
+<pre class="hljs"><code class="language-http">GET <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>products
 Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
 </code></pre>
 <h2 id="products-api-get-product" class="docmd-heading"><a href="#products-api-get-product" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Get Product</h2>
-<pre class="hljs"><code class="language-http">GET <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span><span class="hljs-keyword">id</span><span class="hljs-punctuation">/</span>products<span class="hljs-punctuation">/:</span>productId
+<pre class="hljs"><code class="language-http">GET <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>products<span class="hljs-punctuation">/:</span>productId
 Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
+</code></pre>
+<h2 id="products-api-update-product" class="docmd-heading"><a href="#products-api-update-product" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Update Product</h2>
+<pre class="hljs"><code class="language-http">PUT <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>products<span class="hljs-punctuation">/:</span>productId
+Content<span class="hljs-punctuation">-</span>Type<span class="hljs-punctuation">:</span> application<span class="hljs-punctuation">/</span>json
+Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
+</code></pre>
+<pre class="hljs"><code class="language-json">{
+  <span class="hljs-string">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Pro Access Updated&quot;</span>,
+  <span class="hljs-string">&quot;features&quot;</span><span class="hljs-punctuation">:</span> [
+    { <span class="hljs-string">&quot;featureId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;api_calls&quot;</span>, <span class="hljs-string">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;limit&quot;</span>, <span class="hljs-string">&quot;limit&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">20000</span> }
+  ]
+}
+</code></pre>
+<h2 id="products-api-delete-product" class="docmd-heading"><a href="#products-api-delete-product" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Delete Product</h2>
+<pre class="hljs"><code class="language-http">DELETE <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>products<span class="hljs-punctuation">/:</span>productId
+Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
+</code></pre>
+<div class="docmd-container callout callout-danger"><div class="callout-content">
+<p>This permanently deletes the product. Customers with active access via this product will be affected.</p>
+</div></div>
+<h2 id="products-api-purchase-product-client-sdk" class="docmd-heading"><a href="#products-api-purchase-product-client-sdk" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Purchase Product (Client SDK)</h2>
+<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>client<span class="hljs-punctuation">/</span>products<span class="hljs-punctuation">/</span>purchase
+Content<span class="hljs-punctuation">-</span>Type<span class="hljs-punctuation">:</span> application<span class="hljs-punctuation">/</span>json
+x<span class="hljs-punctuation">-</span>api<span class="hljs-punctuation">-</span>key<span class="hljs-punctuation">:</span> pk_...
+</code></pre>
+<pre class="hljs"><code class="language-json">{
+  <span class="hljs-string">&quot;customerId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;cust_abc123&quot;</span>,
+  <span class="hljs-string">&quot;productInternalId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;prod_a1b2c3d4&quot;</span>
+}
+</code></pre>
+<h3 id="products-api-purchase-product-client-sdk-response" class="docmd-heading"><a href="#products-api-purchase-product-client-sdk-response" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Response</h3>
+<pre class="hljs"><code class="language-json">{
+  <span class="hljs-string">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;purch_xyz789&quot;</span>,
+  <span class="hljs-string">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;pending&quot;</span>,
+  <span class="hljs-string">&quot;checkout&quot;</span><span class="hljs-punctuation">:</span> {
+    <span class="hljs-string">&quot;checkoutLink&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://sandbox.nomba.com/checkout/...&quot;</span>,
+    <span class="hljs-string">&quot;orderReference&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;order_abc123&quot;</span>
+  }
+}
 </code></pre>
 
                 
@@ -1249,6 +1329,10 @@ Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">
         </li>
       
         <li class="toc-item toc-level-3">
+          <a href="#products-api-create-product-featureinput" class="toc-link">FeatureInput</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
           <a href="#products-api-create-product-response" class="toc-link">Response</a>
         </li>
       
@@ -1260,6 +1344,22 @@ Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">
           <a href="#products-api-get-product" class="toc-link">Get Product</a>
         </li>
       
+        <li class="toc-item toc-level-2">
+          <a href="#products-api-update-product" class="toc-link">Update Product</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#products-api-delete-product" class="toc-link">Delete Product</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#products-api-purchase-product-client-sdk" class="toc-link">Purchase Product (Client SDK)</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#products-api-purchase-product-client-sdk-response" class="toc-link">Response</a>
+        </li>
+      
     </ul>
   </div>
 
@@ -1267,6 +1367,38 @@ Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">
             </div>
             <div class="page-footer-actions">
               
+              
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
               
               <span class="git-spacer"></span>
               
@@ -1285,13 +1417,13 @@ Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

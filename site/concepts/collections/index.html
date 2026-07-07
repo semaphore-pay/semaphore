@@ -105,10 +105,10 @@
       Collections : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Collections%0A---%0A%0A%23%20Collections%0A%0AA%20collection%20is%20an%20isolated%20tenant%20within%20Semaphore.%20Think%20of%20it%20like%20a%20RevenueCat%20project%20%E2%80%94%20each%20developer%20gets%20their%20own%20collection%20with%20unique%20API%20keys%20and%20data%20isolation.%0A%0A%23%23%20How%20Collections%20Work%0A%0A%60%60%60%0ASemaphore%20Account%20(Nomba)%0A%E2%94%9C%E2%94%80%E2%94%80%20Collection%3A%20%22My%20SaaS%20App%22%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Plans%3A%20Pro%2C%20Enterprise%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Products%3A%20Pro%20Access%2C%20Enterprise%20Access%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Customers%3A%201%2C234%0A%E2%94%82%20%20%20%E2%94%94%E2%94%80%E2%94%80%20Subscriptions%3A%20892%20active%0A%E2%94%82%0A%E2%94%9C%E2%94%80%E2%94%80%20Collection%3A%20%22Another%20App%22%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Plans%3A%20Basic%2C%20Premium%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Products%3A%20Basic%20Access%2C%20Premium%20Access%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Customers%3A%20567%0A%E2%94%82%20%20%20%E2%94%94%E2%94%80%E2%94%80%20Subscriptions%3A%20234%20active%0A%60%60%60%0A%0AEach%20collection%20is%20completely%20isolated.%20Data%2C%20API%20keys%2C%20and%20billing%20are%20separate.%0A%0A%23%23%20Creating%20a%20Collection%0A%0A%60%60%60typescript%0Aconst%20collection%20%3D%20await%20engine.createCollection(%7B%0A%20%20name%3A%20&#039;My%20App&#039;%2C%0A%20%20description%3A%20&#039;Production%20environment&#039;%2C%0A%7D)%3B%0A%60%60%60%0A%0AResponse%3A%0A%0A%60%60%60json%0A%7B%0A%20%20%22id%22%3A%20%22col_abc123%22%2C%0A%20%20%22name%22%3A%20%22My%20App%22%2C%0A%20%20%22description%22%3A%20%22Production%20environment%22%2C%0A%20%20%22publicKey%22%3A%20%22pk_col_abc123_xyz%22%2C%0A%20%20%22secretKey%22%3A%20%22sk_col_abc123_def%22%2C%0A%20%20%22createdAt%22%3A%20%222026-07-05T12%3A00%3A00Z%22%0A%7D%0A%60%60%60%0A%0A%23%23%20API%20Keys%0A%0AEach%20collection%20has%20two%20API%20keys%3A%0A%0A%7C%20Key%20%7C%20Prefix%20%7C%20Purpose%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20Public%20Key%20%7C%20%60pk_%60%20%7C%20Client-side%20SDK%20(end-user%20apps)%20%7C%0A%7C%20Secret%20Key%20%7C%20%60sk_%60%20%7C%20Server-side%20admin%20operations%20%7C%0A%0A%3A%3A%3A%20warning%0ANever%20expose%20secret%20keys%20in%20client-side%20code.%20Use%20public%20keys%20for%20end-user%20applications.%0A%3A%3A%3A%0A%0A%23%23%20Listing%20Collections%0A%0A%60%60%60typescript%0Aconst%20collections%20%3D%20await%20engine.listCollections()%3B%0A%60%60%60%0A%0A%23%23%20Deleting%20a%20Collection%0A%0A%60%60%60typescript%0Aawait%20engine.deleteCollection(&#039;col_abc123&#039;)%3B%0A%60%60%60%0A%0A%3A%3A%3A%20danger%0ADeleting%20a%20collection%20removes%20all%20associated%20plans%2C%20products%2C%20customers%2C%20and%20subscriptions.%20This%20action%20is%20irreversible.%0A%3A%3A%3A%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Collections%0A---%0A%0A%23%20Collections%0A%0AA%20collection%20is%20an%20isolated%20tenant%20within%20Semaphore.%20Think%20of%20it%20like%20a%20RevenueCat%20project%20%E2%80%94%20each%20developer%20gets%20their%20own%20collection%20with%20unique%20API%20keys%20and%20data%20isolation.%0A%0A%23%23%20How%20Collections%20Work%0A%0A%60%60%60%0ASemaphore%20Account%20(Nomba)%0A%E2%94%9C%E2%94%80%E2%94%80%20Collection%3A%20%22My%20SaaS%20App%22%20(sandbox)%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Plans%3A%20Pro%2C%20Enterprise%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Products%3A%20Pro%20Access%2C%20Enterprise%20Access%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Features%3A%20api_calls%2C%20export%2C%20pro_mode%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Customers%3A%201%2C234%0A%E2%94%82%20%20%20%E2%94%94%E2%94%80%E2%94%80%20Subscriptions%3A%20892%20active%0A%E2%94%82%0A%E2%94%9C%E2%94%80%E2%94%80%20Collection%3A%20%22Another%20App%22%20(production)%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Plans%3A%20Basic%2C%20Premium%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Products%3A%20Basic%20Access%2C%20Premium%20Access%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20Customers%3A%20567%0A%E2%94%82%20%20%20%E2%94%94%E2%94%80%E2%94%80%20Subscriptions%3A%20234%20active%0A%60%60%60%0A%0AEach%20collection%20is%20completely%20isolated.%20Data%2C%20API%20keys%2C%20and%20billing%20are%20separate.%0A%0A%23%23%20Creating%20a%20Collection%0A%0A%60%60%60typescript%0Aimport%20%7B%20createCollection%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20collection%20%3D%20await%20createCollection(engine%2C%20&#039;My%20App&#039;%2C%20&#039;sandbox&#039;)%3B%0A%60%60%60%0A%0AResponse%3A%0A%0A%60%60%60json%0A%7B%0A%20%20%22id%22%3A%20%22col_abc123%22%2C%0A%20%20%22name%22%3A%20%22My%20App%22%2C%0A%20%20%22environment%22%3A%20%22sandbox%22%2C%0A%20%20%22createdAt%22%3A%20%222026-07-05T12%3A00%3A00Z%22%0A%7D%0A%60%60%60%0A%0A%23%23%20Environments%0A%0AEach%20collection%20has%20an%20environment%3A%0A%0A%7C%20Environment%20%7C%20Purpose%20%7C%20Nomba%20Keys%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60sandbox%60%20%7C%20Development%20and%20testing%20%7C%20%60NOMBA_SANDBOX_*%60%20%7C%0A%7C%20%60production%60%20%7C%20Live%20payments%20%7C%20%60NOMBA_LIVE_*%60%20%7C%0A%0A%23%23%20API%20Keys%0A%0AEach%20collection%20has%20API%20keys%20for%20authentication%3A%0A%0A%7C%20Key%20Type%20%7C%20Prefix%20%7C%20Purpose%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20Public%20Key%20%7C%20%60sem_pk_test_*%60%20%2F%20%60sem_pk_live_*%60%20%7C%20Client-side%20SDK%20(end-user%20apps)%20%7C%0A%7C%20Secret%20Key%20%7C%20%60sem_sk_test_*%60%20%2F%20%60sem_sk_live_*%60%20%7C%20Server-side%20admin%20operations%20%7C%0A%0A%3A%3A%3A%20warning%0ANever%20expose%20secret%20keys%20in%20client-side%20code.%20Use%20public%20keys%20for%20end-user%20applications.%0A%3A%3A%3A%0A%0A%23%23%20Listing%20Collections%0A%0A%60%60%60typescript%0A%2F%2F%20Dashboard%20API%20returns%20collections%20with%20stats%0Aconst%20collections%20%3D%20await%20fetch(&#039;%2Fapi%2Fv1%2Fbilling%2Fcollections&#039;)%3B%0A%2F%2F%20Returns%3A%20%5B%7B%20id%2C%20name%2C%20environment%2C%20plans%2C%20products%2C%20customers%2C%20activeSubscriptions%20%7D%5D%0A%60%60%60%0A%0A%23%23%20Deleting%20a%20Collection%0A%0A%60%60%60typescript%0Aimport%20%7B%20deleteCollection%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aawait%20deleteCollection(engine%2C%20&#039;col_abc123&#039;)%3B%0A%60%60%60%0A%0A%3A%3A%3A%20danger%0ADeleting%20a%20collection%20removes%20all%20associated%20API%20keys.%20This%20action%20is%20irreversible.%0A%3A%3A%3A%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1092,13 +1092,14 @@
 <p>A collection is an isolated tenant within Semaphore. Think of it like a RevenueCat project — each developer gets their own collection with unique API keys and data isolation.</p>
 <h2 id="collections-how-collections-work" class="docmd-heading"><a href="#collections-how-collections-work" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>How Collections Work</h2>
 <pre class="hljs"><code>Semaphore <span class="hljs-title function_">Account</span> (Nomba)
-├── Collection<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;My SaaS App&quot;</span>
+├── Collection<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;My SaaS App&quot;</span> (sandbox)
 │   ├── Plans<span class="hljs-punctuation">:</span> Pro, Enterprise
 │   ├── Products<span class="hljs-punctuation">:</span> Pro Access, Enterprise Access
+│   ├── Features<span class="hljs-punctuation">:</span> api_calls, <span class="hljs-keyword">export</span>, pro_mode
 │   ├── Customers<span class="hljs-punctuation">:</span> <span class="hljs-number">1</span>,<span class="hljs-number">234</span>
 │   └── Subscriptions<span class="hljs-punctuation">:</span> <span class="hljs-number">892</span> active
 │
-├── Collection<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Another App&quot;</span>
+├── Collection<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Another App&quot;</span> (production)
 │   ├── Plans<span class="hljs-punctuation">:</span> Basic, Premium
 │   ├── Products<span class="hljs-punctuation">:</span> Basic Access, Premium Access
 │   ├── Customers<span class="hljs-punctuation">:</span> <span class="hljs-number">567</span>
@@ -1106,27 +1107,47 @@
 </code></pre>
 <p>Each collection is completely isolated. Data, API keys, and billing are separate.</p>
 <h2 id="collections-creating-a-collection" class="docmd-heading"><a href="#collections-creating-a-collection" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Creating a Collection</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> collection <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">createCollection</span>({
-  name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;My App&#039;</span>,
-  description<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Production environment&#039;</span>,
-});
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { createCollection } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">const</span> collection <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">createCollection</span>(engine, <span class="hljs-string">&#039;My App&#039;</span>, <span class="hljs-string">&#039;sandbox&#039;</span>);
 </code></pre>
 <p>Response:</p>
 <pre class="hljs"><code class="language-json">{
   <span class="hljs-string">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;col_abc123&quot;</span>,
   <span class="hljs-string">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;My App&quot;</span>,
-  <span class="hljs-string">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Production environment&quot;</span>,
-  <span class="hljs-string">&quot;publicKey&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;pk_col_abc123_xyz&quot;</span>,
-  <span class="hljs-string">&quot;secretKey&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;sk_col_abc123_def&quot;</span>,
+  <span class="hljs-string">&quot;environment&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;sandbox&quot;</span>,
   <span class="hljs-string">&quot;createdAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2026-07-05T12:00:00Z&quot;</span>
 }
 </code></pre>
-<h2 id="collections-api-keys" class="docmd-heading"><a href="#collections-api-keys" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>API Keys</h2>
-<p>Each collection has two API keys:</p>
+<h2 id="collections-environments" class="docmd-heading"><a href="#collections-environments" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Environments</h2>
+<p>Each collection has an environment:</p>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
-<th>Key</th>
+<th>Environment</th>
+<th>Purpose</th>
+<th>Nomba Keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sandbox</code></td>
+<td>Development and testing</td>
+<td><code>NOMBA_SANDBOX_*</code></td>
+</tr>
+<tr>
+<td><code>production</code></td>
+<td>Live payments</td>
+<td><code>NOMBA_LIVE_*</code></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="collections-api-keys" class="docmd-heading"><a href="#collections-api-keys" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>API Keys</h2>
+<p>Each collection has API keys for authentication:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Key Type</th>
 <th>Prefix</th>
 <th>Purpose</th>
 </tr>
@@ -1134,12 +1155,12 @@
 <tbody>
 <tr>
 <td>Public Key</td>
-<td><code>pk_</code></td>
+<td><code>sem_pk_test_*</code> / <code>sem_pk_live_*</code></td>
 <td>Client-side SDK (end-user apps)</td>
 </tr>
 <tr>
 <td>Secret Key</td>
-<td><code>sk_</code></td>
+<td><code>sem_sk_test_*</code> / <code>sem_sk_live_*</code></td>
 <td>Server-side admin operations</td>
 </tr>
 </tbody>
@@ -1148,13 +1169,17 @@
 <p>Never expose secret keys in client-side code. Use public keys for end-user applications.</p>
 </div></div>
 <h2 id="collections-listing-collections" class="docmd-heading"><a href="#collections-listing-collections" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Listing Collections</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> collections <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">listCollections</span>();
+<pre class="hljs"><code class="language-typescript"><span class="hljs-comment">// Dashboard API returns collections with stats</span>
+<span class="hljs-keyword">const</span> collections <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#039;/api/v1/billing/collections&#039;</span>);
+<span class="hljs-comment">// Returns: [{ id, name, environment, plans, products, customers, activeSubscriptions }]</span>
 </code></pre>
 <h2 id="collections-deleting-a-collection" class="docmd-heading"><a href="#collections-deleting-a-collection" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Deleting a Collection</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">deleteCollection</span>(<span class="hljs-string">&#039;col_abc123&#039;</span>);
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { deleteCollection } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">deleteCollection</span>(engine, <span class="hljs-string">&#039;col_abc123&#039;</span>);
 </code></pre>
 <div class="docmd-container callout callout-danger"><div class="callout-content">
-<p>Deleting a collection removes all associated plans, products, customers, and subscriptions. This action is irreversible.</p>
+<p>Deleting a collection removes all associated API keys. This action is irreversible.</p>
 </div></div>
 
                 
@@ -1247,6 +1272,10 @@
         </li>
       
         <li class="toc-item toc-level-2">
+          <a href="#collections-environments" class="toc-link">Environments</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
           <a href="#collections-api-keys" class="toc-link">API Keys</a>
         </li>
       
@@ -1266,6 +1295,38 @@
             <div class="page-footer-actions">
               
               
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
+              
               <span class="git-spacer"></span>
               
             </div>
@@ -1283,13 +1344,13 @@
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

@@ -105,10 +105,10 @@
       First API Call : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20First%20API%20Call%0A---%0A%0A%23%20First%20API%20Call%0A%0AWalk%20through%20creating%20a%20subscription%20from%20scratch.%0A%0A%23%23%20Step%201%3A%20Create%20a%20Collection%0A%0A%60%60%60typescript%0Aimport%20%7B%20createSemaphoreEngine%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20engine%20%3D%20createSemaphoreEngine(%7B%0A%20%20db%3A%20env.SEMAPHORE_DB%2C%0A%20%20nomba%3A%20%7B%0A%20%20%20%20clientId%3A%20env.NOMBA_CLIENT_ID%2C%0A%20%20%20%20clientSecret%3A%20env.NOMBA_CLIENT_SECRET%2C%0A%20%20%20%20accountId%3A%20env.NOMBA_ACCOUNT_ID%2C%0A%20%20%7D%2C%0A%20%20webhookSecret%3A%20env.NOMBA_WEBHOOK_SECRET%2C%0A%20%20callbackUrl%3A%20env.NOMBA_CHECKOUT_CALLBACK_URL%2C%0A%7D)%3B%0A%0Aconst%20collection%20%3D%20await%20engine.createCollection(%7B%0A%20%20name%3A%20&#039;My%20SaaS%20App&#039;%2C%0A%20%20description%3A%20&#039;Production&#039;%2C%0A%7D)%3B%0A%0Aconsole.log(collection.id)%3B%20%2F%2F%20Use%20this%20for%20all%20subsequent%20calls%0Aconsole.log(collection.publicKey)%3B%20%2F%2F%20pk_...%20for%20client%20SDK%0Aconsole.log(collection.secretKey)%3B%20%2F%2F%20sk_...%20for%20server-side%20admin%0A%60%60%60%0A%0A%23%23%20Step%202%3A%20Create%20a%20Plan%0A%0APlans%20define%20pricing%20and%20billing%20intervals.%0A%0A%60%60%60typescript%0Aconst%20plan%20%3D%20await%20engine.createPlan(collection.id%2C%20%7B%0A%20%20name%3A%20&#039;Pro&#039;%2C%0A%20%20description%3A%20&#039;Full%20access&#039;%2C%0A%20%20amount%3A%205000%2C%20%2F%2F%20%E2%82%A650.00%20in%20kobo%0A%20%20currency%3A%20&#039;NGN&#039;%2C%0A%20%20interval%3A%20&#039;month&#039;%2C%0A%20%20intervalCount%3A%201%2C%0A%20%20trialPeriodDays%3A%2014%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Step%203%3A%20Create%20a%20Product%0A%0AProducts%20are%20what%20customers%20subscribe%20to.%20Each%20product%20links%20to%20a%20plan.%0A%0A%60%60%60typescript%0Aconst%20product%20%3D%20await%20engine.createProduct(collection.id%2C%20%7B%0A%20%20name%3A%20&#039;Pro%20Access&#039;%2C%0A%20%20description%3A%20&#039;Unlimited%20access%20to%20all%20features&#039;%2C%0A%20%20planId%3A%20plan.id%2C%0A%20%20metadata%3A%20%7B%0A%20%20%20%20features%3A%20&#039;unlimited%2Capi%2Cexport&#039;%2C%0A%20%20%7D%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Step%204%3A%20Create%20a%20Customer%0A%0A%60%60%60typescript%0Aconst%20customer%20%3D%20await%20engine.upsertCustomer(collection.id%2C%20%7B%0A%20%20userId%3A%20&#039;user_abc123&#039;%2C%0A%20%20email%3A%20&#039;user%40example.com&#039;%2C%0A%20%20name%3A%20&#039;John%20Doe&#039;%2C%0A%20%20metadata%3A%20%7B%0A%20%20%20%20company%3A%20&#039;Acme%20Inc&#039;%2C%0A%20%20%7D%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Step%205%3A%20Subscribe%0A%0A%60%60%60typescript%0Aconst%20subscription%20%3D%20await%20engine.subscribe(collection.id%2C%20%7B%0A%20%20customerId%3A%20customer.id%2C%0A%20%20productId%3A%20product.id%2C%0A%20%20paymentMethod%3A%20%7B%0A%20%20%20%20type%3A%20&#039;card&#039;%2C%0A%20%20%20%20token%3A%20&#039;tok_card_...&#039;%2C%20%2F%2F%20From%20Nomba%20checkout%0A%20%20%7D%2C%0A%7D)%3B%0A%0Aconsole.log(subscription.status)%3B%20%2F%2F%20&#039;active&#039;%0Aconsole.log(subscription.currentPeriodEnd)%3B%20%2F%2F%20Next%20billing%20date%0A%60%60%60%0A%0A%23%23%20Step%206%3A%20Check%20Entitlement%0A%0A%60%60%60typescript%0Aconst%20entitlement%20%3D%20await%20engine.checkEntitlement(collection.id%2C%20%7B%0A%20%20customerId%3A%20customer.id%2C%0A%20%20feature%3A%20&#039;api_access&#039;%2C%0A%7D)%3B%0A%0Aconsole.log(entitlement.entitled)%3B%20%2F%2F%20true%2Ffalse%0A%60%60%60%0A%0A%23%23%20Next%20Steps%0A%0A-%20%5BCollections%5D(%2Fconcepts%2Fcollections)%20%E2%80%94%20understand%20multi-tenancy%0A-%20%5BWebhooks%5D(%2Fguides%2Fwebhooks)%20%E2%80%94%20handle%20subscription%20events%0A-%20%5BTesting%5D(%2Fguides%2Ftesting)%20%E2%80%94%20test%20in%20sandbox%20mode%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20First%20API%20Call%0A---%0A%0A%23%20First%20API%20Call%0A%0AWalk%20through%20creating%20a%20subscription%20from%20scratch.%0A%0A%23%23%20Step%201%3A%20Initialize%20the%20Engine%0A%0A%60%60%60typescript%0Aimport%20%7B%20initSemaphorePay%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0Aimport%20%7B%20drizzle%20%7D%20from%20&#039;drizzle-orm%2Fd1&#039;%3B%0Aimport%20*%20as%20sqliteSchema%20from%20&#039;%40semaphore-pay%2Fserver%2Fschema%2Fsqlite&#039;%3B%0A%0Aconst%20db%20%3D%20drizzle(env.SEMAPHORE_DB%2C%20%7B%20schema%3A%20sqliteSchema%20%7D)%3B%0A%0Aconst%20engine%20%3D%20initSemaphorePay(%7B%0A%20%20dialect%3A%20&#039;sqlite&#039;%2C%0A%20%20db%2C%0A%20%20supportsTransactions%3A%20false%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Step%202%3A%20Create%20a%20Collection%0A%0A%60%60%60typescript%0Aimport%20%7B%20createCollection%2C%20createApiKey%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20collection%20%3D%20await%20createCollection(engine%2C%20&#039;My%20SaaS%20App&#039;%2C%20&#039;sandbox&#039;)%3B%0A%0Aconsole.log(collection.id)%3B%20%2F%2F%20Use%20this%20for%20all%20subsequent%20calls%0A%0A%2F%2F%20Generate%20API%20keys%0Aconst%20publicKey%20%3D%20await%20createApiKey(engine%2C%20%7B%0A%20%20collectionId%3A%20collection.id%2C%0A%20%20type%3A%20&#039;public&#039;%2C%0A%20%20environment%3A%20&#039;development&#039;%2C%0A%20%20userId%3A%20user.id%2C%0A%7D)%3B%0A%0Aconsole.log(publicKey.key)%3B%20%2F%2F%20pk_...%20for%20client%20SDK%0A%60%60%60%0A%0A%23%23%20Step%203%3A%20Create%20a%20Plan%0A%0APlans%20define%20pricing%20and%20billing%20intervals.%0A%0A%60%60%60typescript%0Aimport%20%7B%20create%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20plan%20%3D%20await%20create(engine%2C%20%7B%0A%20%20name%3A%20&#039;Pro&#039;%2C%0A%20%20description%3A%20&#039;Full%20access&#039;%2C%0A%20%20priceAmount%3A%205000%2C%20%2F%2F%20%E2%82%A650.00%20in%20kobo%0A%20%20priceCurrency%3A%20&#039;NGN&#039;%2C%0A%20%20interval%3A%20&#039;monthly&#039;%2C%0A%20%20trialPeriodDays%3A%2014%2C%0A%7D%2C%20%7B%0A%20%20collectionId%3A%20collection.id%2C%0A%20%20environment%3A%20&#039;development&#039;%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Step%204%3A%20Create%20a%20Product%0A%0AProducts%20are%20what%20customers%20subscribe%20to.%20Each%20product%20has%20its%20own%20features.%0A%0A%60%60%60typescript%0Aimport%20%7B%20createProduct%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20product%20%3D%20await%20createProduct(engine%2C%20%7B%0A%20%20name%3A%20&#039;Pro%20Access&#039;%2C%0A%20%20description%3A%20&#039;Unlimited%20access%20to%20all%20features&#039;%2C%0A%20%20features%3A%20%5B%0A%20%20%20%20%7B%20featureId%3A%20&#039;api_calls&#039;%2C%20type%3A%20&#039;limit&#039;%2C%20limit%3A%2010000%20%7D%2C%0A%20%20%20%20%7B%20featureId%3A%20&#039;export&#039;%2C%20type%3A%20&#039;boolean&#039;%20%7D%2C%0A%20%20%5D%2C%0A%7D%2C%20%7B%0A%20%20collectionId%3A%20collection.id%2C%0A%20%20environment%3A%20&#039;development&#039;%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Step%205%3A%20Create%20a%20Customer%0A%0A%60%60%60typescript%0Aimport%20%7B%20upsertCustomer%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20customer%20%3D%20await%20upsertCustomer(engine%2C%20%7B%0A%20%20userId%3A%20&#039;user_abc123&#039;%2C%0A%20%20email%3A%20&#039;user%40example.com&#039;%2C%0A%20%20name%3A%20&#039;John%20Doe&#039;%2C%0A%7D%2C%20%7B%20collectionId%3A%20collection.id%20%7D)%3B%0A%60%60%60%0A%0A%23%23%20Step%206%3A%20Subscribe%0A%0A%60%60%60typescript%0Aimport%20%7B%20subscribe%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20subscription%20%3D%20await%20subscribe(engine%2C%20%7B%0A%20%20customerId%3A%20customer.id%2C%0A%20%20planId%3A%20plan.id%2C%0A%7D%2C%20%7B%0A%20%20collectionId%3A%20collection.id%2C%0A%20%20environment%3A%20&#039;development&#039;%2C%0A%7D)%3B%0A%0Aconsole.log(subscription.status)%3B%20%2F%2F%20&#039;active&#039;%20or%20&#039;pending_payment&#039;%0Aconsole.log(subscription.checkout%3F.checkoutLink)%3B%20%2F%2F%20Nomba%20checkout%20URL%20for%20paid%20plans%0A%60%60%60%0A%0A%23%23%20Step%207%3A%20Check%20Entitlement%0A%0A%60%60%60typescript%0Aimport%20%7B%20check%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20entitlement%20%3D%20await%20check(engine%2C%20%7B%0A%20%20customerId%3A%20customer.id%2C%0A%20%20featureId%3A%20&#039;api_calls&#039;%2C%0A%7D%2C%20%7B%20collectionId%3A%20collection.id%20%7D)%3B%0A%0Aconsole.log(entitlement.allowed)%3B%20%2F%2F%20true%2Ffalse%0Aconsole.log(entitlement.balance)%3B%20%2F%2F%20%7B%20limit%2C%20remaining%2C%20resetAt%2C%20unlimited%20%7D%0A%60%60%60%0A%0A%23%23%20Next%20Steps%0A%0A-%20%5BCollections%5D(%2Fconcepts%2Fcollections)%20%E2%80%94%20understand%20multi-tenancy%0A-%20%5BWebhooks%5D(%2Fguides%2Fwebhooks)%20%E2%80%94%20handle%20subscription%20events%0A-%20%5BTesting%5D(%2Fguides%2Ftesting)%20%E2%80%94%20test%20in%20sandbox%20mode%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1090,82 +1090,101 @@
                 
                 <h1 id="first-api-call" class="docmd-heading"><a href="#first-api-call" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>First API Call</h1>
 <p>Walk through creating a subscription from scratch.</p>
-<h2 id="first-api-call-step-1-create-a-collection" class="docmd-heading"><a href="#first-api-call-step-1-create-a-collection" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 1: Create a Collection</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { createSemaphoreEngine } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+<h2 id="first-api-call-step-1-initialize-the-engine" class="docmd-heading"><a href="#first-api-call-step-1-initialize-the-engine" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 1: Initialize the Engine</h2>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { initSemaphorePay } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+<span class="hljs-keyword">import</span> { drizzle } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;drizzle-orm/d1&#039;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-punctuation">*</span> <span class="hljs-keyword">as</span> sqliteSchema <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server/schema/sqlite&#039;</span>;
 
-<span class="hljs-keyword">const</span> engine <span class="hljs-punctuation">=</span> <span class="hljs-title function_">createSemaphoreEngine</span>({
-  db<span class="hljs-punctuation">:</span> env.<span class="hljs-attr">SEMAPHORE_DB</span>,
-  nomba<span class="hljs-punctuation">:</span> {
-    clientId<span class="hljs-punctuation">:</span> env.<span class="hljs-attr">NOMBA_CLIENT_ID</span>,
-    clientSecret<span class="hljs-punctuation">:</span> env.<span class="hljs-attr">NOMBA_CLIENT_SECRET</span>,
-    accountId<span class="hljs-punctuation">:</span> env.<span class="hljs-attr">NOMBA_ACCOUNT_ID</span>,
-  },
-  webhookSecret<span class="hljs-punctuation">:</span> env.<span class="hljs-attr">NOMBA_WEBHOOK_SECRET</span>,
-  callbackUrl<span class="hljs-punctuation">:</span> env.<span class="hljs-attr">NOMBA_CHECKOUT_CALLBACK_URL</span>,
-});
+<span class="hljs-keyword">const</span> db <span class="hljs-punctuation">=</span> <span class="hljs-title function_">drizzle</span>(env.<span class="hljs-attr">SEMAPHORE_DB</span>, { schema<span class="hljs-punctuation">:</span> sqliteSchema });
 
-<span class="hljs-keyword">const</span> collection <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">createCollection</span>({
-  name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;My SaaS App&#039;</span>,
-  description<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Production&#039;</span>,
+<span class="hljs-keyword">const</span> engine <span class="hljs-punctuation">=</span> <span class="hljs-title function_">initSemaphorePay</span>({
+  dialect<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;sqlite&#039;</span>,
+  db,
+  supportsTransactions<span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span>,
 });
+</code></pre>
+<h2 id="first-api-call-step-2-create-a-collection" class="docmd-heading"><a href="#first-api-call-step-2-create-a-collection" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 2: Create a Collection</h2>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { createCollection, createApiKey } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">const</span> collection <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">createCollection</span>(engine, <span class="hljs-string">&#039;My SaaS App&#039;</span>, <span class="hljs-string">&#039;sandbox&#039;</span>);
 
 console.<span class="hljs-title function_">log</span>(collection.<span class="hljs-keyword">id</span>); <span class="hljs-comment">// Use this for all subsequent calls</span>
-console.<span class="hljs-title function_">log</span>(collection.<span class="hljs-attr">publicKey</span>); <span class="hljs-comment">// pk_... for client SDK</span>
-console.<span class="hljs-title function_">log</span>(collection.<span class="hljs-attr">secretKey</span>); <span class="hljs-comment">// sk_... for server-side admin</span>
+
+<span class="hljs-comment">// Generate API keys</span>
+<span class="hljs-keyword">const</span> publicKey <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">createApiKey</span>(engine, {
+  collectionId<span class="hljs-punctuation">:</span> collection.<span class="hljs-keyword">id</span>,
+  <span class="hljs-keyword">type</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;public&#039;</span>,
+  environment<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;development&#039;</span>,
+  userId<span class="hljs-punctuation">:</span> user.<span class="hljs-keyword">id</span>,
+});
+
+console.<span class="hljs-title function_">log</span>(publicKey.<span class="hljs-attr">key</span>); <span class="hljs-comment">// pk_... for client SDK</span>
 </code></pre>
-<h2 id="first-api-call-step-2-create-a-plan" class="docmd-heading"><a href="#first-api-call-step-2-create-a-plan" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 2: Create a Plan</h2>
+<h2 id="first-api-call-step-3-create-a-plan" class="docmd-heading"><a href="#first-api-call-step-3-create-a-plan" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 3: Create a Plan</h2>
 <p>Plans define pricing and billing intervals.</p>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> plan <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">createPlan</span>(collection.<span class="hljs-keyword">id</span>, {
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">const</span> plan <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">create</span>(engine, {
   name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Pro&#039;</span>,
   description<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Full access&#039;</span>,
-  amount<span class="hljs-punctuation">:</span> <span class="hljs-number">5000</span>, <span class="hljs-comment">// ₦50.00 in kobo</span>
-  currency<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;NGN&#039;</span>,
-  interval<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;month&#039;</span>,
-  intervalCount<span class="hljs-punctuation">:</span> <span class="hljs-number">1</span>,
+  priceAmount<span class="hljs-punctuation">:</span> <span class="hljs-number">5000</span>, <span class="hljs-comment">// ₦50.00 in kobo</span>
+  priceCurrency<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;NGN&#039;</span>,
+  interval<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;monthly&#039;</span>,
   trialPeriodDays<span class="hljs-punctuation">:</span> <span class="hljs-number">14</span>,
+}, {
+  collectionId<span class="hljs-punctuation">:</span> collection.<span class="hljs-keyword">id</span>,
+  environment<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;development&#039;</span>,
 });
 </code></pre>
-<h2 id="first-api-call-step-3-create-a-product" class="docmd-heading"><a href="#first-api-call-step-3-create-a-product" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 3: Create a Product</h2>
-<p>Products are what customers subscribe to. Each product links to a plan.</p>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> product <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">createProduct</span>(collection.<span class="hljs-keyword">id</span>, {
+<h2 id="first-api-call-step-4-create-a-product" class="docmd-heading"><a href="#first-api-call-step-4-create-a-product" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 4: Create a Product</h2>
+<p>Products are what customers subscribe to. Each product has its own features.</p>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { createProduct } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">const</span> product <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">createProduct</span>(engine, {
   name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Pro Access&#039;</span>,
   description<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Unlimited access to all features&#039;</span>,
-  planId<span class="hljs-punctuation">:</span> plan.<span class="hljs-keyword">id</span>,
-  metadata<span class="hljs-punctuation">:</span> {
-    features<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;unlimited,api,export&#039;</span>,
-  },
+  features<span class="hljs-punctuation">:</span> [
+    { featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_calls&#039;</span>, <span class="hljs-keyword">type</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;limit&#039;</span>, limit<span class="hljs-punctuation">:</span> <span class="hljs-number">10000</span> },
+    { featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;export&#039;</span>, <span class="hljs-keyword">type</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;boolean&#039;</span> },
+  ],
+}, {
+  collectionId<span class="hljs-punctuation">:</span> collection.<span class="hljs-keyword">id</span>,
+  environment<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;development&#039;</span>,
 });
 </code></pre>
-<h2 id="first-api-call-step-4-create-a-customer" class="docmd-heading"><a href="#first-api-call-step-4-create-a-customer" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 4: Create a Customer</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> customer <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">upsertCustomer</span>(collection.<span class="hljs-keyword">id</span>, {
+<h2 id="first-api-call-step-5-create-a-customer" class="docmd-heading"><a href="#first-api-call-step-5-create-a-customer" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 5: Create a Customer</h2>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { upsertCustomer } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">const</span> customer <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">upsertCustomer</span>(engine, {
   userId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;user_abc123&#039;</span>,
   email<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;user@example.com&#039;</span>,
   name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;John Doe&#039;</span>,
-  metadata<span class="hljs-punctuation">:</span> {
-    company<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Acme Inc&#039;</span>,
-  },
-});
+}, { collectionId<span class="hljs-punctuation">:</span> collection.<span class="hljs-keyword">id</span> });
 </code></pre>
-<h2 id="first-api-call-step-5-subscribe" class="docmd-heading"><a href="#first-api-call-step-5-subscribe" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 5: Subscribe</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> subscription <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">subscribe</span>(collection.<span class="hljs-keyword">id</span>, {
+<h2 id="first-api-call-step-6-subscribe" class="docmd-heading"><a href="#first-api-call-step-6-subscribe" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 6: Subscribe</h2>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { subscribe } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">const</span> subscription <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">subscribe</span>(engine, {
   customerId<span class="hljs-punctuation">:</span> customer.<span class="hljs-keyword">id</span>,
-  productId<span class="hljs-punctuation">:</span> product.<span class="hljs-keyword">id</span>,
-  paymentMethod<span class="hljs-punctuation">:</span> {
-    <span class="hljs-keyword">type</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;card&#039;</span>,
-    token<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;tok_card_...&#039;</span>, <span class="hljs-comment">// From Nomba checkout</span>
-  },
+  planId<span class="hljs-punctuation">:</span> plan.<span class="hljs-keyword">id</span>,
+}, {
+  collectionId<span class="hljs-punctuation">:</span> collection.<span class="hljs-keyword">id</span>,
+  environment<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;development&#039;</span>,
 });
 
-console.<span class="hljs-title function_">log</span>(subscription.<span class="hljs-attr">status</span>); <span class="hljs-comment">// &#039;active&#039;</span>
-console.<span class="hljs-title function_">log</span>(subscription.<span class="hljs-attr">currentPeriodEnd</span>); <span class="hljs-comment">// Next billing date</span>
+console.<span class="hljs-title function_">log</span>(subscription.<span class="hljs-attr">status</span>); <span class="hljs-comment">// &#039;active&#039; or &#039;pending_payment&#039;</span>
+console.<span class="hljs-title function_">log</span>(subscription.<span class="hljs-attr">checkout</span><span class="hljs-punctuation">?</span>.<span class="hljs-attr">checkoutLink</span>); <span class="hljs-comment">// Nomba checkout URL for paid plans</span>
 </code></pre>
-<h2 id="first-api-call-step-6-check-entitlement" class="docmd-heading"><a href="#first-api-call-step-6-check-entitlement" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 6: Check Entitlement</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> entitlement <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">checkEntitlement</span>(collection.<span class="hljs-keyword">id</span>, {
-  customerId<span class="hljs-punctuation">:</span> customer.<span class="hljs-keyword">id</span>,
-  feature<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_access&#039;</span>,
-});
+<h2 id="first-api-call-step-7-check-entitlement" class="docmd-heading"><a href="#first-api-call-step-7-check-entitlement" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Step 7: Check Entitlement</h2>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { check } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
 
-console.<span class="hljs-title function_">log</span>(entitlement.<span class="hljs-attr">entitled</span>); <span class="hljs-comment">// true/false</span>
+<span class="hljs-keyword">const</span> entitlement <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">check</span>(engine, {
+  customerId<span class="hljs-punctuation">:</span> customer.<span class="hljs-keyword">id</span>,
+  featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_calls&#039;</span>,
+}, { collectionId<span class="hljs-punctuation">:</span> collection.<span class="hljs-keyword">id</span> });
+
+console.<span class="hljs-title function_">log</span>(entitlement.<span class="hljs-attr">allowed</span>); <span class="hljs-comment">// true/false</span>
+console.<span class="hljs-title function_">log</span>(entitlement.<span class="hljs-attr">balance</span>); <span class="hljs-comment">// { limit, remaining, resetAt, unlimited }</span>
 </code></pre>
 <h2 id="first-api-call-next-steps" class="docmd-heading"><a href="#first-api-call-next-steps" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Next Steps</h2>
 <ul>
@@ -1256,27 +1275,31 @@ console.<span class="hljs-title function_">log</span>(entitlement.<span class="h
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#first-api-call-step-1-create-a-collection" class="toc-link">Step 1: Create a Collection</a>
+          <a href="#first-api-call-step-1-initialize-the-engine" class="toc-link">Step 1: Initialize the Engine</a>
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#first-api-call-step-2-create-a-plan" class="toc-link">Step 2: Create a Plan</a>
+          <a href="#first-api-call-step-2-create-a-collection" class="toc-link">Step 2: Create a Collection</a>
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#first-api-call-step-3-create-a-product" class="toc-link">Step 3: Create a Product</a>
+          <a href="#first-api-call-step-3-create-a-plan" class="toc-link">Step 3: Create a Plan</a>
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#first-api-call-step-4-create-a-customer" class="toc-link">Step 4: Create a Customer</a>
+          <a href="#first-api-call-step-4-create-a-product" class="toc-link">Step 4: Create a Product</a>
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#first-api-call-step-5-subscribe" class="toc-link">Step 5: Subscribe</a>
+          <a href="#first-api-call-step-5-create-a-customer" class="toc-link">Step 5: Create a Customer</a>
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#first-api-call-step-6-check-entitlement" class="toc-link">Step 6: Check Entitlement</a>
+          <a href="#first-api-call-step-6-subscribe" class="toc-link">Step 6: Subscribe</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#first-api-call-step-7-check-entitlement" class="toc-link">Step 7: Check Entitlement</a>
         </li>
       
         <li class="toc-item toc-level-2">
@@ -1290,6 +1313,38 @@ console.<span class="hljs-title function_">log</span>(entitlement.<span class="h
             </div>
             <div class="page-footer-actions">
               
+              
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
               
               <span class="git-spacer"></span>
               
@@ -1308,13 +1363,13 @@ console.<span class="hljs-title function_">log</span>(entitlement.<span class="h
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

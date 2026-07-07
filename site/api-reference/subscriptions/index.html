@@ -105,10 +105,10 @@
       Subscriptions API : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Subscriptions%20API%0A---%0A%0A%23%20Subscriptions%20API%0A%0A%23%23%20Subscribe%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3Aid%2Fsubscriptions%2Fsubscribe%0AContent-Type%3A%20application%2Fjson%0Ax-api-key%3A%20pk_...%0A%60%60%60%0A%0A%60%60%60json%0A%7B%0A%20%20%22customerId%22%3A%20%22cust_abc123%22%2C%0A%20%20%22productId%22%3A%20%22prod_xyz789%22%2C%0A%20%20%22paymentMethod%22%3A%20%7B%0A%20%20%20%20%22type%22%3A%20%22card%22%2C%0A%20%20%20%20%22token%22%3A%20%22tok_...%22%0A%20%20%7D%0A%7D%0A%60%60%60%0A%0A%23%23%23%20Response%0A%0A%60%60%60json%0A%7B%0A%20%20%22id%22%3A%20%22sub_abc123%22%2C%0A%20%20%22customerId%22%3A%20%22cust_abc123%22%2C%0A%20%20%22productId%22%3A%20%22prod_xyz789%22%2C%0A%20%20%22status%22%3A%20%22active%22%2C%0A%20%20%22currentPeriodStart%22%3A%20%222026-07-05T12%3A00%3A00Z%22%2C%0A%20%20%22currentPeriodEnd%22%3A%20%222026-08-05T12%3A00%3A00Z%22%0A%7D%0A%60%60%60%0A%0A%23%23%20Cancel%20Subscription%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3Aid%2Fsubscriptions%2F%3AsubId%2Fcancel%0Ax-api-key%3A%20pk_...%0A%60%60%60%0A%0A%23%23%23%20Response%0A%0A%60%60%60json%0A%7B%0A%20%20%22id%22%3A%20%22sub_abc123%22%2C%0A%20%20%22cancelAtPeriodEnd%22%3A%20true%2C%0A%20%20%22currentPeriodEnd%22%3A%20%222026-08-05T12%3A00%3A00Z%22%0A%7D%0A%60%60%60%0A%0A%3A%3A%3A%20info%0ACanceling%20sets%20%60cancelAtPeriodEnd%3A%20true%60.%20The%20subscription%20remains%20active%20until%20the%20period%20ends.%0A%3A%3A%3A%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Subscriptions%20API%0A---%0A%0A%23%20Subscriptions%20API%0A%0A%23%23%20Subscribe%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fsubscriptions%2Fsubscribe%0AContent-Type%3A%20application%2Fjson%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%60%60%60json%0A%7B%0A%20%20%22customerId%22%3A%20%22cust_abc123%22%2C%0A%20%20%22planId%22%3A%20%22plan_pro_monthly%22%0A%7D%0A%60%60%60%0A%0A%23%23%23%20Parameters%0A%0A%7C%20Field%20%7C%20Type%20%7C%20Required%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C---%7C%0A%7C%20%60customerId%60%20%7C%20string%20%7C%20yes%20%7C%20Customer%20ID%20%7C%0A%7C%20%60planId%60%20%7C%20string%20%7C%20yes%20%7C%20Plan%20ID%20(e.g.%20%60%22plan_pro_monthly%22%60)%20%7C%0A%0A%23%23%23%20Response%0A%0A%60%60%60json%0A%7B%0A%20%20%22subscriptionId%22%3A%20%22sub_abc123%22%2C%0A%20%20%22status%22%3A%20%22active%22%2C%0A%20%20%22nombaOrderReference%22%3A%20%22order_xyz789%22%2C%0A%20%20%22trialEndAt%22%3A%20null%2C%0A%20%20%22checkout%22%3A%20%7B%0A%20%20%20%20%22checkoutLink%22%3A%20%22https%3A%2F%2Fsandbox.nomba.com%2Fcheckout%2F...%22%2C%0A%20%20%20%20%22orderReference%22%3A%20%22order_xyz789%22%0A%20%20%7D%0A%7D%0A%60%60%60%0A%0A%3A%3A%3A%20info%0AFor%20free%20plans%20(price%20%3D%200)%2C%20status%20is%20%60%22active%22%60%20and%20%60checkout%60%20is%20null.%20For%20paid%20plans%2C%20status%20is%20%60%22pending_payment%22%60%20and%20%60checkout%60%20contains%20the%20Nomba%20checkout%20link.%0A%3A%3A%3A%0A%0A%23%23%20List%20Subscriptions%0A%0A%60%60%60http%0AGET%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fsubscriptions%3Fstatus%3Dactive%26limit%3D20%26offset%3D0%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%23%20Query%20Parameters%0A%0A%7C%20Param%20%7C%20Type%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60status%60%20%7C%20string%20%7C%20Filter%20by%20status%3A%20%60active%60%2C%20%60trialing%60%2C%20%60past_due%60%2C%20%60canceled%60%2C%20%60paused%60%20%7C%0A%7C%20%60planId%60%20%7C%20string%20%7C%20Filter%20by%20plan%20ID%20%7C%0A%7C%20%60customerId%60%20%7C%20string%20%7C%20Filter%20by%20customer%20ID%20%7C%0A%7C%20%60limit%60%20%7C%20number%20%7C%20Results%20per%20page%20%7C%0A%7C%20%60offset%60%20%7C%20number%20%7C%20Pagination%20offset%20%7C%0A%0A%23%23%20Get%20Subscription%0A%0A%60%60%60http%0AGET%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fsubscriptions%2F%3AsubscriptionId%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%20Cancel%20Subscription%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fsubscriptions%2F%3AsubscriptionId%2Fcancel%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%23%20Response%0A%0A%60%60%60json%0A%7B%0A%20%20%22id%22%3A%20%22sub_abc123%22%2C%0A%20%20%22cancelAtPeriodEnd%22%3A%20true%2C%0A%20%20%22currentPeriodEnd%22%3A%20%222026-08-05T12%3A00%3A00Z%22%0A%7D%0A%60%60%60%0A%0A%3A%3A%3A%20info%0ACanceling%20sets%20%60cancelAtPeriodEnd%3A%20true%60.%20The%20subscription%20remains%20active%20until%20the%20current%20period%20ends.%0A%3A%3A%3A%0A%0A%23%23%20Pause%20Subscription%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fsubscriptions%2F%3AsubscriptionId%2Fpause%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%20Resume%20Subscription%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fsubscriptions%2F%3AsubscriptionId%2Fresume%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%20Reactivate%20Subscription%0A%0A%60%60%60http%0APOST%20%2Fapi%2Fv1%2Fbilling%2Fcollections%2F%3AcollectionId%2Fsubscriptions%2F%3AsubscriptionId%2Freactivate%0ACookie%3A%20semaphore.session%3D...%0A%60%60%60%0A%0A%23%23%20Subscribe%20(Client%20SDK)%0A%0A%60%60%60http%0APOST%20%2Fclient%2Fsubscriptions%2Fsubscribe%0AContent-Type%3A%20application%2Fjson%0Ax-api-key%3A%20pk_...%0A%60%60%60%0A%0A%60%60%60json%0A%7B%0A%20%20%22customerId%22%3A%20%22cust_abc123%22%2C%0A%20%20%22planId%22%3A%20%22plan_pro_monthly%22%0A%7D%0A%60%60%60%0A%0A%23%23%20Cancel%20(Client%20SDK)%0A%0A%60%60%60http%0APOST%20%2Fclient%2Fsubscriptions%2F%3AsubscriptionId%2Fcancel%0Ax-api-key%3A%20pk_...%0A%60%60%60%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1090,32 +1090,103 @@
                 
                 <h1 id="subscriptions-api" class="docmd-heading"><a href="#subscriptions-api" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Subscriptions API</h1>
 <h2 id="subscriptions-api-subscribe" class="docmd-heading"><a href="#subscriptions-api-subscribe" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Subscribe</h2>
-<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span><span class="hljs-keyword">id</span><span class="hljs-punctuation">/</span>subscriptions<span class="hljs-punctuation">/</span>subscribe
+<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>subscriptions<span class="hljs-punctuation">/</span>subscribe
 Content<span class="hljs-punctuation">-</span>Type<span class="hljs-punctuation">:</span> application<span class="hljs-punctuation">/</span>json
-x<span class="hljs-punctuation">-</span>api<span class="hljs-punctuation">-</span>key<span class="hljs-punctuation">:</span> pk_...
+Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
 </code></pre>
 <pre class="hljs"><code class="language-json">{
   <span class="hljs-string">&quot;customerId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;cust_abc123&quot;</span>,
-  <span class="hljs-string">&quot;productId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;prod_xyz789&quot;</span>,
-  <span class="hljs-string">&quot;paymentMethod&quot;</span><span class="hljs-punctuation">:</span> {
-    <span class="hljs-string">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;card&quot;</span>,
-    <span class="hljs-string">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tok_...&quot;</span>
+  <span class="hljs-string">&quot;planId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;plan_pro_monthly&quot;</span>
+}
+</code></pre>
+<h3 id="subscriptions-api-subscribe-parameters" class="docmd-heading"><a href="#subscriptions-api-subscribe-parameters" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Parameters</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customerId</code></td>
+<td>string</td>
+<td>yes</td>
+<td>Customer ID</td>
+</tr>
+<tr>
+<td><code>planId</code></td>
+<td>string</td>
+<td>yes</td>
+<td>Plan ID (e.g. <code>&quot;plan_pro_monthly&quot;</code>)</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="subscriptions-api-subscribe-response" class="docmd-heading"><a href="#subscriptions-api-subscribe-response" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Response</h3>
+<pre class="hljs"><code class="language-json">{
+  <span class="hljs-string">&quot;subscriptionId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;sub_abc123&quot;</span>,
+  <span class="hljs-string">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;active&quot;</span>,
+  <span class="hljs-string">&quot;nombaOrderReference&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;order_xyz789&quot;</span>,
+  <span class="hljs-string">&quot;trialEndAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">null</span>,
+  <span class="hljs-string">&quot;checkout&quot;</span><span class="hljs-punctuation">:</span> {
+    <span class="hljs-string">&quot;checkoutLink&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://sandbox.nomba.com/checkout/...&quot;</span>,
+    <span class="hljs-string">&quot;orderReference&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;order_xyz789&quot;</span>
   }
 }
 </code></pre>
-<h3 id="subscriptions-api-subscribe-response" class="docmd-heading"><a href="#subscriptions-api-subscribe-response" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Response</h3>
-<pre class="hljs"><code class="language-json">{
-  <span class="hljs-string">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;sub_abc123&quot;</span>,
-  <span class="hljs-string">&quot;customerId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;cust_abc123&quot;</span>,
-  <span class="hljs-string">&quot;productId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;prod_xyz789&quot;</span>,
-  <span class="hljs-string">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;active&quot;</span>,
-  <span class="hljs-string">&quot;currentPeriodStart&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2026-07-05T12:00:00Z&quot;</span>,
-  <span class="hljs-string">&quot;currentPeriodEnd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2026-08-05T12:00:00Z&quot;</span>
-}
+<div class="docmd-container callout callout-info"><div class="callout-content">
+<p>For free plans (price = 0), status is <code>&quot;active&quot;</code> and <code>checkout</code> is null. For paid plans, status is <code>&quot;pending_payment&quot;</code> and <code>checkout</code> contains the Nomba checkout link.</p>
+</div></div>
+<h2 id="subscriptions-api-list-subscriptions" class="docmd-heading"><a href="#subscriptions-api-list-subscriptions" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>List Subscriptions</h2>
+<pre class="hljs"><code class="language-http">GET <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>subscriptions<span class="hljs-punctuation">?</span>status<span class="hljs-punctuation">=</span>active<span class="hljs-punctuation">&amp;</span>limit<span class="hljs-punctuation">=</span><span class="hljs-number">20</span><span class="hljs-punctuation">&amp;</span>offset<span class="hljs-punctuation">=</span><span class="hljs-number">0</span>
+Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
+</code></pre>
+<h3 id="subscriptions-api-list-subscriptions-query-parameters" class="docmd-heading"><a href="#subscriptions-api-list-subscriptions-query-parameters" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Query Parameters</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Filter by status: <code>active</code>, <code>trialing</code>, <code>past_due</code>, <code>canceled</code>, <code>paused</code></td>
+</tr>
+<tr>
+<td><code>planId</code></td>
+<td>string</td>
+<td>Filter by plan ID</td>
+</tr>
+<tr>
+<td><code>customerId</code></td>
+<td>string</td>
+<td>Filter by customer ID</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>number</td>
+<td>Results per page</td>
+</tr>
+<tr>
+<td><code>offset</code></td>
+<td>number</td>
+<td>Pagination offset</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="subscriptions-api-get-subscription" class="docmd-heading"><a href="#subscriptions-api-get-subscription" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Get Subscription</h2>
+<pre class="hljs"><code class="language-http">GET <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>subscriptions<span class="hljs-punctuation">/:</span>subscriptionId
+Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
 </code></pre>
 <h2 id="subscriptions-api-cancel-subscription" class="docmd-heading"><a href="#subscriptions-api-cancel-subscription" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Cancel Subscription</h2>
-<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span><span class="hljs-keyword">id</span><span class="hljs-punctuation">/</span>subscriptions<span class="hljs-punctuation">/:</span>subId<span class="hljs-punctuation">/</span>cancel
-x<span class="hljs-punctuation">-</span>api<span class="hljs-punctuation">-</span>key<span class="hljs-punctuation">:</span> pk_...
+<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>subscriptions<span class="hljs-punctuation">/:</span>subscriptionId<span class="hljs-punctuation">/</span>cancel
+Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
 </code></pre>
 <h3 id="subscriptions-api-cancel-subscription-response" class="docmd-heading"><a href="#subscriptions-api-cancel-subscription-response" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Response</h3>
 <pre class="hljs"><code class="language-json">{
@@ -1125,8 +1196,34 @@ x<span class="hljs-punctuation">-</span>api<span class="hljs-punctuation">-</spa
 }
 </code></pre>
 <div class="docmd-container callout callout-info"><div class="callout-content">
-<p>Canceling sets <code>cancelAtPeriodEnd: true</code>. The subscription remains active until the period ends.</p>
+<p>Canceling sets <code>cancelAtPeriodEnd: true</code>. The subscription remains active until the current period ends.</p>
 </div></div>
+<h2 id="subscriptions-api-pause-subscription" class="docmd-heading"><a href="#subscriptions-api-pause-subscription" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Pause Subscription</h2>
+<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>subscriptions<span class="hljs-punctuation">/:</span>subscriptionId<span class="hljs-punctuation">/</span>pause
+Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
+</code></pre>
+<h2 id="subscriptions-api-resume-subscription" class="docmd-heading"><a href="#subscriptions-api-resume-subscription" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Resume Subscription</h2>
+<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>subscriptions<span class="hljs-punctuation">/:</span>subscriptionId<span class="hljs-punctuation">/</span>resume
+Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
+</code></pre>
+<h2 id="subscriptions-api-reactivate-subscription" class="docmd-heading"><a href="#subscriptions-api-reactivate-subscription" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Reactivate Subscription</h2>
+<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>v1<span class="hljs-punctuation">/</span>billing<span class="hljs-punctuation">/</span>collections<span class="hljs-punctuation">/:</span>collectionId<span class="hljs-punctuation">/</span>subscriptions<span class="hljs-punctuation">/:</span>subscriptionId<span class="hljs-punctuation">/</span>reactivate
+Cookie<span class="hljs-punctuation">:</span> semaphore.<span class="hljs-attr">session</span><span class="hljs-punctuation">=</span>...
+</code></pre>
+<h2 id="subscriptions-api-subscribe-client-sdk" class="docmd-heading"><a href="#subscriptions-api-subscribe-client-sdk" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Subscribe (Client SDK)</h2>
+<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>client<span class="hljs-punctuation">/</span>subscriptions<span class="hljs-punctuation">/</span>subscribe
+Content<span class="hljs-punctuation">-</span>Type<span class="hljs-punctuation">:</span> application<span class="hljs-punctuation">/</span>json
+x<span class="hljs-punctuation">-</span>api<span class="hljs-punctuation">-</span>key<span class="hljs-punctuation">:</span> pk_...
+</code></pre>
+<pre class="hljs"><code class="language-json">{
+  <span class="hljs-string">&quot;customerId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;cust_abc123&quot;</span>,
+  <span class="hljs-string">&quot;planId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;plan_pro_monthly&quot;</span>
+}
+</code></pre>
+<h2 id="subscriptions-api-cancel-client-sdk" class="docmd-heading"><a href="#subscriptions-api-cancel-client-sdk" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Cancel (Client SDK)</h2>
+<pre class="hljs"><code class="language-http">POST <span class="hljs-punctuation">/</span>client<span class="hljs-punctuation">/</span>subscriptions<span class="hljs-punctuation">/:</span>subscriptionId<span class="hljs-punctuation">/</span>cancel
+x<span class="hljs-punctuation">-</span>api<span class="hljs-punctuation">-</span>key<span class="hljs-punctuation">:</span> pk_...
+</code></pre>
 
                 
                   <div class="page-navigation">
@@ -1214,7 +1311,23 @@ x<span class="hljs-punctuation">-</span>api<span class="hljs-punctuation">-</spa
         </li>
       
         <li class="toc-item toc-level-3">
+          <a href="#subscriptions-api-subscribe-parameters" class="toc-link">Parameters</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
           <a href="#subscriptions-api-subscribe-response" class="toc-link">Response</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#subscriptions-api-list-subscriptions" class="toc-link">List Subscriptions</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#subscriptions-api-list-subscriptions-query-parameters" class="toc-link">Query Parameters</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#subscriptions-api-get-subscription" class="toc-link">Get Subscription</a>
         </li>
       
         <li class="toc-item toc-level-2">
@@ -1225,6 +1338,26 @@ x<span class="hljs-punctuation">-</span>api<span class="hljs-punctuation">-</spa
           <a href="#subscriptions-api-cancel-subscription-response" class="toc-link">Response</a>
         </li>
       
+        <li class="toc-item toc-level-2">
+          <a href="#subscriptions-api-pause-subscription" class="toc-link">Pause Subscription</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#subscriptions-api-resume-subscription" class="toc-link">Resume Subscription</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#subscriptions-api-reactivate-subscription" class="toc-link">Reactivate Subscription</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#subscriptions-api-subscribe-client-sdk" class="toc-link">Subscribe (Client SDK)</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#subscriptions-api-cancel-client-sdk" class="toc-link">Cancel (Client SDK)</a>
+        </li>
+      
     </ul>
   </div>
 
@@ -1232,6 +1365,38 @@ x<span class="hljs-punctuation">-</span>api<span class="hljs-punctuation">-</spa
             </div>
             <div class="page-footer-actions">
               
+              
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
               
               <span class="git-spacer"></span>
               
@@ -1250,13 +1415,13 @@ x<span class="hljs-punctuation">-</span>api<span class="hljs-punctuation">-</spa
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

@@ -3,10 +3,10 @@ type: guide
 title: Webhooks
 source: "https://docs.semaphorepay.tech/guides/webhooks/"
 path: /guides/webhooks/
-updated: 2026-07-05
+updated: 2026-07-07
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-05T13:54:02.043Z"
+  generated_at: "2026-07-07T20:01:08.645Z"
 ---
 ---
 title: Webhooks
@@ -14,40 +14,36 @@ title: Webhooks
 
 # Webhooks
 
-Webhooks notify your backend when subscription events occur. Semaphore receives events from Nomba and forwards them to your handler.
+Webhooks notify your backend when payment events occur. Semaphore receives events from Nomba and forwards them to your handler.
 
 ## Setting Up
 
 ```bash
 # Environment variable
-NOMBA_CHECKOUT_CALLBACK_URL=https://your-api.example.com/webhook/nomba
+NOMBA_CHECKOUT_CALLBACK_URL=https://your-api.example.com/webhook
 ```
 
 ## Webhook Endpoint
 
 ```typescript
-// In your Cloudflare Worker
-app.post('/webhook/nomba', async (c) => {
-  const event = await engine.handleWebhook(c.req.raw);
-  
-  switch (event.type) {
-    case 'checkout.completed':
-      // Payment successful, subscription activated
-      console.log('Subscription:', event.data.subscriptionId);
-      break;
-      
-    case 'subscription.renewed':
-      // Recurring payment succeeded
-      console.log('Renewed until:', event.data.currentPeriodEnd);
-      break;
-      
-    case 'subscription.canceled':
-      // Subscription canceled
-      console.log('Cancels at:', event.data.currentPeriodEnd);
-      break;
-  }
-  
-  return c.json({ received: true });
+import { Hono } from 'hono';
+import { handleWebhook } from '@semaphore-pay/server';
+
+const app = new Hono();
+
+app.post('/webhook', async (c) => {
+  const rawBody = await c.req.text();
+  const signature = c.req.header('nomba-signature') ?? '';
+  const nombaTimestamp = c.req.header('nomba-timestamp') ?? '';
+
+  const result = await handleWebhook(engine, {
+    rawBody,
+    signature,
+    webhookSecret: c.env.NOMBA_WEBHOOK_SECRET,
+    nombaTimestamp,
+  });
+
+  return c.json(result);
 });
 ```
 
@@ -55,20 +51,60 @@ app.post('/webhook/nomba', async (c) => {
 
 | Event | Trigger |
 |---|---|
-| `checkout.completed` | Initial payment successful |
-| `subscription.renewed` | Recurring payment successful |
-| `subscription.canceled` | Subscription canceled |
-| `payment.failed` | Payment failed, entering dunning |
+| `payment_success` | Payment successful (initial or renewal) |
+| `payment_failed` | Payment failed |
+| `mandate.debit_success` | Recurring mandate debit successful |
 
 ## Verifying Webhooks
 
-Semaphore automatically verifies webhook signatures before processing. Invalid signatures are rejected with 400.
+Semaphore automatically verifies webhook signatures using HMAC-SHA256 before processing. Invalid signatures are rejected with 400.
 
-## Retry Policy
+The signature is computed over colon-joined fields:
 
-Failed webhook deliveries are retried with exponential backoff:
-- 1st retry: 1 minute
-- 2nd retry: 5 minutes
-- 3rd retry: 30 minutes
-- 4th retry: 2 hours
-- 5th retry: 24 hours
+```
+event_type:requestId:userId:walletId:transactionId:type:time:responseCode:nomba-timestamp
+```
+
+## Payment Verification Fallback
+
+If webhooks aren't received (e.g. during development), use the payment verification endpoint:
+
+```typescript
+// Client SDK
+const result = await client.verifyPayment('order_abc123');
+console.log(result.status); // 'success', 'pending', 'failed'
+console.log(result.processed); // true if just processed
+```
+
+Or poll with exponential backoff:
+
+```typescript
+const result = await client.waitForPayment('order_abc123', {
+  maxAttempts: 6,
+  delays: [0, 5000, 20000, 40000, 80000, 160000], // ~5 min total
+  onAttempt: (attempt, result) => {
+    console.log(`Attempt ${attempt}: ${result.status}`);
+  },
+});
+```
+
+## Webhook Response
+
+Always return `200` to acknowledge receipt. Semaphore processes the event asynchronously.
+
+```json
+{
+  "status": "processed"
+}
+```
+
+## Testing Webhooks
+
+Use the mock webhook script for local development:
+
+```bash
+cd packages/server
+npx tsx mock-webhook.ts
+```
+
+This sends a signed `payment_success` event to `http://localhost:8787/webhook`.

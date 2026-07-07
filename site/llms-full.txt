@@ -23,20 +23,34 @@ Cookie: semaphore.session=...
 ```json
 {
   "name": "My App",
-  "description": "Production"
+  "description": "Production",
+  "environment": "sandbox"
 }
 ```
+
+### Parameters
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | string | yes | Collection name |
+| `description` | string | no | Collection description |
+| `environment` | string | no | `"sandbox"` (default) or `"production"` |
 
 ### Response
 
 ```json
 {
-  "id": "col_abc123",
-  "name": "My App",
-  "description": "Production",
-  "publicKey": "pk_col_abc123_xyz",
-  "secretKey": "sk_col_abc123_def",
-  "createdAt": "2026-07-05T12:00:00Z"
+  "collection": {
+    "id": "col_abc123",
+    "name": "My App",
+    "description": "Production",
+    "environment": "sandbox",
+    "createdAt": "2026-07-05T12:00:00Z"
+  },
+  "keys": {
+    "public": "sem_pk_test_abc123",
+    "secret": "sem_sk_test_def456"
+  }
 }
 ```
 
@@ -54,6 +68,11 @@ Cookie: semaphore.session=...
   {
     "id": "col_abc123",
     "name": "My App",
+    "environment": "sandbox",
+    "plans": 3,
+    "products": 5,
+    "customers": 123,
+    "activeSubscriptions": 89,
     "createdAt": "2026-07-05T12:00:00Z"
   }
 ]
@@ -66,6 +85,60 @@ GET /api/v1/billing/collections/:id
 Cookie: semaphore.session=...
 ```
 
+### Response
+
+```json
+{
+  "id": "col_abc123",
+  "name": "My App",
+  "description": "Production",
+  "environment": "sandbox",
+  "plans": 3,
+  "products": 5,
+  "customers": 123,
+  "activeSubscriptions": 89,
+  "createdAt": "2026-07-05T12:00:00Z"
+}
+```
+
+## Get Collection Analytics
+
+```http
+GET /api/v1/billing/collections/:id/analytics
+Cookie: semaphore.session=...
+```
+
+### Response
+
+```json
+{
+  "mrr": 299900,
+  "arr": 3598800,
+  "activeTrials": 12,
+  "subscribersByStatus": {
+    "active": 89,
+    "trialing": 12,
+    "past_due": 3,
+    "canceled": 45
+  },
+  "planBreakdown": [
+    {
+      "planId": "plan_pro_monthly",
+      "planName": "Pro",
+      "subscribers": 67,
+      "mrr": 199900,
+      "interval": "monthly"
+    }
+  ],
+  "stats": {
+    "plans": 3,
+    "products": 5,
+    "customers": 123,
+    "activeSubscriptions": 89
+  }
+}
+```
+
 ## Delete Collection
 
 ```http
@@ -74,8 +147,44 @@ Cookie: semaphore.session=...
 ```
 
 ::: danger
-This permanently deletes the collection and all its data.
+This permanently deletes the collection and all its API keys.
 :::
+
+## API Keys
+
+### List API Keys
+
+```http
+GET /api/v1/billing/collections/:id/api-keys
+Cookie: semaphore.session=...
+```
+
+### Generate API Key
+
+```http
+POST /api/v1/billing/collections/:id/api-keys
+Content-Type: application/json
+Cookie: semaphore.session=...
+```
+
+```json
+{
+  "type": "secret",
+  "environment": "development"
+}
+```
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `type` | string | no | `"public"` or `"secret"` (default: `"secret"`) |
+| `environment` | string | no | `"development"` or `"production"` (default: matches collection) |
+
+### Revoke API Key
+
+```http
+DELETE /api/v1/billing/collections/:id/api-keys/:key
+Cookie: semaphore.session=...
+```
 
 
 ---
@@ -91,9 +200,9 @@ title: Customers API
 ## Upsert Customer
 
 ```http
-POST /api/v1/billing/collections/:id/customers
+POST /api/v1/billing/collections/:collectionId/customers
 Content-Type: application/json
-x-api-key: pk_...
+Cookie: semaphore.session=...
 ```
 
 ```json
@@ -112,9 +221,9 @@ x-api-key: pk_...
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `userId` | string | yes | Your internal user ID |
-| `email` | string | yes | Customer email |
+| `email` | string | no | Customer email |
 | `name` | string | no | Customer name |
-| `metadata` | object | no | Custom data |
+| `metadata` | object | no | Custom key-value pairs |
 
 ### Response
 
@@ -127,11 +236,47 @@ x-api-key: pk_...
 }
 ```
 
+## List Customers
+
+```http
+GET /api/v1/billing/collections/:collectionId/customers?search=john&limit=20&offset=0
+Cookie: semaphore.session=...
+```
+
+### Query Parameters
+
+| Param | Type | Description |
+|---|---|---|
+| `search` | string | Search by name or email |
+| `limit` | number | Results per page (default: 20) |
+| `offset` | number | Pagination offset |
+
+### Response
+
+```json
+{
+  "data": [
+    {
+      "id": "cust_abc123",
+      "userId": "user_abc123",
+      "email": "user@example.com",
+      "name": "John Doe",
+      "subscriptionCount": 2,
+      "activeSubscriptionCount": 1,
+      "lastActivityAt": "2026-07-05T12:00:00Z"
+    }
+  ],
+  "total": 45,
+  "limit": 20,
+  "offset": 0
+}
+```
+
 ## Get Customer
 
 ```http
-GET /api/v1/billing/collections/:id/customers/:customerId
-x-api-key: pk_...
+GET /api/v1/billing/collections/:collectionId/customers/:customerId
+Cookie: semaphore.session=...
 ```
 
 ### Response
@@ -141,6 +286,7 @@ x-api-key: pk_...
   "id": "cust_abc123",
   "userId": "user_abc123",
   "email": "user@example.com",
+  "name": "John Doe",
   "subscriptions": [
     {
       "productId": "prod_xyz789",
@@ -150,6 +296,35 @@ x-api-key: pk_...
   ]
 }
 ```
+
+## Get Current Customer (Client SDK)
+
+```http
+GET /client/customers/me
+x-api-key: pk_...
+```
+
+Returns the customer resolved from the API key's `userId`.
+
+## Create Customer (Client SDK)
+
+```http
+POST /client/customers
+Content-Type: application/json
+x-api-key: pk_...
+```
+
+```json
+{
+  "userId": "user_abc123",
+  "email": "user@example.com",
+  "name": "John Doe"
+}
+```
+
+::: info
+When using a public API key, the `userId` is automatically set from the key's owner. You don't need to pass it.
+:::
 
 
 ---
@@ -165,41 +340,16 @@ title: Entitlements API
 ## Check Entitlement
 
 ```http
-POST /api/v1/billing/collections/:id/entitlements/check
+POST /api/v1/billing/collections/:collectionId/entitlements/check
 Content-Type: application/json
-x-api-key: pk_...
+Cookie: semaphore.session=...
 ```
 
 ```json
 {
   "customerId": "cust_abc123",
-  "feature": "api_access"
-}
-```
-
-### Response
-
-```json
-{
-  "entitled": true,
-  "customerId": "cust_abc123",
-  "feature": "api_access"
-}
-```
-
-## Report Usage
-
-```http
-POST /api/v1/billing/collections/:id/entitlements/report
-Content-Type: application/json
-x-api-key: pk_...
-```
-
-```json
-{
-  "customerId": "cust_abc123",
-  "feature": "api_calls",
-  "quantity": 150
+  "featureId": "api_calls",
+  "required": 1
 }
 ```
 
@@ -208,8 +358,96 @@ x-api-key: pk_...
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `customerId` | string | yes | Customer ID |
-| `feature` | string | yes | Feature identifier |
-| `quantity` | number | yes | Usage amount |
+| `featureId` | string | yes | Feature identifier (e.g. `"api_calls"`) |
+| `required` | number | no | Units required (default: 1) |
+
+### Response
+
+```json
+{
+  "allowed": true,
+  "balance": {
+    "limit": 10000,
+    "remaining": 9500,
+    "resetAt": "2026-08-01T00:00:00Z",
+    "unlimited": false
+  }
+}
+```
+
+::: info
+For boolean features, `balance` is null. For limit features, `balance` shows remaining units.
+:::
+
+## Report Usage
+
+```http
+POST /api/v1/billing/collections/:collectionId/entitlements/report
+Content-Type: application/json
+Cookie: semaphore.session=...
+```
+
+```json
+{
+  "customerId": "cust_abc123",
+  "featureId": "api_calls",
+  "amount": 150
+}
+```
+
+### Parameters
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `customerId` | string | yes | Customer ID |
+| `featureId` | string | yes | Feature identifier |
+| `amount` | number | no | Units consumed (default: 1) |
+
+### Response
+
+```json
+{
+  "success": true,
+  "balance": {
+    "limit": 10000,
+    "remaining": 9350,
+    "resetAt": "2026-08-01T00:00:00Z",
+    "unlimited": false
+  }
+}
+```
+
+## Check Entitlement (Client SDK)
+
+```http
+POST /client/entitlements/check
+Content-Type: application/json
+x-api-key: pk_...
+```
+
+```json
+{
+  "customerId": "cust_abc123",
+  "featureId": "api_calls",
+  "required": 1
+}
+```
+
+## Report Usage (Client SDK)
+
+```http
+POST /client/entitlements/report
+Content-Type: application/json
+x-api-key: pk_...
+```
+
+```json
+{
+  "customerId": "cust_abc123",
+  "featureId": "api_calls",
+  "amount": 1
+}
+```
 
 
 ---
@@ -222,73 +460,169 @@ title: API Reference
 
 # API Reference
 
-All endpoints are under `/api/v1/billing`. Authentication is required via session cookie or API key.
+Semaphore has two API layers: **Dashboard routes** (`/api/v1/billing`) for admin operations via session auth, and **SDK routes** (`/client`) for end-user operations via API key auth.
 
 ## Authentication
+
+### Dashboard Routes (`/api/v1/billing`)
+
+Used by the developer dashboard. Authentication via session cookie.
 
 | Method | Header | Purpose |
 |---|---|---|
 | Session | `Cookie: semaphore.session=...` | Developer dashboard |
-| API Key | `x-api-key: pk_...` | End-user client SDK |
-| API Key | `x-api-key: sk_...` | Server-side admin |
 
-## Base URL
+### SDK Routes (`/client`)
 
-```
-https://your-api.example.com/api/v1/billing
-```
+Used by the client SDK in end-user apps. Authentication via API key.
 
-## Collections
+| Method | Header | Purpose |
+|---|---|---|
+| API Key | `x-api-key: pk_...` | Public key (client-side) |
+| API Key | `x-api-key: sk_...` | Secret key (server-side) |
+
+### Webhook Route (`/webhook`)
+
+No auth required — verified by HMAC-SHA256 signature from Nomba.
+
+## Dashboard API (`/api/v1/billing`)
+
+### Collections
 
 | Method | Endpoint | Description |
 |---|---|---|
 | `POST` | `/collections` | Create a collection |
 | `GET` | `/collections` | List all collections |
 | `GET` | `/collections/:id` | Get a collection |
+| `GET` | `/collections/:id/analytics` | Get collection analytics |
 | `DELETE` | `/collections/:id` | Delete a collection |
 
-## Plans
+### API Keys
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/collections/:id/api-keys` | List API keys |
+| `POST` | `/collections/:id/api-keys` | Generate a new API key |
+| `DELETE` | `/collections/:id/api-keys/:key` | Revoke an API key |
+
+### Plans
 
 | Method | Endpoint | Description |
 |---|---|---|
 | `POST` | `/collections/:id/plans` | Create a plan |
 | `GET` | `/collections/:id/plans` | List plans |
 | `GET` | `/collections/:id/plans/:planId` | Get a plan |
+| `POST` | `/collections/:id/plans/:planId/deactivate` | Deactivate a plan |
+| `POST` | `/collections/:id/plans/:planId/reactivate` | Reactivate a plan |
+| `DELETE` | `/collections/:id/plans/:planId` | Delete a plan |
 
-## Products
+### Products
 
 | Method | Endpoint | Description |
 |---|---|---|
 | `POST` | `/collections/:id/products` | Create a product |
 | `GET` | `/collections/:id/products` | List products |
 | `GET` | `/collections/:id/products/:productId` | Get a product |
+| `PUT` | `/collections/:id/products/:productId` | Update a product |
+| `DELETE` | `/collections/:id/products/:productId` | Delete a product |
 
-## Customers
+### Customers
 
 | Method | Endpoint | Description |
 |---|---|---|
 | `POST` | `/collections/:id/customers` | Upsert a customer |
+| `GET` | `/collections/:id/customers` | List customers (with search/pagination) |
 | `GET` | `/collections/:id/customers/:customerId` | Get a customer |
 
-## Subscriptions
+### Subscriptions
 
 | Method | Endpoint | Description |
 |---|---|---|
 | `POST` | `/collections/:id/subscriptions/subscribe` | Subscribe a customer |
+| `GET` | `/collections/:id/subscriptions` | List subscriptions |
+| `GET` | `/collections/:id/subscriptions/:subId` | Get a subscription |
 | `POST` | `/collections/:id/subscriptions/:subId/cancel` | Cancel a subscription |
+| `POST` | `/collections/:id/subscriptions/:subId/pause` | Pause a subscription |
+| `POST` | `/collections/:id/subscriptions/:subId/resume` | Resume a subscription |
+| `POST` | `/collections/:id/subscriptions/:subId/reactivate` | Reactivate a subscription |
 
-## Entitlements
+### Features
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/collections/:id/features` | Create a feature |
+| `GET` | `/collections/:id/features` | List features |
+| `DELETE` | `/collections/:id/features/:featureId` | Delete a feature |
+| `POST` | `/collections/:id/features/attach-plan` | Attach feature to a plan |
+| `POST` | `/collections/:id/features/detach-plan` | Detach feature from a plan |
+| `POST` | `/collections/:id/features/attach-product` | Attach feature to a product |
+| `POST` | `/collections/:id/features/detach-product` | Detach feature from a product |
+
+### Entitlements
 
 | Method | Endpoint | Description |
 |---|---|---|
 | `POST` | `/collections/:id/entitlements/check` | Check entitlement |
 | `POST` | `/collections/:id/entitlements/report` | Report usage |
 
-## Webhooks
+### Metrics & Balance
 
 | Method | Endpoint | Description |
 |---|---|---|
-| `POST` | `/webhook/nomba` | Nomba webhook receiver |
+| `GET` | `/collections/:id/metrics/trend` | Get metric trend (current vs previous) |
+| `GET` | `/collections/:id/metrics/history` | Get metric history |
+| `GET` | `/collections/:id/balance` | Get collection balance |
+
+## Client SDK API (`/client`)
+
+These endpoints are used by `@semaphore-pay/client`. All require `x-api-key` header.
+
+### Customers
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/customers/me` | Get current customer (from key's userId) |
+| `POST` | `/customers` | Create/update a customer |
+
+### Plans & Products (read-only)
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/plans` | List plans |
+| `GET` | `/plans/:planId` | Get a plan |
+| `GET` | `/products` | List products |
+
+### Subscriptions
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/subscriptions/subscribe` | Subscribe to a plan |
+| `POST` | `/subscriptions/:id/cancel` | Cancel a subscription |
+
+### Products (purchase)
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/products/purchase` | Purchase a product (one-time) |
+
+### Entitlements
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/entitlements/check` | Check entitlement |
+| `POST` | `/entitlements/report` | Report usage |
+
+### Payments
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/payments/verify` | Verify a payment by order reference |
+
+## Webhook
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/webhook` | Nomba webhook receiver |
 
 
 ---
@@ -304,7 +638,7 @@ title: Plans API
 ## Create Plan
 
 ```http
-POST /api/v1/billing/collections/:id/plans
+POST /api/v1/billing/collections/:collectionId/plans
 Content-Type: application/json
 Cookie: semaphore.session=...
 ```
@@ -313,10 +647,9 @@ Cookie: semaphore.session=...
 {
   "name": "Pro",
   "description": "Full access",
-  "amount": 5000,
-  "currency": "NGN",
-  "interval": "month",
-  "intervalCount": 1,
+  "priceAmount": 5000,
+  "priceCurrency": "NGN",
+  "interval": "monthly",
   "trialPeriodDays": 14
 }
 ```
@@ -327,39 +660,89 @@ Cookie: semaphore.session=...
 |---|---|---|---|
 | `name` | string | yes | Plan name |
 | `description` | string | no | Plan description |
-| `amount` | number | yes | Price in kobo (₦50.00 = 5000) |
-| `currency` | string | yes | ISO 4217 code |
-| `interval` | string | yes | `day`, `week`, `month`, `year` |
-| `intervalCount` | number | yes | Billing frequency |
-| `trialPeriodDays` | number | no | Free trial length |
+| `priceAmount` | number | yes | Price in kobo (₦50.00 = 5000) |
+| `priceCurrency` | string | yes | ISO 4217 code (e.g. `"NGN"`) |
+| `interval` | string | yes | `"monthly"`, `"yearly"`, or `"none"` |
+| `trialPeriodDays` | number | no | Free trial length in days |
+| `badge` | string | no | Display badge (e.g. `"Most Popular"`) |
+| `ctaText` | string | no | Call-to-action text (e.g. `"Start Free Trial"`) |
+| `sortOrder` | number | no | Display order (lower = first) |
 
 ### Response
 
 ```json
 {
-  "id": "plan_abc123",
+  "id": "plan_pro_monthly",
+  "collectionId": "col_abc123",
+  "environment": "development",
   "name": "Pro",
-  "amount": 5000,
-  "currency": "NGN",
-  "interval": "month",
-  "intervalCount": 1,
-  "trialPeriodDays": 14
+  "description": "Full access",
+  "priceAmount": 5000,
+  "priceCurrency": "NGN",
+  "interval": "monthly",
+  "trialPeriodDays": 14,
+  "badge": null,
+  "ctaText": null,
+  "sortOrder": 0,
+  "isActive": true,
+  "createdAt": "2026-07-05T12:00:00Z",
+  "updatedAt": "2026-07-05T12:00:00Z"
 }
 ```
+
+::: info
+Plan IDs are auto-generated from name + interval: `plan_{sanitized_name}_{interval}` (e.g. `plan_pro_monthly`).
+:::
 
 ## List Plans
 
 ```http
-GET /api/v1/billing/collections/:id/plans
+GET /api/v1/billing/collections/:collectionId/plans
 Cookie: semaphore.session=...
 ```
 
 ## Get Plan
 
 ```http
-GET /api/v1/billing/collections/:id/plans/:planId
+GET /api/v1/billing/collections/:collectionId/plans/:planId
 Cookie: semaphore.session=...
 ```
+
+## Deactivate Plan
+
+```http
+POST /api/v1/billing/collections/:collectionId/plans/:planId/deactivate
+Content-Type: application/json
+Cookie: semaphore.session=...
+```
+
+```json
+{
+  "cancelRenewals": true
+}
+```
+
+::: info
+Deactivating a plan stops new subscriptions but existing ones continue until canceled or period ends.
+:::
+
+## Reactivate Plan
+
+```http
+POST /api/v1/billing/collections/:collectionId/plans/:planId/reactivate
+Cookie: semaphore.session=...
+```
+
+## Delete Plan
+
+```http
+DELETE /api/v1/billing/collections/:collectionId/plans/:planId
+Cookie: semaphore.session=...
+```
+
+::: danger
+This permanently deletes the plan. Active subscriptions using this plan will be affected.
+:::
 
 
 ---
@@ -375,7 +758,7 @@ title: Products API
 ## Create Product
 
 ```http
-POST /api/v1/billing/collections/:id/products
+POST /api/v1/billing/collections/:collectionId/products
 Content-Type: application/json
 Cookie: semaphore.session=...
 ```
@@ -384,10 +767,10 @@ Cookie: semaphore.session=...
 {
   "name": "Pro Access",
   "description": "Unlimited access",
-  "planId": "plan_abc123",
-  "metadata": {
-    "features": "api,export,priority_support"
-  }
+  "features": [
+    { "featureId": "api_calls", "type": "limit", "limit": 10000 },
+    { "featureId": "export", "type": "boolean" }
+  ]
 }
 ```
 
@@ -397,34 +780,108 @@ Cookie: semaphore.session=...
 |---|---|---|---|
 | `name` | string | yes | Product name |
 | `description` | string | no | Product description |
-| `planId` | string | yes | Associated plan ID |
-| `metadata` | object | no | Custom key-value pairs |
+| `features` | FeatureInput[] | no | Features attached to this product |
+
+### FeatureInput
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `featureId` | string | yes | Feature identifier (e.g. `"api_calls"`) |
+| `type` | string | yes | `"boolean"` for on/off, `"limit"` for metered |
+| `limit` | number | no | Max units for metered features |
+| `resetInterval` | string | no | `"day"`, `"week"`, `"month"`, or `"year"` |
 
 ### Response
 
 ```json
 {
+  "internalId": "prod_a1b2c3d4",
   "id": "prod_xyz789",
+  "collectionId": "col_abc123",
+  "environment": "development",
+  "version": 1,
   "name": "Pro Access",
-  "planId": "plan_abc123",
-  "metadata": {
-    "features": "api,export,priority_support"
-  }
+  "group": "default",
+  "isDefault": false,
+  "priceAmount": null,
+  "priceCurrency": "NGN",
+  "priceInterval": null,
+  "features": [
+    { "featureId": "api_calls", "type": "limit", "limit": 10000 }
+  ],
+  "createdAt": "2026-07-05T12:00:00Z",
+  "updatedAt": "2026-07-05T12:00:00Z"
 }
 ```
 
 ## List Products
 
 ```http
-GET /api/v1/billing/collections/:id/products
+GET /api/v1/billing/collections/:collectionId/products
 Cookie: semaphore.session=...
 ```
 
 ## Get Product
 
 ```http
-GET /api/v1/billing/collections/:id/products/:productId
+GET /api/v1/billing/collections/:collectionId/products/:productId
 Cookie: semaphore.session=...
+```
+
+## Update Product
+
+```http
+PUT /api/v1/billing/collections/:collectionId/products/:productId
+Content-Type: application/json
+Cookie: semaphore.session=...
+```
+
+```json
+{
+  "name": "Pro Access Updated",
+  "features": [
+    { "featureId": "api_calls", "type": "limit", "limit": 20000 }
+  ]
+}
+```
+
+## Delete Product
+
+```http
+DELETE /api/v1/billing/collections/:collectionId/products/:productId
+Cookie: semaphore.session=...
+```
+
+::: danger
+This permanently deletes the product. Customers with active access via this product will be affected.
+:::
+
+## Purchase Product (Client SDK)
+
+```http
+POST /client/products/purchase
+Content-Type: application/json
+x-api-key: pk_...
+```
+
+```json
+{
+  "customerId": "cust_abc123",
+  "productInternalId": "prod_a1b2c3d4"
+}
+```
+
+### Response
+
+```json
+{
+  "id": "purch_xyz789",
+  "status": "pending",
+  "checkout": {
+    "checkoutLink": "https://sandbox.nomba.com/checkout/...",
+    "orderReference": "order_abc123"
+  }
+}
 ```
 
 
@@ -441,40 +898,73 @@ title: Subscriptions API
 ## Subscribe
 
 ```http
-POST /api/v1/billing/collections/:id/subscriptions/subscribe
+POST /api/v1/billing/collections/:collectionId/subscriptions/subscribe
 Content-Type: application/json
-x-api-key: pk_...
+Cookie: semaphore.session=...
 ```
 
 ```json
 {
   "customerId": "cust_abc123",
-  "productId": "prod_xyz789",
-  "paymentMethod": {
-    "type": "card",
-    "token": "tok_..."
-  }
+  "planId": "plan_pro_monthly"
 }
 ```
+
+### Parameters
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `customerId` | string | yes | Customer ID |
+| `planId` | string | yes | Plan ID (e.g. `"plan_pro_monthly"`) |
 
 ### Response
 
 ```json
 {
-  "id": "sub_abc123",
-  "customerId": "cust_abc123",
-  "productId": "prod_xyz789",
+  "subscriptionId": "sub_abc123",
   "status": "active",
-  "currentPeriodStart": "2026-07-05T12:00:00Z",
-  "currentPeriodEnd": "2026-08-05T12:00:00Z"
+  "nombaOrderReference": "order_xyz789",
+  "trialEndAt": null,
+  "checkout": {
+    "checkoutLink": "https://sandbox.nomba.com/checkout/...",
+    "orderReference": "order_xyz789"
+  }
 }
+```
+
+::: info
+For free plans (price = 0), status is `"active"` and `checkout` is null. For paid plans, status is `"pending_payment"` and `checkout` contains the Nomba checkout link.
+:::
+
+## List Subscriptions
+
+```http
+GET /api/v1/billing/collections/:collectionId/subscriptions?status=active&limit=20&offset=0
+Cookie: semaphore.session=...
+```
+
+### Query Parameters
+
+| Param | Type | Description |
+|---|---|---|
+| `status` | string | Filter by status: `active`, `trialing`, `past_due`, `canceled`, `paused` |
+| `planId` | string | Filter by plan ID |
+| `customerId` | string | Filter by customer ID |
+| `limit` | number | Results per page |
+| `offset` | number | Pagination offset |
+
+## Get Subscription
+
+```http
+GET /api/v1/billing/collections/:collectionId/subscriptions/:subscriptionId
+Cookie: semaphore.session=...
 ```
 
 ## Cancel Subscription
 
 ```http
-POST /api/v1/billing/collections/:id/subscriptions/:subId/cancel
-x-api-key: pk_...
+POST /api/v1/billing/collections/:collectionId/subscriptions/:subscriptionId/cancel
+Cookie: semaphore.session=...
 ```
 
 ### Response
@@ -488,8 +978,51 @@ x-api-key: pk_...
 ```
 
 ::: info
-Canceling sets `cancelAtPeriodEnd: true`. The subscription remains active until the period ends.
+Canceling sets `cancelAtPeriodEnd: true`. The subscription remains active until the current period ends.
 :::
+
+## Pause Subscription
+
+```http
+POST /api/v1/billing/collections/:collectionId/subscriptions/:subscriptionId/pause
+Cookie: semaphore.session=...
+```
+
+## Resume Subscription
+
+```http
+POST /api/v1/billing/collections/:collectionId/subscriptions/:subscriptionId/resume
+Cookie: semaphore.session=...
+```
+
+## Reactivate Subscription
+
+```http
+POST /api/v1/billing/collections/:collectionId/subscriptions/:subscriptionId/reactivate
+Cookie: semaphore.session=...
+```
+
+## Subscribe (Client SDK)
+
+```http
+POST /client/subscriptions/subscribe
+Content-Type: application/json
+x-api-key: pk_...
+```
+
+```json
+{
+  "customerId": "cust_abc123",
+  "planId": "plan_pro_monthly"
+}
+```
+
+## Cancel (Client SDK)
+
+```http
+POST /client/subscriptions/:subscriptionId/cancel
+x-api-key: pk_...
+```
 
 
 ---
@@ -508,13 +1041,14 @@ A collection is an isolated tenant within Semaphore. Think of it like a RevenueC
 
 ```
 Semaphore Account (Nomba)
-├── Collection: "My SaaS App"
+├── Collection: "My SaaS App" (sandbox)
 │   ├── Plans: Pro, Enterprise
 │   ├── Products: Pro Access, Enterprise Access
+│   ├── Features: api_calls, export, pro_mode
 │   ├── Customers: 1,234
 │   └── Subscriptions: 892 active
 │
-├── Collection: "Another App"
+├── Collection: "Another App" (production)
 │   ├── Plans: Basic, Premium
 │   ├── Products: Basic Access, Premium Access
 │   ├── Customers: 567
@@ -526,10 +1060,9 @@ Each collection is completely isolated. Data, API keys, and billing are separate
 ## Creating a Collection
 
 ```typescript
-const collection = await engine.createCollection({
-  name: 'My App',
-  description: 'Production environment',
-});
+import { createCollection } from '@semaphore-pay/server';
+
+const collection = await createCollection(engine, 'My App', 'sandbox');
 ```
 
 Response:
@@ -538,21 +1071,28 @@ Response:
 {
   "id": "col_abc123",
   "name": "My App",
-  "description": "Production environment",
-  "publicKey": "pk_col_abc123_xyz",
-  "secretKey": "sk_col_abc123_def",
+  "environment": "sandbox",
   "createdAt": "2026-07-05T12:00:00Z"
 }
 ```
 
+## Environments
+
+Each collection has an environment:
+
+| Environment | Purpose | Nomba Keys |
+|---|---|---|
+| `sandbox` | Development and testing | `NOMBA_SANDBOX_*` |
+| `production` | Live payments | `NOMBA_LIVE_*` |
+
 ## API Keys
 
-Each collection has two API keys:
+Each collection has API keys for authentication:
 
-| Key | Prefix | Purpose |
+| Key Type | Prefix | Purpose |
 |---|---|---|
-| Public Key | `pk_` | Client-side SDK (end-user apps) |
-| Secret Key | `sk_` | Server-side admin operations |
+| Public Key | `sem_pk_test_*` / `sem_pk_live_*` | Client-side SDK (end-user apps) |
+| Secret Key | `sem_sk_test_*` / `sem_sk_live_*` | Server-side admin operations |
 
 ::: warning
 Never expose secret keys in client-side code. Use public keys for end-user applications.
@@ -561,17 +1101,21 @@ Never expose secret keys in client-side code. Use public keys for end-user appli
 ## Listing Collections
 
 ```typescript
-const collections = await engine.listCollections();
+// Dashboard API returns collections with stats
+const collections = await fetch('/api/v1/billing/collections');
+// Returns: [{ id, name, environment, plans, products, customers, activeSubscriptions }]
 ```
 
 ## Deleting a Collection
 
 ```typescript
-await engine.deleteCollection('col_abc123');
+import { deleteCollection } from '@semaphore-pay/server';
+
+await deleteCollection(engine, 'col_abc123');
 ```
 
 ::: danger
-Deleting a collection removes all associated plans, products, customers, and subscriptions. This action is irreversible.
+Deleting a collection removes all associated API keys. This action is irreversible.
 :::
 
 
@@ -587,15 +1131,71 @@ title: Entitlements
 
 Entitlements control access to features. Check if a customer has access, and report usage for metered billing.
 
+## Feature Types
+
+| Type | Description | Balance |
+|---|---|---|
+| `boolean` | On/off access | null |
+| `limit` | Metered with quota | `{ limit, remaining, resetAt, unlimited }` |
+
+## Creating Features
+
+Features are created separately and attached to plans/products:
+
+```typescript
+import { createFeatureApi } from '@semaphore-pay/server';
+
+// Boolean feature
+await createFeatureApi(engine, {
+  featureId: 'pro_mode',
+  name: 'Pro Mode',
+  type: 'boolean',
+}, { collectionId: 'col_abc123' });
+
+// Limit feature
+await createFeatureApi(engine, {
+  featureId: 'api_calls',
+  name: 'API Calls',
+  type: 'limit',
+}, { collectionId: 'col_abc123' });
+```
+
+## Attaching Features to Plans
+
+```typescript
+import { attachPlan } from '@semaphore-pay/server';
+
+await attachPlan(engine, {
+  planId: 'plan_pro_monthly',
+  featureId: 'api_calls',
+  limit: 10000,
+  resetInterval: 'month',
+}, { collectionId: 'col_abc123' });
+```
+
+## Attaching Features to Products
+
+```typescript
+import { attachProduct } from '@semaphore-pay/server';
+
+await attachProduct(engine, {
+  productInternalId: 'prod_a1b2c3d4',
+  featureId: 'pro_mode',
+}, { collectionId: 'col_abc123' });
+```
+
 ## Checking Entitlement
 
 ```typescript
-const check = await engine.checkEntitlement(collectionId, {
-  customerId: 'cust_abc123',
-  feature: 'api_access',
-});
+import { check } from '@semaphore-pay/server';
 
-if (check.entitled) {
+const result = await check(engine, {
+  customerId: 'cust_abc123',
+  featureId: 'api_calls',
+  required: 1,
+}, { collectionId: 'col_abc123' });
+
+if (result.allowed) {
   // Grant access to the feature
   return { access: true };
 } else {
@@ -608,9 +1208,13 @@ if (check.entitled) {
 
 ```json
 {
-  "entitled": true,
-  "customerId": "cust_abc123",
-  "feature": "api_access"
+  "allowed": true,
+  "balance": {
+    "limit": 10000,
+    "remaining": 9500,
+    "resetAt": "2026-08-01T00:00:00Z",
+    "unlimited": false
+  }
 }
 ```
 
@@ -619,47 +1223,52 @@ if (check.entitled) {
 For metered features, report usage after each unit is consumed:
 
 ```typescript
-await engine.reportUsage(collectionId, {
+import { report } from '@semaphore-pay/server';
+
+await report(engine, {
   customerId: 'cust_abc123',
-  feature: 'api_calls',
-  quantity: 1,
-});
+  featureId: 'api_calls',
+  amount: 1,
+}, { collectionId: 'col_abc123' });
 ```
 
 ### Common Usage Patterns
 
-| Feature | Quantity | Description |
+| Feature | Amount | Description |
 |---|---|---|
 | `api_calls` | 1 per call | Track API usage |
 | `storage_gb` | 1 per GB | Track storage consumption |
 | `seats` | 1 per user | Track team size |
 | `exports` | 1 per export | Track data exports |
 
-## Setting Up Features
-
-Features are defined in your product metadata. When creating a product:
-
-```typescript
-const product = await engine.createProduct(collectionId, {
-  name: 'Pro Access',
-  planId: plan.id,
-  metadata: {
-    features: 'api_access,export,priority_support',
-    api_limit: '10000',
-    storage_limit: '50',
-  },
-});
-```
-
 ## Entitlement Logic
 
 1. Customer must have an active or trialing subscription
-2. Subscription must be linked to the product with the requested feature
-3. Usage must be within limits (if defined)
+2. Subscription must be linked to a plan/product with the requested feature
+3. For limit features, balance must have sufficient remaining units
+4. Entitlements can also come from product purchases (one-time)
 
 ::: info
 Entitlement checks are synchronous. Use them for real-time access control.
 :::
+
+## Detaching Features
+
+```typescript
+import { detachPlan, detachProduct } from '@semaphore-pay/server';
+
+// Detach from plan
+await detachPlan(engine, {
+  planId: 'plan_pro_monthly',
+  featureId: 'api_calls',
+}, { collectionId: 'col_abc123' });
+
+// Detach from product
+await detachProduct(engine, {
+  productInternalId: 'prod_a1b2c3d4',
+  featureId: 'pro_mode',
+}, { collectionId: 'col_abc123' });
+```
 
 
 ---
@@ -672,21 +1281,25 @@ title: Products & Plans
 
 # Products & Plans
 
-Plans define pricing. Products are what customers subscribe to.
+Plans define pricing. Products are what customers actually use.
 
 ## Plans
 
 A plan defines how much to charge and how often.
 
 ```typescript
-const plan = await engine.createPlan(collectionId, {
+import { create } from '@semaphore-pay/server';
+
+const plan = await create(engine, {
   name: 'Pro',
   description: 'Full access',
-  amount: 5000, // ₦50.00 in kobo
-  currency: 'NGN',
-  interval: 'month',
-  intervalCount: 1,
+  priceAmount: 5000, // ₦50.00 in kobo
+  priceCurrency: 'NGN',
+  interval: 'monthly',
   trialPeriodDays: 14,
+}, {
+  collectionId: 'col_abc123',
+  environment: 'development',
 });
 ```
 
@@ -696,24 +1309,41 @@ const plan = await engine.createPlan(collectionId, {
 |---|---|---|
 | `name` | string | Display name |
 | `description` | string | Optional description |
-| `amount` | number | Price in smallest currency unit (kobo for NGN) |
-| `currency` | string | ISO 4217 currency code |
-| `interval` | string | `day`, `week`, `month`, or `year` |
-| `intervalCount` | number | Billing frequency (e.g., 3 for every 3 months) |
+| `priceAmount` | number | Price in smallest currency unit (kobo for NGN) |
+| `priceCurrency` | string | ISO 4217 currency code |
+| `interval` | string | `"monthly"`, `"yearly"`, or `"none"` |
 | `trialPeriodDays` | number | Optional trial length |
+| `badge` | string | Optional display badge (e.g. `"Most Popular"`) |
+| `ctaText` | string | Optional call-to-action text |
+| `sortOrder` | number | Display order (lower = first) |
+
+### Plan ID Format
+
+Plan IDs are auto-generated: `plan_{sanitized_name}_{interval}`
+
+Examples:
+- `plan_pro_monthly`
+- `plan_enterprise_yearly`
+- `plan_basic_none`
 
 ## Products
 
-Products are what customers actually subscribe to. Each product links to one or more plans.
+Products are what customers subscribe to or purchase. Each product has its own features.
 
 ```typescript
-const product = await engine.createProduct(collectionId, {
+import { createProduct } from '@semaphore-pay/server';
+
+const product = await createProduct(engine, {
   name: 'Pro Access',
   description: 'Unlimited access to all features',
-  planId: plan.id,
-  metadata: {
-    features: 'unlimited,api,export,priority_support',
-  },
+  features: [
+    { featureId: 'api_calls', type: 'limit', limit: 10000 },
+    { featureId: 'export', type: 'boolean' },
+    { featureId: 'pro_mode', type: 'boolean' },
+  ],
+}, {
+  collectionId: 'col_abc123',
+  environment: 'development',
 });
 ```
 
@@ -723,25 +1353,62 @@ const product = await engine.createProduct(collectionId, {
 |---|---|---|
 | `name` | string | Display name |
 | `description` | string | Optional description |
-| `planId` | string | ID of the associated plan |
-| `metadata` | object | Key-value pairs for custom data |
+| `features` | FeatureInput[] | Features attached to this product |
+
+### FeatureInput
+
+| Field | Type | Description |
+|---|---|---|
+| `featureId` | string | Feature identifier (e.g. `"api_calls"`) |
+| `type` | string | `"boolean"` for on/off, `"limit"` for metered |
+| `limit` | number | Max units for metered features |
+| `resetInterval` | string | `"day"`, `"week"`, `"month"`, or `"year"` |
 
 ## Listing
 
 ```typescript
+import { list } from '@semaphore-pay/server';
+import { listProducts } from '@semaphore-pay/server';
+
 // List plans
-const plans = await engine.listPlans(collectionId);
+const plans = await list(engine, {}, {
+  collectionId: 'col_abc123',
+  environment: 'development',
+});
 
 // List products
-const products = await engine.listProducts(collectionId);
+const products = await listProducts(engine, {
+  collectionId: 'col_abc123',
+  environment: 'development',
+});
 ```
 
 ## Getting by ID
 
 ```typescript
-const plan = await engine.getPlan(collectionId, 'plan_abc123');
-const product = await engine.getProduct(collectionId, 'prod_xyz789');
+import { get } from '@semaphore-pay/server';
+import { getProduct } from '@semaphore-pay/server';
+
+const plan = await get(engine, { planId: 'plan_pro_monthly' }, {
+  collectionId: 'col_abc123',
+  environment: 'development',
+});
+
+const product = await getProduct(engine, {
+  productId: 'prod_xyz789',
+  collectionId: 'col_abc123',
+  environment: 'development',
+});
 ```
+
+## Plans vs Products
+
+| Aspect | Plan | Product |
+|---|---|---|
+| Purpose | Defines pricing & billing | Defines features & access |
+| Price | Has `priceAmount` | No price (links to plan via subscription) |
+| Features | Can have features attached | Has features directly |
+| Subscription | Customer subscribes to plan | Customer gets access via plan subscription |
 
 
 ---
@@ -754,13 +1421,15 @@ title: Subscriptions
 
 # Subscriptions
 
-Subscriptions represent a customer's access to a product. They track billing status, renewal dates, and cancellation state.
+Subscriptions represent a customer's access to a plan. They track billing status, renewal dates, and cancellation state.
 
 ## Subscription Lifecycle
 
 ```
 created → active → past_due → canceled
                  ↘ trialed ↗
+                      ↓
+                   paused → active (resumed)
 ```
 
 | Status | Description |
@@ -769,18 +1438,24 @@ created → active → past_due → canceled
 | `trialing` | In free trial period |
 | `past_due` | Payment failed, in dunning period |
 | `canceled` | Subscription ended (either immediately or at period end) |
+| `paused` | Subscription temporarily paused |
+| `pending_payment` | Awaiting initial payment (checkout in progress) |
 
 ## Creating a Subscription
 
 ```typescript
-const subscription = await engine.subscribe(collectionId, {
+import { subscribe } from '@semaphore-pay/server';
+
+const result = await subscribe(engine, {
   customerId: 'cust_abc123',
-  productId: 'prod_xyz789',
-  paymentMethod: {
-    type: 'card',
-    token: 'tok_...',
-  },
+  planId: 'plan_pro_monthly',
+}, {
+  collectionId: 'col_abc123',
+  environment: 'development',
 });
+
+console.log(result.status); // 'active' for free, 'pending_payment' for paid
+console.log(result.checkout?.checkoutLink); // Nomba checkout URL
 ```
 
 ## Canceling a Subscription
@@ -789,17 +1464,28 @@ End users can cancel their own subscriptions:
 
 ```typescript
 // Client SDK
-const result = await client.cancelSubscription({
-  subscriptionId: 'sub_abc123',
-});
-
-console.log(result.cancelAtPeriodEnd); // true
-console.log(result.currentPeriodEnd); // When access ends
+const result = await client.cancelSubscription('sub_abc123');
 ```
 
 ::: info
 Canceling sets `cancelAtPeriodEnd: true`. The subscription remains active until the current period ends.
 :::
+
+## Pausing a Subscription
+
+```typescript
+import { pause } from '@semaphore-pay/server/subscription';
+
+await pause(engine, 'sub_abc123', { collectionId: 'col_abc123' });
+```
+
+## Resuming a Subscription
+
+```typescript
+import { resume } from '@semaphore-pay/server/subscription';
+
+await resume(engine, 'sub_abc123', { collectionId: 'col_abc123' });
+```
 
 ## Renewals
 
@@ -812,12 +1498,14 @@ Renewals are handled automatically via cron job. When a subscription's `currentP
 ## Checking Entitlements
 
 ```typescript
-const check = await engine.checkEntitlement(collectionId, {
-  customerId: 'cust_abc123',
-  feature: 'api_access',
-});
+import { check } from '@semaphore-pay/server';
 
-if (check.entitled) {
+const entitlement = await check(engine, {
+  customerId: 'cust_abc123',
+  featureId: 'api_access',
+}, { collectionId: 'col_abc123' });
+
+if (entitlement.allowed) {
   // Grant access
 }
 ```
@@ -827,19 +1515,24 @@ if (check.entitled) {
 For metered billing:
 
 ```typescript
-await engine.reportUsage(collectionId, {
+import { report } from '@semaphore-pay/server';
+
+await report(engine, {
   customerId: 'cust_abc123',
-  feature: 'api_calls',
-  quantity: 150,
-});
+  featureId: 'api_calls',
+  amount: 150,
+}, { collectionId: 'col_abc123' });
 ```
 
 ## Fetching Subscriptions
 
 ```typescript
-// Get customer's subscriptions
-const subscriptions = await engine.getCustomer(collectionId, 'cust_abc123');
-// Returns active, trialing, and past_due subscriptions
+import { list as listSubscriptions } from '@semaphore-pay/server/subscription';
+
+const subscriptions = await listSubscriptions(engine, {
+  status: 'active',
+  limit: 20,
+}, { collectionId: 'col_abc123' });
 ```
 
 
@@ -878,12 +1571,17 @@ Copy the `database_id` to `wrangler.jsonc`.
   "name": "semaphore-api",
   "main": "src/index.ts",
   "compatibility_date": "2024-12-01",
+  "compatibility_flags": ["nodejs_compat"],
   "d1_databases": [
     {
-      "binding": "SEMAPHORE_DB",
+      "binding": "semaphore_db",
       "database_name": "semaphore-db",
       "database_id": "your-d1-id"
     }
+  ],
+  "crons": ["0 * * * *", "0 0 * * *"],
+  "routes": [
+    { "pattern": "api.semaphorepay.tech", "zone_name": "semaphorepay.tech" }
   ]
 }
 ```
@@ -891,20 +1589,45 @@ Copy the `database_id` to `wrangler.jsonc`.
 ## 3. Set Environment Variables
 
 ```bash
+# Better Auth
 npx wrangler secret put BETTER_AUTH_SECRET
 npx wrangler secret put BETTER_AUTH_URL
+
+# Nomba (sandbox)
 npx wrangler secret put NOMBA_SANDBOX_CLIENT_ID
 npx wrangler secret put NOMBA_SANDBOX_CLIENT_SECRET
 npx wrangler secret put NOMBA_SANDBOX_ACCOUNT_ID
+
+# Nomba (production)
+npx wrangler secret put NOMBA_LIVE_CLIENT_ID
+npx wrangler secret put NOMBA_LIVE_CLIENT_SECRET
+npx wrangler secret put NOMBA_LIVE_ACCOUNT_ID
+
+# Nomba (shared)
 npx wrangler secret put NOMBA_WEBHOOK_SECRET
 npx wrangler secret put NOMBA_CHECKOUT_CALLBACK_URL
+
+# CORS
 npx wrangler secret put FRONTEND_URL
+
+# Cloudflare (for D1 access)
+npx wrangler secret put CLOUDFLARE_ACCOUNT_ID
+npx wrangler secret put CLOUDFLARE_DATABASE_ID
+npx wrangler secret put CLOUDFLARE_D1_TOKEN
 ```
 
 ## 4. Run Migrations
 
 ```bash
+# Run all migrations in order
 npx wrangler d1 execute semaphore-db --remote --file=./migrations/sqlite/0001_watery_wild_child.sql
+npx wrangler d1 execute semaphore-db --remote --file=./migrations/sqlite/0002_*.sql
+npx wrangler d1 execute semaphore-db --remote --file=./migrations/sqlite/0003_*.sql
+npx wrangler d1 execute semaphore-db --remote --file=./migrations/sqlite/0004_*.sql
+npx wrangler d1 execute semaphore-db --remote --file=./migrations/sqlite/0005_*.sql
+npx wrangler d1 execute semaphore-db --remote --file=./migrations/sqlite/0006_*.sql
+npx wrangler d1 execute semaphore-db --remote --file=./migrations/sqlite/0007_*.sql
+npx wrangler d1 execute semaphore-db --remote --file=./migrations/sqlite/0008_add_webhook_event.sql
 ```
 
 ## 5. Deploy
@@ -919,11 +1642,11 @@ In Cloudflare Dashboard:
 1. Go to Workers & Pages
 2. Select your worker
 3. Settings → Triggers → Custom Domains
-4. Add `api.yourdomain.com`
+4. Add `api.semaphorepay.tech`
 
-## Static Files (Client SDK)
+## Static Files (Documentation Site)
 
-For the client SDK documentation site:
+For the documentation site:
 
 ```bash
 cd docs
@@ -964,7 +1687,7 @@ NOMBA_LIVE_ACCOUNT_ID=
 
 # Shared
 NOMBA_WEBHOOK_SECRET=
-NOMBA_CHECKOUT_CALLBACK_URL=https://your-api.example.com/webhook/nomba
+NOMBA_CHECKOUT_CALLBACK_URL=https://your-api.example.com/webhook
 ```
 
 ## Better Auth
@@ -980,6 +1703,14 @@ BETTER_AUTH_URL=https://your-api.example.com
 FRONTEND_URL=https://your-frontend.com
 ```
 
+## Cloudflare
+
+```bash
+CLOUDFLARE_ACCOUNT_ID=
+CLOUDFLARE_DATABASE_ID=
+CLOUDFLARE_D1_TOKEN=
+```
+
 ::: warning
 Never commit secrets to version control. Use Cloudflare Secrets or `.dev.vars` for local development.
 :::
@@ -992,11 +1723,25 @@ Create `.dev.vars` in your project root:
 BETTER_AUTH_SECRET=dev-secret
 BETTER_AUTH_URL=http://localhost:8787
 FRONTEND_URL=http://localhost:3000
+
+# Nomba (sandbox)
 NOMBA_SANDBOX_CLIENT_ID=...
 NOMBA_SANDBOX_CLIENT_SECRET=...
 NOMBA_SANDBOX_ACCOUNT_ID=...
+
+# Nomba (production)
+NOMBA_LIVE_CLIENT_ID=...
+NOMBA_LIVE_CLIENT_SECRET=...
+NOMBA_LIVE_ACCOUNT_ID=...
+
+# Nomba (shared)
 NOMBA_WEBHOOK_SECRET=...
-NOMBA_CHECKOUT_CALLBACK_URL=http://localhost:8787/webhook/nomba
+NOMBA_CHECKOUT_CALLBACK_URL=http://localhost:8787/webhook
+
+# Cloudflare (for D1 access)
+CLOUDFLARE_ACCOUNT_ID=...
+CLOUDFLARE_DATABASE_ID=...
+CLOUDFLARE_D1_TOKEN=...
 ```
 
 
@@ -1010,7 +1755,7 @@ title: React Native
 
 # React Native
 
-Use the React Native hook for mobile apps.
+Use the React Native hook and components for mobile apps.
 
 ## Installation
 
@@ -1025,51 +1770,154 @@ import { useSemaphorePay } from '@semaphore-pay/client/react-native';
 
 function App() {
   const {
-    customer,
-    subscriptions,
-    isLoading,
+    ready,
+    customerId,
+    subscribed,
+    subscriptionStatus,
     error,
     subscribe,
-    cancelSubscription,
-    checkEntitlement,
+    check,
+    report,
+    client,
   } = useSemaphorePay({
     baseUrl: 'https://your-api.example.com',
     apiKey: 'pk_your_key',
     collectionId: 'col_abc123',
+    planId: 'plan_pro_monthly',
+    userId: 'user_123',
+    userEmail: 'user@example.com',
+    userName: 'John Doe',
+    autoSubscribe: true,
   });
+
+  if (error) return <Text>Error: {error}</Text>;
+  if (!ready) return <ActivityIndicator />;
+
+  if (subscribed) return <Dashboard />;
 
   return (
     <View>
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : error ? (
-        <Text>Error: {error.message}</Text>
-      ) : (
-        <>
-          <Text>Subscriptions: {subscriptions.length}</Text>
-          {subscriptions.map((sub) => (
-            <View key={sub.productId}>
-              <Text>{sub.status}</Text>
-            </View>
-          ))}
-        </>
-      )}
+      <Text>Setting up subscription...</Text>
     </View>
   );
 }
 ```
 
-## Deep Links
-
-The client SDK supports Expo deep links. If a token appears in the URL, it's used for authentication (tokens expire but are safe for short-lived sessions).
-
-## Configuration
+## Hook Options
 
 | Option | Type | Required | Description |
 |---|---|---|---|
 | `baseUrl` | string | yes | API base URL |
 | `apiKey` | string | yes | Public API key |
 | `collectionId` | string | yes | Collection ID |
+| `planId` | string | no | Plan ID to subscribe to |
+| `userId` | string | no | User identifier (auto-generated if not provided) |
+| `userEmail` | string | no | Customer email |
+| `userName` | string | no | Customer name |
+| `autoSubscribe` | boolean | no | Auto-subscribe on mount (default: true) |
+
+## Hook Return Values
+
+| Property | Type | Description |
+|---|---|---|
+| `client` | `SemaphorePayClient` | The API client instance |
+| `ready` | `boolean` | Whether setup is complete |
+| `customerId` | `string \| null` | Current customer ID |
+| `subscribed` | `boolean` | Whether subscription is active |
+| `subscriptionStatus` | `string \| null` | Current subscription status |
+| `error` | `string \| null` | Error message |
+| `subscribe` | `() => Promise<any>` | Subscribe to plan |
+| `check` | `(featureId, required?) => Promise<any>` | Check entitlement |
+| `report` | `(featureId, amount?) => Promise<any>` | Report usage |
+
+## Paywall Component
+
+The `SemaphorePayPaywall` component hosts a WebView for Nomba checkout:
+
+```tsx
+import { SemaphorePayPaywall } from '@semaphore-pay/client/react-native';
+
+function BuyButton() {
+  const [link, setLink] = useState<string | null>(null);
+
+  const handleBuy = async () => {
+    const result = await client.subscribeToPlan({ customerId, planId });
+    if (result.checkout?.checkoutLink) {
+      setLink(result.checkout.checkoutLink);
+    }
+  };
+
+  return (
+    <>
+      <Button title="Buy Premium" onPress={handleBuy} />
+      {link && (
+        <SemaphorePayPaywall
+          visible={true}
+          checkoutLink={link}
+          callbackUrl="https://your-api.example.com/webhook"
+          callbacks={{
+            onSuccess: () => {
+              setLink(null);
+              console.log('Payment successful!');
+            },
+            onCancel: () => setLink(null),
+            onError: (err) => console.error(err),
+          }}
+        />
+      )}
+    </>
+  );
+}
+```
+
+### Paywall Props
+
+| Prop | Type | Required | Description |
+|---|---|---|---|
+| `checkoutLink` | string | yes | Nomba checkout URL |
+| `visible` | boolean | yes | Whether modal is visible |
+| `callbacks` | object | yes | `{ onSuccess, onCancel?, onError? }` |
+| `callbackUrl` | string | no | Success detection URL |
+| `successUrlPrefix` | string | no | Override success detection |
+
+## Entitlement Guard
+
+The `SemaphorePayEntitlementGuard` component gates content behind an entitlement:
+
+```tsx
+import { SemaphorePayEntitlementGuard } from '@semaphore-pay/client/react-native';
+
+function ProDashboard() {
+  return (
+    <SemaphorePayEntitlementGuard
+      client={client}
+      featureId="pro_mode"
+      customerId={customerId}
+      denied={
+        <View>
+          <Text>Upgrade to Pro to access this dashboard.</Text>
+          <Button title="Upgrade" onPress={openPaywall} />
+        </View>
+      }
+    >
+      <ProFeaturesScreen />
+    </SemaphorePayEntitlementGuard>
+  );
+}
+```
+
+### Guard Props
+
+| Prop | Type | Required | Description |
+|---|---|---|---|
+| `client` | SemaphorePayClient | yes | API client instance |
+| `featureId` | string | yes | Feature to check |
+| `customerId` | string | no | Customer ID (falls back to client) |
+| `required` | number | no | Units required (default: 1) |
+| `fallback` | ReactNode | no | Loading state content |
+| `denied` | ReactNode | no | Denied state content |
+| `children` | ReactNode | yes | Content to render when allowed |
+| `onChecked` | `(allowed: boolean) => void` | no | Callback after check |
 
 
 ---
@@ -1093,60 +1941,66 @@ npm install @semaphore-pay/client zustand
 ## Setup
 
 ```tsx
-import { SemaphorePayProvider, useSemaphorePay } from '@semaphore-pay/client/react';
+import { useSemaphorePayStore } from '@semaphore-pay/client/react';
 
-function App() {
+// Initialize once (e.g. in App.tsx)
+useSemaphorePayStore.getState().initialize({
+  baseUrl: 'https://your-api.example.com',
+  apiKey: 'pk_your_key',
+  collectionId: 'col_abc123',
+});
+```
+
+## Using the Store
+
+```tsx
+import { useSemaphorePayStore } from '@semaphore-pay/client/react';
+
+function Dashboard() {
+  const { customerId, subscribed, subscriptionStatus, error } = useSemaphorePayStore();
+
+  if (error) return <div>Error: {error}</div>;
+
   return (
-    <SemaphorePayProvider
-      config={{
-        baseUrl: 'https://your-api.example.com',
-        apiKey: 'pk_your_key',
-        collectionId: 'col_abc123',
-      }}
-    >
-      <Dashboard />
-    </SemaphorePayProvider>
+    <div>
+      <h2>Subscription Status</h2>
+      <p>Customer: {customerId}</p>
+      <p>Subscribed: {subscribed ? 'Yes' : 'No'}</p>
+      <p>Status: {subscriptionStatus}</p>
+    </div>
   );
 }
 ```
 
-## Using the Hook
+## Setting Customer ID
+
+After creating a customer, set the ID in the store:
 
 ```tsx
-function Dashboard() {
-  const {
-    customer,
-    subscriptions,
-    entitlements,
-    isLoading,
-    error,
-    subscribe,
-    cancelSubscription,
-    checkEntitlement,
-  } = useSemaphorePay();
+import { useSemaphorePayStore } from '@semaphore-pay/client/react';
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+function LoginButton() {
+  const { initialize, setCustomerId } = useSemaphorePayStore();
 
-  return (
-    <div>
-      <h2>Subscriptions</h2>
-      {subscriptions.map((sub) => (
-        <div key={sub.productId}>
-          {sub.productInternalId} — {sub.status}
-          {sub.cancelAtPeriodEnd && ' (cancels at period end)'}
-        </div>
-      ))}
+  const handleLogin = async () => {
+    // Initialize client
+    initialize({
+      baseUrl: 'https://your-api.example.com',
+      apiKey: 'pk_your_key',
+      collectionId: 'col_abc123',
+    });
 
-      <h2>Features</h2>
-      <button
-        onClick={() => checkEntitlement('api_access')}
-        disabled={!entitlements?.api_access}
-      >
-        {entitlements?.api_access ? 'Access Granted' : 'Upgrade Required'}
-      </button>
-    </div>
-  );
+    // Create or get customer
+    const client = useSemaphorePayStore.getState().client;
+    const customer = await client.createCustomer({
+      userId: 'user_123',
+      email: 'user@example.com',
+    });
+
+    setCustomerId(customer.id);
+  };
+
+  return <button onClick={handleLogin}>Login</button>;
 }
 ```
 
@@ -1154,11 +2008,22 @@ function Dashboard() {
 
 | Property | Type | Description |
 |---|---|---|
-| `customer` | `Customer \| null` | Current customer data |
-| `subscriptions` | `CustomerSubscription[]` | Active subscriptions |
-| `entitlements` | `Record<string, boolean>` | Feature access map |
-| `isLoading` | `boolean` | Loading state |
-| `error` | `Error \| null` | Last error |
+| `client` | `SemaphorePayClient \| null` | The API client instance |
+| `ready` | `boolean` | Whether the client is initialized |
+| `customerId` | `string \| null` | Current customer ID |
+| `subscriptionStatus` | `string \| null` | Current subscription status |
+| `subscribed` | `boolean` | Whether user has active subscription |
+| `error` | `string \| null` | Last error message |
+
+## Available Actions
+
+| Action | Parameters | Description |
+|---|---|---|
+| `initialize` | `{ baseUrl, apiKey, collectionId }` | Initialize the client |
+| `setCustomerId` | `id: string` | Set the current customer ID |
+| `setSubscriptionStatus` | `status: string \| null` | Set subscription status |
+| `setError` | `error: string \| null` | Set error message |
+| `reset` | — | Reset the store |
 
 
 ---
@@ -1181,17 +2046,9 @@ Use sandbox API keys for development:
 NOMBA_SANDBOX_CLIENT_ID=your_sandbox_client_id
 NOMBA_SANDBOX_CLIENT_SECRET=your_sandbox_client_secret
 NOMBA_SANDBOX_ACCOUNT_ID=your_sandbox_account_id
+NOMBA_WEBHOOK_SECRET=your_webhook_secret
+NOMBA_CHECKOUT_CALLBACK_URL=http://localhost:8787/webhook
 ```
-
-## Test Cards
-
-Use Nomba's test card numbers:
-
-| Card | Result |
-|---|---|
-| `4111111111111111` | Success |
-| `4000000000000002` | Declined |
-| `4000000000009995` | Insufficient funds |
 
 ## Smoke Test
 
@@ -1210,33 +2067,94 @@ This tests:
 - Subscription flow
 - Entitlement checks
 
+## Full Test Suite
+
+Run the comprehensive test suite:
+
+```bash
+cd packages/server
+npx tsx test-client.ts
+```
+
+All 10 SDK methods are tested:
+- `createCustomer`
+- `getMe`
+- `listPlans`
+- `getPlan`
+- `listProducts`
+- `subscribeToPlan`
+- `cancelSubscription`
+- `purchaseProduct`
+- `checkEntitlement`
+- `reportEntitlement`
+
+## Payment Flow Tests
+
+Test the complete payment flow including webhooks and verification:
+
+```bash
+cd packages/server
+npx tsx test-payment-flow.ts
+```
+
+14 test suites covering:
+- Webhook processing
+- Payment verification
+- Deduplication
+- Bad signature handling
+- Missing fields
+- Invalid references
+- Already active subscriptions
+- `waitForPayment` polling
+- Product purchases
+- Edge cases
+
+## Mock Webhook
+
+Test webhook handling locally:
+
+```bash
+cd packages/server
+npx tsx mock-webhook.ts
+```
+
+Sends a signed `payment_success` event to `http://localhost:8787/webhook`.
+
 ## Unit Testing
 
 ```typescript
-import { createSemaphoreEngine } from '@semaphore-pay/server';
+import { initSemaphorePay } from '@semaphore-pay/server';
+import { drizzle } from 'drizzle-orm/better-sqlite3';
+import * as sqliteSchema from '@semaphore-pay/server/schema/sqlite';
 
 // Use in-memory SQLite for tests
-const engine = createSemaphoreEngine({
-  db: ':memory:',
-  nomba: {
-    clientId: 'test',
-    clientSecret: 'test',
-    accountId: 'test',
-  },
-  webhookSecret: 'test',
-  callbackUrl: 'http://localhost:3000/webhook',
+const sqlite = require('better-sqlite3')(':memory:');
+const db = drizzle(sqlite, { schema: sqliteSchema });
+
+const engine = initSemaphorePay({
+  dialect: 'sqlite',
+  db,
+  supportsTransactions: true,
 });
 
 // Test subscription flow
-const collection = await engine.createCollection({ name: 'Test' });
-const plan = await engine.createPlan(collection.id, {
+import { createCollection, create, createProduct, upsertCustomer, subscribe } from '@semaphore-pay/server';
+
+const collection = await createCollection(engine, 'Test', 'sandbox');
+const plan = await create(engine, {
   name: 'Test Plan',
-  amount: 1000,
-  currency: 'NGN',
-  interval: 'month',
-  intervalCount: 1,
+  priceAmount: 1000,
+  priceCurrency: 'NGN',
+  interval: 'monthly',
+}, {
+  collectionId: collection.id,
+  environment: 'development',
 });
 ```
+
+## Test Cards
+
+Nomba sandbox provides test card numbers for development. Refer to Nomba documentation for current test card numbers.
 
 
 ---
@@ -1249,40 +2167,36 @@ title: Webhooks
 
 # Webhooks
 
-Webhooks notify your backend when subscription events occur. Semaphore receives events from Nomba and forwards them to your handler.
+Webhooks notify your backend when payment events occur. Semaphore receives events from Nomba and forwards them to your handler.
 
 ## Setting Up
 
 ```bash
 # Environment variable
-NOMBA_CHECKOUT_CALLBACK_URL=https://your-api.example.com/webhook/nomba
+NOMBA_CHECKOUT_CALLBACK_URL=https://your-api.example.com/webhook
 ```
 
 ## Webhook Endpoint
 
 ```typescript
-// In your Cloudflare Worker
-app.post('/webhook/nomba', async (c) => {
-  const event = await engine.handleWebhook(c.req.raw);
-  
-  switch (event.type) {
-    case 'checkout.completed':
-      // Payment successful, subscription activated
-      console.log('Subscription:', event.data.subscriptionId);
-      break;
-      
-    case 'subscription.renewed':
-      // Recurring payment succeeded
-      console.log('Renewed until:', event.data.currentPeriodEnd);
-      break;
-      
-    case 'subscription.canceled':
-      // Subscription canceled
-      console.log('Cancels at:', event.data.currentPeriodEnd);
-      break;
-  }
-  
-  return c.json({ received: true });
+import { Hono } from 'hono';
+import { handleWebhook } from '@semaphore-pay/server';
+
+const app = new Hono();
+
+app.post('/webhook', async (c) => {
+  const rawBody = await c.req.text();
+  const signature = c.req.header('nomba-signature') ?? '';
+  const nombaTimestamp = c.req.header('nomba-timestamp') ?? '';
+
+  const result = await handleWebhook(engine, {
+    rawBody,
+    signature,
+    webhookSecret: c.env.NOMBA_WEBHOOK_SECRET,
+    nombaTimestamp,
+  });
+
+  return c.json(result);
 });
 ```
 
@@ -1290,23 +2204,63 @@ app.post('/webhook/nomba', async (c) => {
 
 | Event | Trigger |
 |---|---|
-| `checkout.completed` | Initial payment successful |
-| `subscription.renewed` | Recurring payment successful |
-| `subscription.canceled` | Subscription canceled |
-| `payment.failed` | Payment failed, entering dunning |
+| `payment_success` | Payment successful (initial or renewal) |
+| `payment_failed` | Payment failed |
+| `mandate.debit_success` | Recurring mandate debit successful |
 
 ## Verifying Webhooks
 
-Semaphore automatically verifies webhook signatures before processing. Invalid signatures are rejected with 400.
+Semaphore automatically verifies webhook signatures using HMAC-SHA256 before processing. Invalid signatures are rejected with 400.
 
-## Retry Policy
+The signature is computed over colon-joined fields:
 
-Failed webhook deliveries are retried with exponential backoff:
-- 1st retry: 1 minute
-- 2nd retry: 5 minutes
-- 3rd retry: 30 minutes
-- 4th retry: 2 hours
-- 5th retry: 24 hours
+```
+event_type:requestId:userId:walletId:transactionId:type:time:responseCode:nomba-timestamp
+```
+
+## Payment Verification Fallback
+
+If webhooks aren't received (e.g. during development), use the payment verification endpoint:
+
+```typescript
+// Client SDK
+const result = await client.verifyPayment('order_abc123');
+console.log(result.status); // 'success', 'pending', 'failed'
+console.log(result.processed); // true if just processed
+```
+
+Or poll with exponential backoff:
+
+```typescript
+const result = await client.waitForPayment('order_abc123', {
+  maxAttempts: 6,
+  delays: [0, 5000, 20000, 40000, 80000, 160000], // ~5 min total
+  onAttempt: (attempt, result) => {
+    console.log(`Attempt ${attempt}: ${result.status}`);
+  },
+});
+```
+
+## Webhook Response
+
+Always return `200` to acknowledge receipt. Semaphore processes the event asynchronously.
+
+```json
+{
+  "status": "processed"
+}
+```
+
+## Testing Webhooks
+
+Use the mock webhook script for local development:
+
+```bash
+cd packages/server
+npx tsx mock-webhook.ts
+```
+
+This sends a signed `payment_success` event to `http://localhost:8787/webhook`.
 
 
 ---
@@ -1326,8 +2280,10 @@ A subscription billing engine built on top of Nomba. Multiple developers sign up
 - **Multi-tenant collections** — each developer gets their own isolated collection with API keys
 - **Subscription management** — create plans, products, and manage recurring billing
 - **Tokenized card billing** — charge saved cards on renewals automatically
-- **Entitlements** — check and report usage-based access
-- **Webhook events** — real-time notifications for subscription lifecycle
+- **Bank transfer support** — accept bank transfers via Nomba
+- **Entitlements** — check and report usage-based access with boolean and metered features
+- **Webhook events** — real-time notifications for payment lifecycle
+- **Payment verification** — fallback verification when webhooks aren't received
 - **Client SDKs** — TypeScript/React core + React Native support
 
 ## Architecture
@@ -1357,8 +2313,8 @@ A subscription billing engine built on top of Nomba. Multiple developers sign up
 
 | Package | Layer | Purpose |
 |---|---|---|
-| `@semaphore-pay/server` | Backend | Admin operations, collections, plans, products |
-| `@semaphore-pay/client` | Frontend | End-user operations, subscriptions, entitlements |
+| `@semaphore-pay/server` | Backend | Admin operations, collections, plans, products, features |
+| `@semaphore-pay/client` | Frontend | End-user operations, subscriptions, entitlements, payment verification |
 
 The server SDK is for your backend. The client SDK is for your users' apps.
 
@@ -1375,101 +2331,123 @@ title: First API Call
 
 Walk through creating a subscription from scratch.
 
-## Step 1: Create a Collection
+## Step 1: Initialize the Engine
 
 ```typescript
-import { createSemaphoreEngine } from '@semaphore-pay/server';
+import { initSemaphorePay } from '@semaphore-pay/server';
+import { drizzle } from 'drizzle-orm/d1';
+import * as sqliteSchema from '@semaphore-pay/server/schema/sqlite';
 
-const engine = createSemaphoreEngine({
-  db: env.SEMAPHORE_DB,
-  nomba: {
-    clientId: env.NOMBA_CLIENT_ID,
-    clientSecret: env.NOMBA_CLIENT_SECRET,
-    accountId: env.NOMBA_ACCOUNT_ID,
-  },
-  webhookSecret: env.NOMBA_WEBHOOK_SECRET,
-  callbackUrl: env.NOMBA_CHECKOUT_CALLBACK_URL,
+const db = drizzle(env.SEMAPHORE_DB, { schema: sqliteSchema });
+
+const engine = initSemaphorePay({
+  dialect: 'sqlite',
+  db,
+  supportsTransactions: false,
 });
-
-const collection = await engine.createCollection({
-  name: 'My SaaS App',
-  description: 'Production',
-});
-
-console.log(collection.id); // Use this for all subsequent calls
-console.log(collection.publicKey); // pk_... for client SDK
-console.log(collection.secretKey); // sk_... for server-side admin
 ```
 
-## Step 2: Create a Plan
+## Step 2: Create a Collection
+
+```typescript
+import { createCollection, createApiKey } from '@semaphore-pay/server';
+
+const collection = await createCollection(engine, 'My SaaS App', 'sandbox');
+
+console.log(collection.id); // Use this for all subsequent calls
+
+// Generate API keys
+const publicKey = await createApiKey(engine, {
+  collectionId: collection.id,
+  type: 'public',
+  environment: 'development',
+  userId: user.id,
+});
+
+console.log(publicKey.key); // pk_... for client SDK
+```
+
+## Step 3: Create a Plan
 
 Plans define pricing and billing intervals.
 
 ```typescript
-const plan = await engine.createPlan(collection.id, {
+import { create } from '@semaphore-pay/server';
+
+const plan = await create(engine, {
   name: 'Pro',
   description: 'Full access',
-  amount: 5000, // ₦50.00 in kobo
-  currency: 'NGN',
-  interval: 'month',
-  intervalCount: 1,
+  priceAmount: 5000, // ₦50.00 in kobo
+  priceCurrency: 'NGN',
+  interval: 'monthly',
   trialPeriodDays: 14,
+}, {
+  collectionId: collection.id,
+  environment: 'development',
 });
 ```
 
-## Step 3: Create a Product
+## Step 4: Create a Product
 
-Products are what customers subscribe to. Each product links to a plan.
+Products are what customers subscribe to. Each product has its own features.
 
 ```typescript
-const product = await engine.createProduct(collection.id, {
+import { createProduct } from '@semaphore-pay/server';
+
+const product = await createProduct(engine, {
   name: 'Pro Access',
   description: 'Unlimited access to all features',
-  planId: plan.id,
-  metadata: {
-    features: 'unlimited,api,export',
-  },
+  features: [
+    { featureId: 'api_calls', type: 'limit', limit: 10000 },
+    { featureId: 'export', type: 'boolean' },
+  ],
+}, {
+  collectionId: collection.id,
+  environment: 'development',
 });
 ```
 
-## Step 4: Create a Customer
+## Step 5: Create a Customer
 
 ```typescript
-const customer = await engine.upsertCustomer(collection.id, {
+import { upsertCustomer } from '@semaphore-pay/server';
+
+const customer = await upsertCustomer(engine, {
   userId: 'user_abc123',
   email: 'user@example.com',
   name: 'John Doe',
-  metadata: {
-    company: 'Acme Inc',
-  },
-});
+}, { collectionId: collection.id });
 ```
 
-## Step 5: Subscribe
+## Step 6: Subscribe
 
 ```typescript
-const subscription = await engine.subscribe(collection.id, {
+import { subscribe } from '@semaphore-pay/server';
+
+const subscription = await subscribe(engine, {
   customerId: customer.id,
-  productId: product.id,
-  paymentMethod: {
-    type: 'card',
-    token: 'tok_card_...', // From Nomba checkout
-  },
+  planId: plan.id,
+}, {
+  collectionId: collection.id,
+  environment: 'development',
 });
 
-console.log(subscription.status); // 'active'
-console.log(subscription.currentPeriodEnd); // Next billing date
+console.log(subscription.status); // 'active' or 'pending_payment'
+console.log(subscription.checkout?.checkoutLink); // Nomba checkout URL for paid plans
 ```
 
-## Step 6: Check Entitlement
+## Step 7: Check Entitlement
 
 ```typescript
-const entitlement = await engine.checkEntitlement(collection.id, {
-  customerId: customer.id,
-  feature: 'api_access',
-});
+import { check } from '@semaphore-pay/server';
 
-console.log(entitlement.entitled); // true/false
+const entitlement = await check(engine, {
+  customerId: customer.id,
+  featureId: 'api_calls',
+}, { collectionId: collection.id });
+
+console.log(entitlement.allowed); // true/false
+console.log(entitlement.balance); // { limit, remaining, resetAt, unlimited }
 ```
 
 ## Next Steps
@@ -1493,7 +2471,7 @@ Get Semaphore running in your project in 5 minutes.
 
 ## Prerequisites
 
-- Node.js 18+
+- Node.js 18+ or Bun
 - A Nomba account (sandbox or production)
 - Cloudflare account (for deployment)
 
@@ -1510,17 +2488,16 @@ npm install @semaphore-pay/client
 ## 2. Set Up Your Backend
 
 ```typescript
-import { createSemaphoreEngine } from '@semaphore-pay/server';
+import { initSemaphorePay } from '@semaphore-pay/server';
+import { drizzle } from 'drizzle-orm/d1';
+import * as sqliteSchema from '@semaphore-pay/server/schema/sqlite';
 
-const engine = createSemaphoreEngine({
-  db: env.SEMAPHORE_DB, // D1 database
-  nomba: {
-    clientId: env.NOMBA_CLIENT_ID,
-    clientSecret: env.NOMBA_CLIENT_SECRET,
-    accountId: env.NOMBA_ACCOUNT_ID,
-  },
-  webhookSecret: env.NOMBA_WEBHOOK_SECRET,
-  callbackUrl: env.NOMBA_CHECKOUT_CALLBACK_URL,
+const db = drizzle(env.SEMAPHORE_DB, { schema: sqliteSchema });
+
+const engine = initSemaphorePay({
+  dialect: 'sqlite',
+  db,
+  supportsTransactions: false,
 });
 ```
 
@@ -1529,17 +2506,29 @@ const engine = createSemaphoreEngine({
 A collection is like a RevenueCat project — an isolated tenant with its own API keys.
 
 ```typescript
-const collection = await engine.createCollection({
-  name: 'My App',
-  description: 'Production collection',
+import { createCollection, createApiKey } from '@semaphore-pay/server';
+
+const collection = await createCollection(engine, 'My App', 'sandbox');
+
+// Generate API keys for the collection
+const publicKey = await createApiKey(engine, {
+  collectionId: collection.id,
+  type: 'public',
+  environment: 'development',
+  userId: user.id,
 });
-// Returns: { id, name, publicKey, secretKey }
+
+const secretKey = await createApiKey(engine, {
+  collectionId: collection.id,
+  type: 'secret',
+  environment: 'development',
+});
 ```
 
 ## 4. Set Up the Client SDK
 
 ```typescript
-import SemaphorePayClient from '@semaphore-pay/client';
+import { SemaphorePayClient } from '@semaphore-pay/client';
 
 const client = new SemaphorePayClient({
   baseUrl: 'https://your-api.example.com',
@@ -1551,40 +2540,57 @@ const client = new SemaphorePayClient({
 ## 5. Create Your First Subscription
 
 ```typescript
+import { create, createProduct, subscribe } from '@semaphore-pay/server';
+
 // Server: create a plan
-const plan = await engine.createPlan(collectionId, {
+const plan = await create(engine, {
   name: 'Pro Plan',
   description: 'Full access to all features',
-  amount: 2999, // ₦29.99
-  currency: 'NGN',
-  interval: 'month',
-  intervalCount: 1,
+  priceAmount: 2999, // ₦29.99 in kobo
+  priceCurrency: 'NGN',
+  interval: 'monthly',
+}, {
+  collectionId: collection.id,
+  environment: 'development',
 });
 
 // Server: create a product
-const product = await engine.createProduct(collectionId, {
+const product = await createProduct(engine, {
   name: 'Pro Access',
-  planId: plan.id,
+  features: [],
+}, {
+  collectionId: collection.id,
+  environment: 'development',
 });
 
 // Client: subscribe a customer
-const subscription = await client.subscribe({
-  productId: product.id,
-  customerEmail: 'user@example.com',
-  paymentMethod: {
-    type: 'card',
-    token: 'tok_...',
-  },
+const subscription = await client.subscribeToPlan({
+  customerId: 'cust_abc123',
+  planId: plan.id,
 });
 ```
 
 ## 6. Handle Webhooks
 
 ```typescript
-// In your Cloudflare Worker
-app.post('/webhook/nomba', async (c) => {
-  const event = await engine.handleWebhook(c.req.raw);
-  // Event types: checkout.completed, subscription.renewed, etc.
+import { Hono } from 'hono';
+import { handleWebhook } from '@semaphore-pay/server';
+
+const app = new Hono();
+
+app.post('/webhook', async (c) => {
+  const rawBody = await c.req.text();
+  const signature = c.req.header('nomba-signature') ?? '';
+  const nombaTimestamp = c.req.header('nomba-timestamp') ?? '';
+
+  const result = await handleWebhook(engine, {
+    rawBody,
+    signature,
+    webhookSecret: c.env.NOMBA_WEBHOOK_SECRET,
+    nombaTimestamp,
+  });
+
+  return c.json(result);
 });
 ```
 
@@ -1615,7 +2621,10 @@ npm install @semaphore-pay/server
 
 ### Peer Dependencies
 
-- `better-sqlite3` (SQLite) or `@cloudflare/workers-types` (D1)
+- `better-auth` — authentication
+- `drizzle-orm` — database ORM
+- `hono` — HTTP framework
+- `ioredis` — Redis client (optional, for caching)
 
 ### TypeScript Setup
 
@@ -1639,15 +2648,17 @@ npm install @semaphore-pay/client
 
 ### Peer Dependencies
 
-- `react` (optional, for zustand store)
+- `react` (optional, for React hooks)
+- `react-native` (optional, for React Native components)
+- `react-native-webview` (optional, for React Native paywall)
 
 ### Framework Support
 
 | Framework | Package | Import |
 |---|---|---|
-| Vanilla TS | `@semaphore-pay/client` | `import SemaphorePayClient` |
-| React | `@semaphore-pay/client/react` | `import { useSemaphorePay }` |
-| React Native | `@semaphore-pay/client/react-native` | `import { useSemaphorePay }` |
+| Vanilla TS | `@semaphore-pay/client` | `import { SemaphorePayClient }` |
+| React | `@semaphore-pay/client/react` | `import { useSemaphorePayStore }` |
+| React Native | `@semaphore-pay/client/react-native` | `import { useSemaphorePay, SemaphorePayPaywall, SemaphorePayEntitlementGuard }` |
 
 ## Cloudflare Worker Setup
 
@@ -1665,25 +2676,34 @@ npm install wrangler --save-dev
   "name": "semaphore-api",
   "main": "src/index.ts",
   "compatibility_date": "2024-12-01",
+  "compatibility_flags": ["nodejs_compat"],
   "d1_databases": [
     {
-      "binding": "SEMAPHORE_DB",
+      "binding": "semaphore_db",
       "database_name": "semaphore-db",
       "database_id": "your-d1-id"
     }
-  ]
+  ],
+  "crons": ["0 * * * *", "0 0 * * *"]
 }
 ```
 
 ## Environment Variables
 
 ```bash
-# Nomba
+# Nomba (sandbox)
 NOMBA_SANDBOX_CLIENT_ID=
 NOMBA_SANDBOX_CLIENT_SECRET=
 NOMBA_SANDBOX_ACCOUNT_ID=
+
+# Nomba (production)
+NOMBA_LIVE_CLIENT_ID=
+NOMBA_LIVE_CLIENT_SECRET=
+NOMBA_LIVE_ACCOUNT_ID=
+
+# Nomba (shared)
 NOMBA_WEBHOOK_SECRET=
-NOMBA_CHECKOUT_CALLBACK_URL=
+NOMBA_CHECKOUT_CALLBACK_URL=https://your-api.example.com/webhook
 
 # Better Auth
 BETTER_AUTH_SECRET=
@@ -1691,6 +2711,11 @@ BETTER_AUTH_URL=
 
 # CORS
 FRONTEND_URL=https://your-frontend.com
+
+# Cloudflare (for D1 access)
+CLOUDFLARE_ACCOUNT_ID=
+CLOUDFLARE_DATABASE_ID=
+CLOUDFLARE_D1_TOKEN=
 ```
 
 

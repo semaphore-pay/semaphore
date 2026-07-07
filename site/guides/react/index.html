@@ -105,10 +105,10 @@
       React Integration : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20React%20Integration%0A---%0A%0A%23%20React%20Integration%0A%0AUse%20the%20zustand-powered%20React%20hook%20for%20state%20management.%0A%0A%23%23%20Installation%0A%0A%60%60%60bash%0Anpm%20install%20%40semaphore-pay%2Fclient%20zustand%0A%60%60%60%0A%0A%23%23%20Setup%0A%0A%60%60%60tsx%0Aimport%20%7B%20SemaphorePayProvider%2C%20useSemaphorePay%20%7D%20from%20&#039;%40semaphore-pay%2Fclient%2Freact&#039;%3B%0A%0Afunction%20App()%20%7B%0A%20%20return%20(%0A%20%20%20%20%3CSemaphorePayProvider%0A%20%20%20%20%20%20config%3D%7B%7B%0A%20%20%20%20%20%20%20%20baseUrl%3A%20&#039;https%3A%2F%2Fyour-api.example.com&#039;%2C%0A%20%20%20%20%20%20%20%20apiKey%3A%20&#039;pk_your_key&#039;%2C%0A%20%20%20%20%20%20%20%20collectionId%3A%20&#039;col_abc123&#039;%2C%0A%20%20%20%20%20%20%7D%7D%0A%20%20%20%20%3E%0A%20%20%20%20%20%20%3CDashboard%20%2F%3E%0A%20%20%20%20%3C%2FSemaphorePayProvider%3E%0A%20%20)%3B%0A%7D%0A%60%60%60%0A%0A%23%23%20Using%20the%20Hook%0A%0A%60%60%60tsx%0Afunction%20Dashboard()%20%7B%0A%20%20const%20%7B%0A%20%20%20%20customer%2C%0A%20%20%20%20subscriptions%2C%0A%20%20%20%20entitlements%2C%0A%20%20%20%20isLoading%2C%0A%20%20%20%20error%2C%0A%20%20%20%20subscribe%2C%0A%20%20%20%20cancelSubscription%2C%0A%20%20%20%20checkEntitlement%2C%0A%20%20%7D%20%3D%20useSemaphorePay()%3B%0A%0A%20%20if%20(isLoading)%20return%20%3Cdiv%3ELoading...%3C%2Fdiv%3E%3B%0A%20%20if%20(error)%20return%20%3Cdiv%3EError%3A%20%7Berror.message%7D%3C%2Fdiv%3E%3B%0A%0A%20%20return%20(%0A%20%20%20%20%3Cdiv%3E%0A%20%20%20%20%20%20%3Ch2%3ESubscriptions%3C%2Fh2%3E%0A%20%20%20%20%20%20%7Bsubscriptions.map((sub)%20%3D%3E%20(%0A%20%20%20%20%20%20%20%20%3Cdiv%20key%3D%7Bsub.productId%7D%3E%0A%20%20%20%20%20%20%20%20%20%20%7Bsub.productInternalId%7D%20%E2%80%94%20%7Bsub.status%7D%0A%20%20%20%20%20%20%20%20%20%20%7Bsub.cancelAtPeriodEnd%20%26%26%20&#039;%20(cancels%20at%20period%20end)&#039;%7D%0A%20%20%20%20%20%20%20%20%3C%2Fdiv%3E%0A%20%20%20%20%20%20))%7D%0A%0A%20%20%20%20%20%20%3Ch2%3EFeatures%3C%2Fh2%3E%0A%20%20%20%20%20%20%3Cbutton%0A%20%20%20%20%20%20%20%20onClick%3D%7B()%20%3D%3E%20checkEntitlement(&#039;api_access&#039;)%7D%0A%20%20%20%20%20%20%20%20disabled%3D%7B!entitlements%3F.api_access%7D%0A%20%20%20%20%20%20%3E%0A%20%20%20%20%20%20%20%20%7Bentitlements%3F.api_access%20%3F%20&#039;Access%20Granted&#039;%20%3A%20&#039;Upgrade%20Required&#039;%7D%0A%20%20%20%20%20%20%3C%2Fbutton%3E%0A%20%20%20%20%3C%2Fdiv%3E%0A%20%20)%3B%0A%7D%0A%60%60%60%0A%0A%23%23%20Available%20State%0A%0A%7C%20Property%20%7C%20Type%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60customer%60%20%7C%20%60Customer%20%5C%7C%20null%60%20%7C%20Current%20customer%20data%20%7C%0A%7C%20%60subscriptions%60%20%7C%20%60CustomerSubscription%5B%5D%60%20%7C%20Active%20subscriptions%20%7C%0A%7C%20%60entitlements%60%20%7C%20%60Record%3Cstring%2C%20boolean%3E%60%20%7C%20Feature%20access%20map%20%7C%0A%7C%20%60isLoading%60%20%7C%20%60boolean%60%20%7C%20Loading%20state%20%7C%0A%7C%20%60error%60%20%7C%20%60Error%20%5C%7C%20null%60%20%7C%20Last%20error%20%7C%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20React%20Integration%0A---%0A%0A%23%20React%20Integration%0A%0AUse%20the%20zustand-powered%20React%20hook%20for%20state%20management.%0A%0A%23%23%20Installation%0A%0A%60%60%60bash%0Anpm%20install%20%40semaphore-pay%2Fclient%20zustand%0A%60%60%60%0A%0A%23%23%20Setup%0A%0A%60%60%60tsx%0Aimport%20%7B%20useSemaphorePayStore%20%7D%20from%20&#039;%40semaphore-pay%2Fclient%2Freact&#039;%3B%0A%0A%2F%2F%20Initialize%20once%20(e.g.%20in%20App.tsx)%0AuseSemaphorePayStore.getState().initialize(%7B%0A%20%20baseUrl%3A%20&#039;https%3A%2F%2Fyour-api.example.com&#039;%2C%0A%20%20apiKey%3A%20&#039;pk_your_key&#039;%2C%0A%20%20collectionId%3A%20&#039;col_abc123&#039;%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Using%20the%20Store%0A%0A%60%60%60tsx%0Aimport%20%7B%20useSemaphorePayStore%20%7D%20from%20&#039;%40semaphore-pay%2Fclient%2Freact&#039;%3B%0A%0Afunction%20Dashboard()%20%7B%0A%20%20const%20%7B%20customerId%2C%20subscribed%2C%20subscriptionStatus%2C%20error%20%7D%20%3D%20useSemaphorePayStore()%3B%0A%0A%20%20if%20(error)%20return%20%3Cdiv%3EError%3A%20%7Berror%7D%3C%2Fdiv%3E%3B%0A%0A%20%20return%20(%0A%20%20%20%20%3Cdiv%3E%0A%20%20%20%20%20%20%3Ch2%3ESubscription%20Status%3C%2Fh2%3E%0A%20%20%20%20%20%20%3Cp%3ECustomer%3A%20%7BcustomerId%7D%3C%2Fp%3E%0A%20%20%20%20%20%20%3Cp%3ESubscribed%3A%20%7Bsubscribed%20%3F%20&#039;Yes&#039;%20%3A%20&#039;No&#039;%7D%3C%2Fp%3E%0A%20%20%20%20%20%20%3Cp%3EStatus%3A%20%7BsubscriptionStatus%7D%3C%2Fp%3E%0A%20%20%20%20%3C%2Fdiv%3E%0A%20%20)%3B%0A%7D%0A%60%60%60%0A%0A%23%23%20Setting%20Customer%20ID%0A%0AAfter%20creating%20a%20customer%2C%20set%20the%20ID%20in%20the%20store%3A%0A%0A%60%60%60tsx%0Aimport%20%7B%20useSemaphorePayStore%20%7D%20from%20&#039;%40semaphore-pay%2Fclient%2Freact&#039;%3B%0A%0Afunction%20LoginButton()%20%7B%0A%20%20const%20%7B%20initialize%2C%20setCustomerId%20%7D%20%3D%20useSemaphorePayStore()%3B%0A%0A%20%20const%20handleLogin%20%3D%20async%20()%20%3D%3E%20%7B%0A%20%20%20%20%2F%2F%20Initialize%20client%0A%20%20%20%20initialize(%7B%0A%20%20%20%20%20%20baseUrl%3A%20&#039;https%3A%2F%2Fyour-api.example.com&#039;%2C%0A%20%20%20%20%20%20apiKey%3A%20&#039;pk_your_key&#039;%2C%0A%20%20%20%20%20%20collectionId%3A%20&#039;col_abc123&#039;%2C%0A%20%20%20%20%7D)%3B%0A%0A%20%20%20%20%2F%2F%20Create%20or%20get%20customer%0A%20%20%20%20const%20client%20%3D%20useSemaphorePayStore.getState().client%3B%0A%20%20%20%20const%20customer%20%3D%20await%20client.createCustomer(%7B%0A%20%20%20%20%20%20userId%3A%20&#039;user_123&#039;%2C%0A%20%20%20%20%20%20email%3A%20&#039;user%40example.com&#039;%2C%0A%20%20%20%20%7D)%3B%0A%0A%20%20%20%20setCustomerId(customer.id)%3B%0A%20%20%7D%3B%0A%0A%20%20return%20%3Cbutton%20onClick%3D%7BhandleLogin%7D%3ELogin%3C%2Fbutton%3E%3B%0A%7D%0A%60%60%60%0A%0A%23%23%20Available%20State%0A%0A%7C%20Property%20%7C%20Type%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60client%60%20%7C%20%60SemaphorePayClient%20%5C%7C%20null%60%20%7C%20The%20API%20client%20instance%20%7C%0A%7C%20%60ready%60%20%7C%20%60boolean%60%20%7C%20Whether%20the%20client%20is%20initialized%20%7C%0A%7C%20%60customerId%60%20%7C%20%60string%20%5C%7C%20null%60%20%7C%20Current%20customer%20ID%20%7C%0A%7C%20%60subscriptionStatus%60%20%7C%20%60string%20%5C%7C%20null%60%20%7C%20Current%20subscription%20status%20%7C%0A%7C%20%60subscribed%60%20%7C%20%60boolean%60%20%7C%20Whether%20user%20has%20active%20subscription%20%7C%0A%7C%20%60error%60%20%7C%20%60string%20%5C%7C%20null%60%20%7C%20Last%20error%20message%20%7C%0A%0A%23%23%20Available%20Actions%0A%0A%7C%20Action%20%7C%20Parameters%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60initialize%60%20%7C%20%60%7B%20baseUrl%2C%20apiKey%2C%20collectionId%20%7D%60%20%7C%20Initialize%20the%20client%20%7C%0A%7C%20%60setCustomerId%60%20%7C%20%60id%3A%20string%60%20%7C%20Set%20the%20current%20customer%20ID%20%7C%0A%7C%20%60setSubscriptionStatus%60%20%7C%20%60status%3A%20string%20%5C%7C%20null%60%20%7C%20Set%20subscription%20status%20%7C%0A%7C%20%60setError%60%20%7C%20%60error%3A%20string%20%5C%7C%20null%60%20%7C%20Set%20error%20message%20%7C%0A%7C%20%60reset%60%20%7C%20%E2%80%94%20%7C%20Reset%20the%20store%20%7C%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1094,57 +1094,59 @@
 <pre class="hljs"><code class="language-bash"><span class="hljs-keyword">npm</span> install @semaphore<span class="hljs-punctuation">-</span>pay<span class="hljs-punctuation">/</span>client zustand
 </code></pre>
 <h2 id="react-integration-setup" class="docmd-heading"><a href="#react-integration-setup" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Setup</h2>
-<pre class="hljs"><code class="language-tsx"><span class="hljs-keyword">import</span> { SemaphorePayProvider, useSemaphorePay } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/client/react&#039;</span>;
+<pre class="hljs"><code class="language-tsx"><span class="hljs-keyword">import</span> { useSemaphorePayStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/client/react&#039;</span>;
 
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>() {
-  <span class="hljs-keyword">return</span> (
-    <span class="hljs-punctuation">&lt;</span>SemaphorePayProvider
-      config<span class="hljs-punctuation">=</span>{{
-        baseUrl<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;https://your-api.example.com&#039;</span>,
-        apiKey<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;pk_your_key&#039;</span>,
-        collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span>,
-      }}
-    <span class="hljs-punctuation">&gt;</span>
-      <span class="hljs-punctuation">&lt;</span>Dashboard <span class="hljs-punctuation">/&gt;</span>
-    <span class="hljs-punctuation">&lt;/</span>SemaphorePayProvider<span class="hljs-punctuation">&gt;</span>
-  );
-}
+<span class="hljs-comment">// Initialize once (e.g. in App.tsx)</span>
+useSemaphorePayStore.<span class="hljs-title function_">getState</span>().<span class="hljs-title function_">initialize</span>({
+  baseUrl<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;https://your-api.example.com&#039;</span>,
+  apiKey<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;pk_your_key&#039;</span>,
+  collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span>,
+});
 </code></pre>
-<h2 id="react-integration-using-the-hook" class="docmd-heading"><a href="#react-integration-using-the-hook" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Using the Hook</h2>
-<pre class="hljs"><code class="language-tsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Dashboard</span>() {
-  <span class="hljs-keyword">const</span> {
-    customer,
-    subscriptions,
-    entitlements,
-    isLoading,
-    error,
-    subscribe,
-    cancelSubscription,
-    checkEntitlement,
-  } <span class="hljs-punctuation">=</span> <span class="hljs-title function_">useSemaphorePay</span>();
+<h2 id="react-integration-using-the-store" class="docmd-heading"><a href="#react-integration-using-the-store" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Using the Store</h2>
+<pre class="hljs"><code class="language-tsx"><span class="hljs-keyword">import</span> { useSemaphorePayStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/client/react&#039;</span>;
 
-  <span class="hljs-keyword">if</span> (isLoading) <span class="hljs-keyword">return</span> <span class="hljs-punctuation">&lt;</span>div<span class="hljs-punctuation">&gt;</span>Loading...<span class="hljs-punctuation">&lt;/</span>div<span class="hljs-punctuation">&gt;</span>;
-  <span class="hljs-keyword">if</span> (error) <span class="hljs-keyword">return</span> <span class="hljs-punctuation">&lt;</span>div<span class="hljs-punctuation">&gt;</span>Error<span class="hljs-punctuation">:</span> {error.<span class="hljs-attr">message</span>}<span class="hljs-punctuation">&lt;/</span>div<span class="hljs-punctuation">&gt;</span>;
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Dashboard</span>() {
+  <span class="hljs-keyword">const</span> { customerId, subscribed, subscriptionStatus, error } <span class="hljs-punctuation">=</span> <span class="hljs-title function_">useSemaphorePayStore</span>();
+
+  <span class="hljs-keyword">if</span> (error) <span class="hljs-keyword">return</span> <span class="hljs-punctuation">&lt;</span>div<span class="hljs-punctuation">&gt;</span>Error<span class="hljs-punctuation">:</span> {error}<span class="hljs-punctuation">&lt;/</span>div<span class="hljs-punctuation">&gt;</span>;
 
   <span class="hljs-keyword">return</span> (
     <span class="hljs-punctuation">&lt;</span>div<span class="hljs-punctuation">&gt;</span>
-      <span class="hljs-punctuation">&lt;</span>h2<span class="hljs-punctuation">&gt;</span>Subscriptions<span class="hljs-punctuation">&lt;/</span>h2<span class="hljs-punctuation">&gt;</span>
-      {subscriptions.<span class="hljs-title function_">map</span>((sub) <span class="hljs-punctuation">=&gt;</span> (
-        <span class="hljs-punctuation">&lt;</span>div key<span class="hljs-punctuation">=</span>{sub.<span class="hljs-attr">productId</span>}<span class="hljs-punctuation">&gt;</span>
-          {sub.<span class="hljs-attr">productInternalId</span>} — {sub.<span class="hljs-attr">status</span>}
-          {sub.<span class="hljs-attr">cancelAtPeriodEnd</span> <span class="hljs-punctuation">&amp;&amp;</span> <span class="hljs-string">&#039; (cancels at period end)&#039;</span>}
-        <span class="hljs-punctuation">&lt;/</span>div<span class="hljs-punctuation">&gt;</span>
-      ))}
-
-      <span class="hljs-punctuation">&lt;</span>h2<span class="hljs-punctuation">&gt;</span>Features<span class="hljs-punctuation">&lt;/</span>h2<span class="hljs-punctuation">&gt;</span>
-      <span class="hljs-punctuation">&lt;</span>button
-        onClick<span class="hljs-punctuation">=</span>{() <span class="hljs-punctuation">=&gt;</span> <span class="hljs-title function_">checkEntitlement</span>(<span class="hljs-string">&#039;api_access&#039;</span>)}
-        disabled<span class="hljs-punctuation">=</span>{<span class="hljs-punctuation">!</span>entitlements<span class="hljs-punctuation">?</span>.<span class="hljs-attr">api_access</span>}
-      <span class="hljs-punctuation">&gt;</span>
-        {entitlements<span class="hljs-punctuation">?</span>.<span class="hljs-attr">api_access</span> <span class="hljs-punctuation">?</span> <span class="hljs-string">&#039;Access Granted&#039;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Upgrade Required&#039;</span>}
-      <span class="hljs-punctuation">&lt;/</span>button<span class="hljs-punctuation">&gt;</span>
+      <span class="hljs-punctuation">&lt;</span>h2<span class="hljs-punctuation">&gt;</span>Subscription Status<span class="hljs-punctuation">&lt;/</span>h2<span class="hljs-punctuation">&gt;</span>
+      <span class="hljs-punctuation">&lt;</span>p<span class="hljs-punctuation">&gt;</span>Customer<span class="hljs-punctuation">:</span> {customerId}<span class="hljs-punctuation">&lt;/</span>p<span class="hljs-punctuation">&gt;</span>
+      <span class="hljs-punctuation">&lt;</span>p<span class="hljs-punctuation">&gt;</span>Subscribed<span class="hljs-punctuation">:</span> {subscribed <span class="hljs-punctuation">?</span> <span class="hljs-string">&#039;Yes&#039;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;No&#039;</span>}<span class="hljs-punctuation">&lt;/</span>p<span class="hljs-punctuation">&gt;</span>
+      <span class="hljs-punctuation">&lt;</span>p<span class="hljs-punctuation">&gt;</span>Status<span class="hljs-punctuation">:</span> {subscriptionStatus}<span class="hljs-punctuation">&lt;/</span>p<span class="hljs-punctuation">&gt;</span>
     <span class="hljs-punctuation">&lt;/</span>div<span class="hljs-punctuation">&gt;</span>
   );
+}
+</code></pre>
+<h2 id="react-integration-setting-customer-id" class="docmd-heading"><a href="#react-integration-setting-customer-id" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Setting Customer ID</h2>
+<p>After creating a customer, set the ID in the store:</p>
+<pre class="hljs"><code class="language-tsx"><span class="hljs-keyword">import</span> { useSemaphorePayStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/client/react&#039;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">LoginButton</span>() {
+  <span class="hljs-keyword">const</span> { initialize, setCustomerId } <span class="hljs-punctuation">=</span> <span class="hljs-title function_">useSemaphorePayStore</span>();
+
+  <span class="hljs-keyword">const</span> handleLogin <span class="hljs-punctuation">=</span> <span class="hljs-keyword">async</span> () <span class="hljs-punctuation">=&gt;</span> {
+    <span class="hljs-comment">// Initialize client</span>
+    <span class="hljs-title function_">initialize</span>({
+      baseUrl<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;https://your-api.example.com&#039;</span>,
+      apiKey<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;pk_your_key&#039;</span>,
+      collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span>,
+    });
+
+    <span class="hljs-comment">// Create or get customer</span>
+    <span class="hljs-keyword">const</span> client <span class="hljs-punctuation">=</span> useSemaphorePayStore.<span class="hljs-title function_">getState</span>().<span class="hljs-attr">client</span>;
+    <span class="hljs-keyword">const</span> customer <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createCustomer</span>({
+      userId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;user_123&#039;</span>,
+      email<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;user@example.com&#039;</span>,
+    });
+
+    <span class="hljs-title function_">setCustomerId</span>(customer.<span class="hljs-keyword">id</span>);
+  };
+
+  <span class="hljs-keyword">return</span> <span class="hljs-punctuation">&lt;</span>button onClick<span class="hljs-punctuation">=</span>{handleLogin}<span class="hljs-punctuation">&gt;</span>Login<span class="hljs-punctuation">&lt;/</span>button<span class="hljs-punctuation">&gt;</span>;
 }
 </code></pre>
 <h2 id="react-integration-available-state" class="docmd-heading"><a href="#react-integration-available-state" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Available State</h2>
@@ -1158,29 +1160,71 @@
 </thead>
 <tbody>
 <tr>
-<td><code>customer</code></td>
-<td><code>Customer | null</code></td>
-<td>Current customer data</td>
+<td><code>client</code></td>
+<td><code>SemaphorePayClient | null</code></td>
+<td>The API client instance</td>
 </tr>
 <tr>
-<td><code>subscriptions</code></td>
-<td><code>CustomerSubscription[]</code></td>
-<td>Active subscriptions</td>
-</tr>
-<tr>
-<td><code>entitlements</code></td>
-<td><code>Record&lt;string, boolean&gt;</code></td>
-<td>Feature access map</td>
-</tr>
-<tr>
-<td><code>isLoading</code></td>
+<td><code>ready</code></td>
 <td><code>boolean</code></td>
-<td>Loading state</td>
+<td>Whether the client is initialized</td>
+</tr>
+<tr>
+<td><code>customerId</code></td>
+<td><code>string | null</code></td>
+<td>Current customer ID</td>
+</tr>
+<tr>
+<td><code>subscriptionStatus</code></td>
+<td><code>string | null</code></td>
+<td>Current subscription status</td>
+</tr>
+<tr>
+<td><code>subscribed</code></td>
+<td><code>boolean</code></td>
+<td>Whether user has active subscription</td>
 </tr>
 <tr>
 <td><code>error</code></td>
-<td><code>Error | null</code></td>
-<td>Last error</td>
+<td><code>string | null</code></td>
+<td>Last error message</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="react-integration-available-actions" class="docmd-heading"><a href="#react-integration-available-actions" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Available Actions</h2>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Parameters</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>initialize</code></td>
+<td><code>{ baseUrl, apiKey, collectionId }</code></td>
+<td>Initialize the client</td>
+</tr>
+<tr>
+<td><code>setCustomerId</code></td>
+<td><code>id: string</code></td>
+<td>Set the current customer ID</td>
+</tr>
+<tr>
+<td><code>setSubscriptionStatus</code></td>
+<td><code>status: string | null</code></td>
+<td>Set subscription status</td>
+</tr>
+<tr>
+<td><code>setError</code></td>
+<td><code>error: string | null</code></td>
+<td>Set error message</td>
+</tr>
+<tr>
+<td><code>reset</code></td>
+<td>—</td>
+<td>Reset the store</td>
 </tr>
 </tbody>
 </table>
@@ -1275,11 +1319,19 @@
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#react-integration-using-the-hook" class="toc-link">Using the Hook</a>
+          <a href="#react-integration-using-the-store" class="toc-link">Using the Store</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#react-integration-setting-customer-id" class="toc-link">Setting Customer ID</a>
         </li>
       
         <li class="toc-item toc-level-2">
           <a href="#react-integration-available-state" class="toc-link">Available State</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#react-integration-available-actions" class="toc-link">Available Actions</a>
         </li>
       
     </ul>
@@ -1289,6 +1341,38 @@
             </div>
             <div class="page-footer-actions">
               
+              
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
               
               <span class="git-spacer"></span>
               
@@ -1307,13 +1391,13 @@
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

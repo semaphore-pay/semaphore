@@ -105,10 +105,10 @@
       Entitlements : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Entitlements%0A---%0A%0A%23%20Entitlements%0A%0AEntitlements%20control%20access%20to%20features.%20Check%20if%20a%20customer%20has%20access%2C%20and%20report%20usage%20for%20metered%20billing.%0A%0A%23%23%20Checking%20Entitlement%0A%0A%60%60%60typescript%0Aconst%20check%20%3D%20await%20engine.checkEntitlement(collectionId%2C%20%7B%0A%20%20customerId%3A%20&#039;cust_abc123&#039;%2C%0A%20%20feature%3A%20&#039;api_access&#039;%2C%0A%7D)%3B%0A%0Aif%20(check.entitled)%20%7B%0A%20%20%2F%2F%20Grant%20access%20to%20the%20feature%0A%20%20return%20%7B%20access%3A%20true%20%7D%3B%0A%7D%20else%20%7B%0A%20%20%2F%2F%20Deny%20access%0A%20%20return%20%7B%20access%3A%20false%2C%20reason%3A%20&#039;subscription_required&#039;%20%7D%3B%0A%7D%0A%60%60%60%0A%0A%23%23%23%20Response%0A%0A%60%60%60json%0A%7B%0A%20%20%22entitled%22%3A%20true%2C%0A%20%20%22customerId%22%3A%20%22cust_abc123%22%2C%0A%20%20%22feature%22%3A%20%22api_access%22%0A%7D%0A%60%60%60%0A%0A%23%23%20Reporting%20Usage%0A%0AFor%20metered%20features%2C%20report%20usage%20after%20each%20unit%20is%20consumed%3A%0A%0A%60%60%60typescript%0Aawait%20engine.reportUsage(collectionId%2C%20%7B%0A%20%20customerId%3A%20&#039;cust_abc123&#039;%2C%0A%20%20feature%3A%20&#039;api_calls&#039;%2C%0A%20%20quantity%3A%201%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%23%20Common%20Usage%20Patterns%0A%0A%7C%20Feature%20%7C%20Quantity%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60api_calls%60%20%7C%201%20per%20call%20%7C%20Track%20API%20usage%20%7C%0A%7C%20%60storage_gb%60%20%7C%201%20per%20GB%20%7C%20Track%20storage%20consumption%20%7C%0A%7C%20%60seats%60%20%7C%201%20per%20user%20%7C%20Track%20team%20size%20%7C%0A%7C%20%60exports%60%20%7C%201%20per%20export%20%7C%20Track%20data%20exports%20%7C%0A%0A%23%23%20Setting%20Up%20Features%0A%0AFeatures%20are%20defined%20in%20your%20product%20metadata.%20When%20creating%20a%20product%3A%0A%0A%60%60%60typescript%0Aconst%20product%20%3D%20await%20engine.createProduct(collectionId%2C%20%7B%0A%20%20name%3A%20&#039;Pro%20Access&#039;%2C%0A%20%20planId%3A%20plan.id%2C%0A%20%20metadata%3A%20%7B%0A%20%20%20%20features%3A%20&#039;api_access%2Cexport%2Cpriority_support&#039;%2C%0A%20%20%20%20api_limit%3A%20&#039;10000&#039;%2C%0A%20%20%20%20storage_limit%3A%20&#039;50&#039;%2C%0A%20%20%7D%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20Entitlement%20Logic%0A%0A1.%20Customer%20must%20have%20an%20active%20or%20trialing%20subscription%0A2.%20Subscription%20must%20be%20linked%20to%20the%20product%20with%20the%20requested%20feature%0A3.%20Usage%20must%20be%20within%20limits%20(if%20defined)%0A%0A%3A%3A%3A%20info%0AEntitlement%20checks%20are%20synchronous.%20Use%20them%20for%20real-time%20access%20control.%0A%3A%3A%3A%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Entitlements%0A---%0A%0A%23%20Entitlements%0A%0AEntitlements%20control%20access%20to%20features.%20Check%20if%20a%20customer%20has%20access%2C%20and%20report%20usage%20for%20metered%20billing.%0A%0A%23%23%20Feature%20Types%0A%0A%7C%20Type%20%7C%20Description%20%7C%20Balance%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60boolean%60%20%7C%20On%2Foff%20access%20%7C%20null%20%7C%0A%7C%20%60limit%60%20%7C%20Metered%20with%20quota%20%7C%20%60%7B%20limit%2C%20remaining%2C%20resetAt%2C%20unlimited%20%7D%60%20%7C%0A%0A%23%23%20Creating%20Features%0A%0AFeatures%20are%20created%20separately%20and%20attached%20to%20plans%2Fproducts%3A%0A%0A%60%60%60typescript%0Aimport%20%7B%20createFeatureApi%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0A%2F%2F%20Boolean%20feature%0Aawait%20createFeatureApi(engine%2C%20%7B%0A%20%20featureId%3A%20&#039;pro_mode&#039;%2C%0A%20%20name%3A%20&#039;Pro%20Mode&#039;%2C%0A%20%20type%3A%20&#039;boolean&#039;%2C%0A%7D%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%0A%2F%2F%20Limit%20feature%0Aawait%20createFeatureApi(engine%2C%20%7B%0A%20%20featureId%3A%20&#039;api_calls&#039;%2C%0A%20%20name%3A%20&#039;API%20Calls&#039;%2C%0A%20%20type%3A%20&#039;limit&#039;%2C%0A%7D%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%60%60%60%0A%0A%23%23%20Attaching%20Features%20to%20Plans%0A%0A%60%60%60typescript%0Aimport%20%7B%20attachPlan%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aawait%20attachPlan(engine%2C%20%7B%0A%20%20planId%3A%20&#039;plan_pro_monthly&#039;%2C%0A%20%20featureId%3A%20&#039;api_calls&#039;%2C%0A%20%20limit%3A%2010000%2C%0A%20%20resetInterval%3A%20&#039;month&#039;%2C%0A%7D%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%60%60%60%0A%0A%23%23%20Attaching%20Features%20to%20Products%0A%0A%60%60%60typescript%0Aimport%20%7B%20attachProduct%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aawait%20attachProduct(engine%2C%20%7B%0A%20%20productInternalId%3A%20&#039;prod_a1b2c3d4&#039;%2C%0A%20%20featureId%3A%20&#039;pro_mode&#039;%2C%0A%7D%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%60%60%60%0A%0A%23%23%20Checking%20Entitlement%0A%0A%60%60%60typescript%0Aimport%20%7B%20check%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20result%20%3D%20await%20check(engine%2C%20%7B%0A%20%20customerId%3A%20&#039;cust_abc123&#039;%2C%0A%20%20featureId%3A%20&#039;api_calls&#039;%2C%0A%20%20required%3A%201%2C%0A%7D%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%0Aif%20(result.allowed)%20%7B%0A%20%20%2F%2F%20Grant%20access%20to%20the%20feature%0A%20%20return%20%7B%20access%3A%20true%20%7D%3B%0A%7D%20else%20%7B%0A%20%20%2F%2F%20Deny%20access%0A%20%20return%20%7B%20access%3A%20false%2C%20reason%3A%20&#039;subscription_required&#039;%20%7D%3B%0A%7D%0A%60%60%60%0A%0A%23%23%23%20Response%0A%0A%60%60%60json%0A%7B%0A%20%20%22allowed%22%3A%20true%2C%0A%20%20%22balance%22%3A%20%7B%0A%20%20%20%20%22limit%22%3A%2010000%2C%0A%20%20%20%20%22remaining%22%3A%209500%2C%0A%20%20%20%20%22resetAt%22%3A%20%222026-08-01T00%3A00%3A00Z%22%2C%0A%20%20%20%20%22unlimited%22%3A%20false%0A%20%20%7D%0A%7D%0A%60%60%60%0A%0A%23%23%20Reporting%20Usage%0A%0AFor%20metered%20features%2C%20report%20usage%20after%20each%20unit%20is%20consumed%3A%0A%0A%60%60%60typescript%0Aimport%20%7B%20report%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aawait%20report(engine%2C%20%7B%0A%20%20customerId%3A%20&#039;cust_abc123&#039;%2C%0A%20%20featureId%3A%20&#039;api_calls&#039;%2C%0A%20%20amount%3A%201%2C%0A%7D%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%60%60%60%0A%0A%23%23%23%20Common%20Usage%20Patterns%0A%0A%7C%20Feature%20%7C%20Amount%20%7C%20Description%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20%60api_calls%60%20%7C%201%20per%20call%20%7C%20Track%20API%20usage%20%7C%0A%7C%20%60storage_gb%60%20%7C%201%20per%20GB%20%7C%20Track%20storage%20consumption%20%7C%0A%7C%20%60seats%60%20%7C%201%20per%20user%20%7C%20Track%20team%20size%20%7C%0A%7C%20%60exports%60%20%7C%201%20per%20export%20%7C%20Track%20data%20exports%20%7C%0A%0A%23%23%20Entitlement%20Logic%0A%0A1.%20Customer%20must%20have%20an%20active%20or%20trialing%20subscription%0A2.%20Subscription%20must%20be%20linked%20to%20a%20plan%2Fproduct%20with%20the%20requested%20feature%0A3.%20For%20limit%20features%2C%20balance%20must%20have%20sufficient%20remaining%20units%0A4.%20Entitlements%20can%20also%20come%20from%20product%20purchases%20(one-time)%0A%0A%3A%3A%3A%20info%0AEntitlement%20checks%20are%20synchronous.%20Use%20them%20for%20real-time%20access%20control.%0A%3A%3A%3A%0A%0A%23%23%20Detaching%20Features%0A%0A%60%60%60typescript%0Aimport%20%7B%20detachPlan%2C%20detachProduct%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0A%2F%2F%20Detach%20from%20plan%0Aawait%20detachPlan(engine%2C%20%7B%0A%20%20planId%3A%20&#039;plan_pro_monthly&#039;%2C%0A%20%20featureId%3A%20&#039;api_calls&#039;%2C%0A%7D%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%0A%2F%2F%20Detach%20from%20product%0Aawait%20detachProduct(engine%2C%20%7B%0A%20%20productInternalId%3A%20&#039;prod_a1b2c3d4&#039;%2C%0A%20%20featureId%3A%20&#039;pro_mode&#039;%2C%0A%7D%2C%20%7B%20collectionId%3A%20&#039;col_abc123&#039;%20%7D)%3B%0A%60%60%60%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1090,13 +1090,74 @@
                 
                 <h1 id="entitlements" class="docmd-heading"><a href="#entitlements" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Entitlements</h1>
 <p>Entitlements control access to features. Check if a customer has access, and report usage for metered billing.</p>
-<h2 id="entitlements-checking-entitlement" class="docmd-heading"><a href="#entitlements-checking-entitlement" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Checking Entitlement</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> check <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">checkEntitlement</span>(collectionId, {
-  customerId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;cust_abc123&#039;</span>,
-  feature<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_access&#039;</span>,
-});
+<h2 id="entitlements-feature-types" class="docmd-heading"><a href="#entitlements-feature-types" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Feature Types</h2>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Balance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>boolean</code></td>
+<td>On/off access</td>
+<td>null</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>Metered with quota</td>
+<td><code>{ limit, remaining, resetAt, unlimited }</code></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="entitlements-creating-features" class="docmd-heading"><a href="#entitlements-creating-features" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Creating Features</h2>
+<p>Features are created separately and attached to plans/products:</p>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { createFeatureApi } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
 
-<span class="hljs-keyword">if</span> (check.<span class="hljs-attr">entitled</span>) {
+<span class="hljs-comment">// Boolean feature</span>
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">createFeatureApi</span>(engine, {
+  featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;pro_mode&#039;</span>,
+  name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Pro Mode&#039;</span>,
+  <span class="hljs-keyword">type</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;boolean&#039;</span>,
+}, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
+
+<span class="hljs-comment">// Limit feature</span>
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">createFeatureApi</span>(engine, {
+  featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_calls&#039;</span>,
+  name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;API Calls&#039;</span>,
+  <span class="hljs-keyword">type</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;limit&#039;</span>,
+}, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
+</code></pre>
+<h2 id="entitlements-attaching-features-to-plans" class="docmd-heading"><a href="#entitlements-attaching-features-to-plans" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Attaching Features to Plans</h2>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { attachPlan } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">attachPlan</span>(engine, {
+  planId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;plan_pro_monthly&#039;</span>,
+  featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_calls&#039;</span>,
+  limit<span class="hljs-punctuation">:</span> <span class="hljs-number">10000</span>,
+  resetInterval<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;month&#039;</span>,
+}, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
+</code></pre>
+<h2 id="entitlements-attaching-features-to-products" class="docmd-heading"><a href="#entitlements-attaching-features-to-products" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Attaching Features to Products</h2>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { attachProduct } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">attachProduct</span>(engine, {
+  productInternalId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;prod_a1b2c3d4&#039;</span>,
+  featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;pro_mode&#039;</span>,
+}, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
+</code></pre>
+<h2 id="entitlements-checking-entitlement" class="docmd-heading"><a href="#entitlements-checking-entitlement" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Checking Entitlement</h2>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { check } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">const</span> result <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">check</span>(engine, {
+  customerId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;cust_abc123&#039;</span>,
+  featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_calls&#039;</span>,
+  required<span class="hljs-punctuation">:</span> <span class="hljs-number">1</span>,
+}, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
+
+<span class="hljs-keyword">if</span> (result.<span class="hljs-attr">allowed</span>) {
   <span class="hljs-comment">// Grant access to the feature</span>
   <span class="hljs-keyword">return</span> { access<span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span> };
 } <span class="hljs-keyword">else</span> {
@@ -1106,25 +1167,31 @@
 </code></pre>
 <h3 id="entitlements-checking-entitlement-response" class="docmd-heading"><a href="#entitlements-checking-entitlement-response" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Response</h3>
 <pre class="hljs"><code class="language-json">{
-  <span class="hljs-string">&quot;entitled&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span>,
-  <span class="hljs-string">&quot;customerId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;cust_abc123&quot;</span>,
-  <span class="hljs-string">&quot;feature&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;api_access&quot;</span>
+  <span class="hljs-string">&quot;allowed&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span>,
+  <span class="hljs-string">&quot;balance&quot;</span><span class="hljs-punctuation">:</span> {
+    <span class="hljs-string">&quot;limit&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10000</span>,
+    <span class="hljs-string">&quot;remaining&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">9500</span>,
+    <span class="hljs-string">&quot;resetAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2026-08-01T00:00:00Z&quot;</span>,
+    <span class="hljs-string">&quot;unlimited&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span>
+  }
 }
 </code></pre>
 <h2 id="entitlements-reporting-usage" class="docmd-heading"><a href="#entitlements-reporting-usage" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Reporting Usage</h2>
 <p>For metered features, report usage after each unit is consumed:</p>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">reportUsage</span>(collectionId, {
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { report } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">report</span>(engine, {
   customerId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;cust_abc123&#039;</span>,
-  feature<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_calls&#039;</span>,
-  quantity<span class="hljs-punctuation">:</span> <span class="hljs-number">1</span>,
-});
+  featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_calls&#039;</span>,
+  amount<span class="hljs-punctuation">:</span> <span class="hljs-number">1</span>,
+}, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
 </code></pre>
 <h3 id="entitlements-reporting-usage-common-usage-patterns" class="docmd-heading"><a href="#entitlements-reporting-usage-common-usage-patterns" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Common Usage Patterns</h3>
 <div class="table-wrapper"><table>
 <thead>
 <tr>
 <th>Feature</th>
-<th>Quantity</th>
+<th>Amount</th>
 <th>Description</th>
 </tr>
 </thead>
@@ -1151,27 +1218,31 @@
 </tr>
 </tbody>
 </table>
-</div><h2 id="entitlements-setting-up-features" class="docmd-heading"><a href="#entitlements-setting-up-features" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Setting Up Features</h2>
-<p>Features are defined in your product metadata. When creating a product:</p>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> product <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">createProduct</span>(collectionId, {
-  name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Pro Access&#039;</span>,
-  planId<span class="hljs-punctuation">:</span> plan.<span class="hljs-keyword">id</span>,
-  metadata<span class="hljs-punctuation">:</span> {
-    features<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_access,export,priority_support&#039;</span>,
-    api_limit<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;10000&#039;</span>,
-    storage_limit<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;50&#039;</span>,
-  },
-});
-</code></pre>
-<h2 id="entitlements-entitlement-logic" class="docmd-heading"><a href="#entitlements-entitlement-logic" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Entitlement Logic</h2>
+</div><h2 id="entitlements-entitlement-logic" class="docmd-heading"><a href="#entitlements-entitlement-logic" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Entitlement Logic</h2>
 <ol>
 <li>Customer must have an active or trialing subscription</li>
-<li>Subscription must be linked to the product with the requested feature</li>
-<li>Usage must be within limits (if defined)</li>
+<li>Subscription must be linked to a plan/product with the requested feature</li>
+<li>For limit features, balance must have sufficient remaining units</li>
+<li>Entitlements can also come from product purchases (one-time)</li>
 </ol>
 <div class="docmd-container callout callout-info"><div class="callout-content">
 <p>Entitlement checks are synchronous. Use them for real-time access control.</p>
 </div></div>
+<h2 id="entitlements-detaching-features" class="docmd-heading"><a href="#entitlements-detaching-features" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Detaching Features</h2>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { detachPlan, detachProduct } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-comment">// Detach from plan</span>
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">detachPlan</span>(engine, {
+  planId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;plan_pro_monthly&#039;</span>,
+  featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;api_calls&#039;</span>,
+}, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
+
+<span class="hljs-comment">// Detach from product</span>
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">detachProduct</span>(engine, {
+  productInternalId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;prod_a1b2c3d4&#039;</span>,
+  featureId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;pro_mode&#039;</span>,
+}, { collectionId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;col_abc123&#039;</span> });
+</code></pre>
 
                 
                   <div class="page-navigation">
@@ -1255,6 +1326,22 @@
         </li>
       
         <li class="toc-item toc-level-2">
+          <a href="#entitlements-feature-types" class="toc-link">Feature Types</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#entitlements-creating-features" class="toc-link">Creating Features</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#entitlements-attaching-features-to-plans" class="toc-link">Attaching Features to Plans</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#entitlements-attaching-features-to-products" class="toc-link">Attaching Features to Products</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
           <a href="#entitlements-checking-entitlement" class="toc-link">Checking Entitlement</a>
         </li>
       
@@ -1271,11 +1358,11 @@
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#entitlements-setting-up-features" class="toc-link">Setting Up Features</a>
+          <a href="#entitlements-entitlement-logic" class="toc-link">Entitlement Logic</a>
         </li>
       
         <li class="toc-item toc-level-2">
-          <a href="#entitlements-entitlement-logic" class="toc-link">Entitlement Logic</a>
+          <a href="#entitlements-detaching-features" class="toc-link">Detaching Features</a>
         </li>
       
     </ul>
@@ -1285,6 +1372,38 @@
             </div>
             <div class="page-footer-actions">
               
+              
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
               
               <span class="git-spacer"></span>
               
@@ -1303,13 +1422,13 @@
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

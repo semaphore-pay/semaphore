@@ -105,10 +105,10 @@
       Quick Start : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Quick%20Start%0A---%0A%0A%23%20Quick%20Start%0A%0AGet%20Semaphore%20running%20in%20your%20project%20in%205%20minutes.%0A%0A%23%23%20Prerequisites%0A%0A-%20Node.js%2018%2B%0A-%20A%20Nomba%20account%20(sandbox%20or%20production)%0A-%20Cloudflare%20account%20(for%20deployment)%0A%0A%23%23%201.%20Install%20the%20SDKs%0A%0A%60%60%60bash%0A%23%20Server%20SDK%20(backend)%0Anpm%20install%20%40semaphore-pay%2Fserver%0A%0A%23%20Client%20SDK%20(end-user%20apps)%0Anpm%20install%20%40semaphore-pay%2Fclient%0A%60%60%60%0A%0A%23%23%202.%20Set%20Up%20Your%20Backend%0A%0A%60%60%60typescript%0Aimport%20%7B%20createSemaphoreEngine%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20engine%20%3D%20createSemaphoreEngine(%7B%0A%20%20db%3A%20env.SEMAPHORE_DB%2C%20%2F%2F%20D1%20database%0A%20%20nomba%3A%20%7B%0A%20%20%20%20clientId%3A%20env.NOMBA_CLIENT_ID%2C%0A%20%20%20%20clientSecret%3A%20env.NOMBA_CLIENT_SECRET%2C%0A%20%20%20%20accountId%3A%20env.NOMBA_ACCOUNT_ID%2C%0A%20%20%7D%2C%0A%20%20webhookSecret%3A%20env.NOMBA_WEBHOOK_SECRET%2C%0A%20%20callbackUrl%3A%20env.NOMBA_CHECKOUT_CALLBACK_URL%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%203.%20Create%20a%20Collection%0A%0AA%20collection%20is%20like%20a%20RevenueCat%20project%20%E2%80%94%20an%20isolated%20tenant%20with%20its%20own%20API%20keys.%0A%0A%60%60%60typescript%0Aconst%20collection%20%3D%20await%20engine.createCollection(%7B%0A%20%20name%3A%20&#039;My%20App&#039;%2C%0A%20%20description%3A%20&#039;Production%20collection&#039;%2C%0A%7D)%3B%0A%2F%2F%20Returns%3A%20%7B%20id%2C%20name%2C%20publicKey%2C%20secretKey%20%7D%0A%60%60%60%0A%0A%23%23%204.%20Set%20Up%20the%20Client%20SDK%0A%0A%60%60%60typescript%0Aimport%20SemaphorePayClient%20from%20&#039;%40semaphore-pay%2Fclient&#039;%3B%0A%0Aconst%20client%20%3D%20new%20SemaphorePayClient(%7B%0A%20%20baseUrl%3A%20&#039;https%3A%2F%2Fyour-api.example.com&#039;%2C%0A%20%20apiKey%3A%20&#039;pk_your_public_api_key&#039;%2C%0A%20%20collectionId%3A%20&#039;your_collection_id&#039;%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%205.%20Create%20Your%20First%20Subscription%0A%0A%60%60%60typescript%0A%2F%2F%20Server%3A%20create%20a%20plan%0Aconst%20plan%20%3D%20await%20engine.createPlan(collectionId%2C%20%7B%0A%20%20name%3A%20&#039;Pro%20Plan&#039;%2C%0A%20%20description%3A%20&#039;Full%20access%20to%20all%20features&#039;%2C%0A%20%20amount%3A%202999%2C%20%2F%2F%20%E2%82%A629.99%0A%20%20currency%3A%20&#039;NGN&#039;%2C%0A%20%20interval%3A%20&#039;month&#039;%2C%0A%20%20intervalCount%3A%201%2C%0A%7D)%3B%0A%0A%2F%2F%20Server%3A%20create%20a%20product%0Aconst%20product%20%3D%20await%20engine.createProduct(collectionId%2C%20%7B%0A%20%20name%3A%20&#039;Pro%20Access&#039;%2C%0A%20%20planId%3A%20plan.id%2C%0A%7D)%3B%0A%0A%2F%2F%20Client%3A%20subscribe%20a%20customer%0Aconst%20subscription%20%3D%20await%20client.subscribe(%7B%0A%20%20productId%3A%20product.id%2C%0A%20%20customerEmail%3A%20&#039;user%40example.com&#039;%2C%0A%20%20paymentMethod%3A%20%7B%0A%20%20%20%20type%3A%20&#039;card&#039;%2C%0A%20%20%20%20token%3A%20&#039;tok_...&#039;%2C%0A%20%20%7D%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%206.%20Handle%20Webhooks%0A%0A%60%60%60typescript%0A%2F%2F%20In%20your%20Cloudflare%20Worker%0Aapp.post(&#039;%2Fwebhook%2Fnomba&#039;%2C%20async%20(c)%20%3D%3E%20%7B%0A%20%20const%20event%20%3D%20await%20engine.handleWebhook(c.req.raw)%3B%0A%20%20%2F%2F%20Event%20types%3A%20checkout.completed%2C%20subscription.renewed%2C%20etc.%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20What&#039;s%20Next%0A%0A-%20%5BInstall%20SDK%5D(%2Fquickstart%2Finstall)%20%E2%80%94%20detailed%20installation%0A-%20%5BFirst%20API%20Call%5D(%2Fquickstart%2Ffirst-call)%20%E2%80%94%20step-by-step%20walkthrough%0A-%20%5BCollections%5D(%2Fconcepts%2Fcollections)%20%E2%80%94%20understand%20multi-tenancy%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Quick%20Start%0A---%0A%0A%23%20Quick%20Start%0A%0AGet%20Semaphore%20running%20in%20your%20project%20in%205%20minutes.%0A%0A%23%23%20Prerequisites%0A%0A-%20Node.js%2018%2B%20or%20Bun%0A-%20A%20Nomba%20account%20(sandbox%20or%20production)%0A-%20Cloudflare%20account%20(for%20deployment)%0A%0A%23%23%201.%20Install%20the%20SDKs%0A%0A%60%60%60bash%0A%23%20Server%20SDK%20(backend)%0Anpm%20install%20%40semaphore-pay%2Fserver%0A%0A%23%20Client%20SDK%20(end-user%20apps)%0Anpm%20install%20%40semaphore-pay%2Fclient%0A%60%60%60%0A%0A%23%23%202.%20Set%20Up%20Your%20Backend%0A%0A%60%60%60typescript%0Aimport%20%7B%20initSemaphorePay%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0Aimport%20%7B%20drizzle%20%7D%20from%20&#039;drizzle-orm%2Fd1&#039;%3B%0Aimport%20*%20as%20sqliteSchema%20from%20&#039;%40semaphore-pay%2Fserver%2Fschema%2Fsqlite&#039;%3B%0A%0Aconst%20db%20%3D%20drizzle(env.SEMAPHORE_DB%2C%20%7B%20schema%3A%20sqliteSchema%20%7D)%3B%0A%0Aconst%20engine%20%3D%20initSemaphorePay(%7B%0A%20%20dialect%3A%20&#039;sqlite&#039;%2C%0A%20%20db%2C%0A%20%20supportsTransactions%3A%20false%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%203.%20Create%20a%20Collection%0A%0AA%20collection%20is%20like%20a%20RevenueCat%20project%20%E2%80%94%20an%20isolated%20tenant%20with%20its%20own%20API%20keys.%0A%0A%60%60%60typescript%0Aimport%20%7B%20createCollection%2C%20createApiKey%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20collection%20%3D%20await%20createCollection(engine%2C%20&#039;My%20App&#039;%2C%20&#039;sandbox&#039;)%3B%0A%0A%2F%2F%20Generate%20API%20keys%20for%20the%20collection%0Aconst%20publicKey%20%3D%20await%20createApiKey(engine%2C%20%7B%0A%20%20collectionId%3A%20collection.id%2C%0A%20%20type%3A%20&#039;public&#039;%2C%0A%20%20environment%3A%20&#039;development&#039;%2C%0A%20%20userId%3A%20user.id%2C%0A%7D)%3B%0A%0Aconst%20secretKey%20%3D%20await%20createApiKey(engine%2C%20%7B%0A%20%20collectionId%3A%20collection.id%2C%0A%20%20type%3A%20&#039;secret&#039;%2C%0A%20%20environment%3A%20&#039;development&#039;%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%204.%20Set%20Up%20the%20Client%20SDK%0A%0A%60%60%60typescript%0Aimport%20%7B%20SemaphorePayClient%20%7D%20from%20&#039;%40semaphore-pay%2Fclient&#039;%3B%0A%0Aconst%20client%20%3D%20new%20SemaphorePayClient(%7B%0A%20%20baseUrl%3A%20&#039;https%3A%2F%2Fyour-api.example.com&#039;%2C%0A%20%20apiKey%3A%20&#039;pk_your_public_api_key&#039;%2C%0A%20%20collectionId%3A%20&#039;your_collection_id&#039;%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%205.%20Create%20Your%20First%20Subscription%0A%0A%60%60%60typescript%0Aimport%20%7B%20create%2C%20createProduct%2C%20subscribe%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0A%2F%2F%20Server%3A%20create%20a%20plan%0Aconst%20plan%20%3D%20await%20create(engine%2C%20%7B%0A%20%20name%3A%20&#039;Pro%20Plan&#039;%2C%0A%20%20description%3A%20&#039;Full%20access%20to%20all%20features&#039;%2C%0A%20%20priceAmount%3A%202999%2C%20%2F%2F%20%E2%82%A629.99%20in%20kobo%0A%20%20priceCurrency%3A%20&#039;NGN&#039;%2C%0A%20%20interval%3A%20&#039;monthly&#039;%2C%0A%7D%2C%20%7B%0A%20%20collectionId%3A%20collection.id%2C%0A%20%20environment%3A%20&#039;development&#039;%2C%0A%7D)%3B%0A%0A%2F%2F%20Server%3A%20create%20a%20product%0Aconst%20product%20%3D%20await%20createProduct(engine%2C%20%7B%0A%20%20name%3A%20&#039;Pro%20Access&#039;%2C%0A%20%20features%3A%20%5B%5D%2C%0A%7D%2C%20%7B%0A%20%20collectionId%3A%20collection.id%2C%0A%20%20environment%3A%20&#039;development&#039;%2C%0A%7D)%3B%0A%0A%2F%2F%20Client%3A%20subscribe%20a%20customer%0Aconst%20subscription%20%3D%20await%20client.subscribeToPlan(%7B%0A%20%20customerId%3A%20&#039;cust_abc123&#039;%2C%0A%20%20planId%3A%20plan.id%2C%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%206.%20Handle%20Webhooks%0A%0A%60%60%60typescript%0Aimport%20%7B%20Hono%20%7D%20from%20&#039;hono&#039;%3B%0Aimport%20%7B%20handleWebhook%20%7D%20from%20&#039;%40semaphore-pay%2Fserver&#039;%3B%0A%0Aconst%20app%20%3D%20new%20Hono()%3B%0A%0Aapp.post(&#039;%2Fwebhook&#039;%2C%20async%20(c)%20%3D%3E%20%7B%0A%20%20const%20rawBody%20%3D%20await%20c.req.text()%3B%0A%20%20const%20signature%20%3D%20c.req.header(&#039;nomba-signature&#039;)%20%3F%3F%20&#039;&#039;%3B%0A%20%20const%20nombaTimestamp%20%3D%20c.req.header(&#039;nomba-timestamp&#039;)%20%3F%3F%20&#039;&#039;%3B%0A%0A%20%20const%20result%20%3D%20await%20handleWebhook(engine%2C%20%7B%0A%20%20%20%20rawBody%2C%0A%20%20%20%20signature%2C%0A%20%20%20%20webhookSecret%3A%20c.env.NOMBA_WEBHOOK_SECRET%2C%0A%20%20%20%20nombaTimestamp%2C%0A%20%20%7D)%3B%0A%0A%20%20return%20c.json(result)%3B%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%20What&#039;s%20Next%0A%0A-%20%5BInstall%20SDK%5D(%2Fquickstart%2Finstall)%20%E2%80%94%20detailed%20installation%0A-%20%5BFirst%20API%20Call%5D(%2Fquickstart%2Ffirst-call)%20%E2%80%94%20step-by-step%20walkthrough%0A-%20%5BCollections%5D(%2Fconcepts%2Fcollections)%20%E2%80%94%20understand%20multi-tenancy%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1092,7 +1092,7 @@
 <p>Get Semaphore running in your project in 5 minutes.</p>
 <h2 id="quick-start-prerequisites" class="docmd-heading"><a href="#quick-start-prerequisites" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Prerequisites</h2>
 <ul>
-<li>Node.js 18+</li>
+<li>Node.js 18+ or Bun</li>
 <li>A Nomba account (sandbox or production)</li>
 <li>Cloudflare account (for deployment)</li>
 </ul>
@@ -1104,29 +1104,40 @@
 <span class="hljs-keyword">npm</span> install @semaphore<span class="hljs-punctuation">-</span>pay<span class="hljs-punctuation">/</span>client
 </code></pre>
 <h2 id="quick-start-2-set-up-your-backend" class="docmd-heading"><a href="#quick-start-2-set-up-your-backend" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>2. Set Up Your Backend</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { createSemaphoreEngine } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { initSemaphorePay } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+<span class="hljs-keyword">import</span> { drizzle } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;drizzle-orm/d1&#039;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-punctuation">*</span> <span class="hljs-keyword">as</span> sqliteSchema <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server/schema/sqlite&#039;</span>;
 
-<span class="hljs-keyword">const</span> engine <span class="hljs-punctuation">=</span> <span class="hljs-title function_">createSemaphoreEngine</span>({
-  db<span class="hljs-punctuation">:</span> env.<span class="hljs-attr">SEMAPHORE_DB</span>, <span class="hljs-comment">// D1 database</span>
-  nomba<span class="hljs-punctuation">:</span> {
-    clientId<span class="hljs-punctuation">:</span> env.<span class="hljs-attr">NOMBA_CLIENT_ID</span>,
-    clientSecret<span class="hljs-punctuation">:</span> env.<span class="hljs-attr">NOMBA_CLIENT_SECRET</span>,
-    accountId<span class="hljs-punctuation">:</span> env.<span class="hljs-attr">NOMBA_ACCOUNT_ID</span>,
-  },
-  webhookSecret<span class="hljs-punctuation">:</span> env.<span class="hljs-attr">NOMBA_WEBHOOK_SECRET</span>,
-  callbackUrl<span class="hljs-punctuation">:</span> env.<span class="hljs-attr">NOMBA_CHECKOUT_CALLBACK_URL</span>,
+<span class="hljs-keyword">const</span> db <span class="hljs-punctuation">=</span> <span class="hljs-title function_">drizzle</span>(env.<span class="hljs-attr">SEMAPHORE_DB</span>, { schema<span class="hljs-punctuation">:</span> sqliteSchema });
+
+<span class="hljs-keyword">const</span> engine <span class="hljs-punctuation">=</span> <span class="hljs-title function_">initSemaphorePay</span>({
+  dialect<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;sqlite&#039;</span>,
+  db,
+  supportsTransactions<span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span>,
 });
 </code></pre>
 <h2 id="quick-start-3-create-a-collection" class="docmd-heading"><a href="#quick-start-3-create-a-collection" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>3. Create a Collection</h2>
 <p>A collection is like a RevenueCat project — an isolated tenant with its own API keys.</p>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">const</span> collection <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">createCollection</span>({
-  name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;My App&#039;</span>,
-  description<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Production collection&#039;</span>,
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { createCollection, createApiKey } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">const</span> collection <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">createCollection</span>(engine, <span class="hljs-string">&#039;My App&#039;</span>, <span class="hljs-string">&#039;sandbox&#039;</span>);
+
+<span class="hljs-comment">// Generate API keys for the collection</span>
+<span class="hljs-keyword">const</span> publicKey <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">createApiKey</span>(engine, {
+  collectionId<span class="hljs-punctuation">:</span> collection.<span class="hljs-keyword">id</span>,
+  <span class="hljs-keyword">type</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;public&#039;</span>,
+  environment<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;development&#039;</span>,
+  userId<span class="hljs-punctuation">:</span> user.<span class="hljs-keyword">id</span>,
 });
-<span class="hljs-comment">// Returns: { id, name, publicKey, secretKey }</span>
+
+<span class="hljs-keyword">const</span> secretKey <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">createApiKey</span>(engine, {
+  collectionId<span class="hljs-punctuation">:</span> collection.<span class="hljs-keyword">id</span>,
+  <span class="hljs-keyword">type</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;secret&#039;</span>,
+  environment<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;development&#039;</span>,
+});
 </code></pre>
 <h2 id="quick-start-4-set-up-the-client-sdk" class="docmd-heading"><a href="#quick-start-4-set-up-the-client-sdk" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>4. Set Up the Client SDK</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> SemaphorePayClient <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/client&#039;</span>;
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { SemaphorePayClient } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/client&#039;</span>;
 
 <span class="hljs-keyword">const</span> client <span class="hljs-punctuation">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">SemaphorePayClient</span>({
   baseUrl<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;https://your-api.example.com&#039;</span>,
@@ -1135,37 +1146,54 @@
 });
 </code></pre>
 <h2 id="quick-start-5-create-your-first-subscription" class="docmd-heading"><a href="#quick-start-5-create-your-first-subscription" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>5. Create Your First Subscription</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-comment">// Server: create a plan</span>
-<span class="hljs-keyword">const</span> plan <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">createPlan</span>(collectionId, {
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { create, createProduct, subscribe } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-comment">// Server: create a plan</span>
+<span class="hljs-keyword">const</span> plan <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">create</span>(engine, {
   name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Pro Plan&#039;</span>,
   description<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Full access to all features&#039;</span>,
-  amount<span class="hljs-punctuation">:</span> <span class="hljs-number">2999</span>, <span class="hljs-comment">// ₦29.99</span>
-  currency<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;NGN&#039;</span>,
-  interval<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;month&#039;</span>,
-  intervalCount<span class="hljs-punctuation">:</span> <span class="hljs-number">1</span>,
+  priceAmount<span class="hljs-punctuation">:</span> <span class="hljs-number">2999</span>, <span class="hljs-comment">// ₦29.99 in kobo</span>
+  priceCurrency<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;NGN&#039;</span>,
+  interval<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;monthly&#039;</span>,
+}, {
+  collectionId<span class="hljs-punctuation">:</span> collection.<span class="hljs-keyword">id</span>,
+  environment<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;development&#039;</span>,
 });
 
 <span class="hljs-comment">// Server: create a product</span>
-<span class="hljs-keyword">const</span> product <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">createProduct</span>(collectionId, {
+<span class="hljs-keyword">const</span> product <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">createProduct</span>(engine, {
   name<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;Pro Access&#039;</span>,
-  planId<span class="hljs-punctuation">:</span> plan.<span class="hljs-keyword">id</span>,
+  features<span class="hljs-punctuation">:</span> [],
+}, {
+  collectionId<span class="hljs-punctuation">:</span> collection.<span class="hljs-keyword">id</span>,
+  environment<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;development&#039;</span>,
 });
 
 <span class="hljs-comment">// Client: subscribe a customer</span>
-<span class="hljs-keyword">const</span> subscription <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">subscribe</span>({
-  productId<span class="hljs-punctuation">:</span> product.<span class="hljs-keyword">id</span>,
-  customerEmail<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;user@example.com&#039;</span>,
-  paymentMethod<span class="hljs-punctuation">:</span> {
-    <span class="hljs-keyword">type</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;card&#039;</span>,
-    token<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;tok_...&#039;</span>,
-  },
+<span class="hljs-keyword">const</span> subscription <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">subscribeToPlan</span>({
+  customerId<span class="hljs-punctuation">:</span> <span class="hljs-string">&#039;cust_abc123&#039;</span>,
+  planId<span class="hljs-punctuation">:</span> plan.<span class="hljs-keyword">id</span>,
 });
 </code></pre>
 <h2 id="quick-start-6-handle-webhooks" class="docmd-heading"><a href="#quick-start-6-handle-webhooks" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>6. Handle Webhooks</h2>
-<pre class="hljs"><code class="language-typescript"><span class="hljs-comment">// In your Cloudflare Worker</span>
-app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#039;/webhook/nomba&#039;</span>, <span class="hljs-keyword">async</span> (c) <span class="hljs-punctuation">=&gt;</span> {
-  <span class="hljs-keyword">const</span> event <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> engine.<span class="hljs-title function_">handleWebhook</span>(c.<span class="hljs-attr">req</span>.<span class="hljs-attr">raw</span>);
-  <span class="hljs-comment">// Event types: checkout.completed, subscription.renewed, etc.</span>
+<pre class="hljs"><code class="language-typescript"><span class="hljs-keyword">import</span> { Hono } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;hono&#039;</span>;
+<span class="hljs-keyword">import</span> { handleWebhook } <span class="hljs-keyword">from</span> <span class="hljs-string">&#039;@semaphore-pay/server&#039;</span>;
+
+<span class="hljs-keyword">const</span> app <span class="hljs-punctuation">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">Hono</span>();
+
+app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#039;/webhook&#039;</span>, <span class="hljs-keyword">async</span> (c) <span class="hljs-punctuation">=&gt;</span> {
+  <span class="hljs-keyword">const</span> rawBody <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> c.<span class="hljs-attr">req</span>.<span class="hljs-title function_">text</span>();
+  <span class="hljs-keyword">const</span> signature <span class="hljs-punctuation">=</span> c.<span class="hljs-attr">req</span>.<span class="hljs-title function_">header</span>(<span class="hljs-string">&#039;nomba-signature&#039;</span>) <span class="hljs-punctuation">??</span> <span class="hljs-string">&#039;&#039;</span>;
+  <span class="hljs-keyword">const</span> nombaTimestamp <span class="hljs-punctuation">=</span> c.<span class="hljs-attr">req</span>.<span class="hljs-title function_">header</span>(<span class="hljs-string">&#039;nomba-timestamp&#039;</span>) <span class="hljs-punctuation">??</span> <span class="hljs-string">&#039;&#039;</span>;
+
+  <span class="hljs-keyword">const</span> result <span class="hljs-punctuation">=</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">handleWebhook</span>(engine, {
+    rawBody,
+    signature,
+    webhookSecret<span class="hljs-punctuation">:</span> c.<span class="hljs-attr">env</span>.<span class="hljs-attr">NOMBA_WEBHOOK_SECRET</span>,
+    nombaTimestamp,
+  });
+
+  <span class="hljs-keyword">return</span> c.<span class="hljs-title function_">json</span>(result);
 });
 </code></pre>
 <h2 id="quick-start-whats-next" class="docmd-heading"><a href="#quick-start-whats-next" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>What’s Next</h2>
@@ -1296,6 +1324,38 @@ app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#0
             <div class="page-footer-actions">
               
               
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
+              
               <span class="git-spacer"></span>
               
             </div>
@@ -1313,13 +1373,13 @@ app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#0
         </div>
       </div>
       
-      <script src="../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

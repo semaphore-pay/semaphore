@@ -105,10 +105,10 @@
       Install SDK : Semaphore Pay
     </title>
     
-    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mr7uqxlt">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mrb2qqn7">
     
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mr7uqxlt" id="hljs-light" >
-    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mr7uqxlt" id="hljs-dark" disabled>
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mrb2qqn7" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mrb2qqn7" id="hljs-dark" disabled>
     
     
 <meta name="description" content="Subscription billing engine for Nomba.">
@@ -123,11 +123,11 @@
 
 
 
-<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mr7uqxlt" >
-<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mr7uqxlt" >
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mrb2qqn7" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mrb2qqn7" >
 
     
-      <link rel="stylesheet" href="../../assets/css/branding.css?v=mr7uqxlt">
+      <link rel="stylesheet" href="../../assets/css/branding.css?v=mrb2qqn7">
     
     <script>/**
  * --------------------------------------------------------------------
@@ -999,7 +999,7 @@
             <div class="content-layout">
               <div class="main-content">
                 <div class="docmd-breadcrumbs-row">
-                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Install%20SDK%0A---%0A%0A%23%20Install%20SDK%0A%0A%23%23%20Server%20SDK%0A%0AThe%20server%20SDK%20handles%20admin%20operations%3A%20creating%20collections%2C%20plans%2C%20products%2C%20and%20managing%20customers.%0A%0A%60%60%60bash%0Anpm%20install%20%40semaphore-pay%2Fserver%0A%60%60%60%0A%0A%23%23%23%20Peer%20Dependencies%0A%0A-%20%60better-sqlite3%60%20(SQLite)%20or%20%60%40cloudflare%2Fworkers-types%60%20(D1)%0A%0A%23%23%23%20TypeScript%20Setup%0A%0A%60%60%60json%0A%7B%0A%20%20%22compilerOptions%22%3A%20%7B%0A%20%20%20%20%22moduleResolution%22%3A%20%22Bundler%22%2C%0A%20%20%20%20%22target%22%3A%20%22ESNext%22%2C%0A%20%20%20%20%22module%22%3A%20%22ESNext%22%0A%20%20%7D%0A%7D%0A%60%60%60%0A%0A%23%23%20Client%20SDK%0A%0AThe%20client%20SDK%20is%20for%20end-user%20applications.%20It%20handles%20subscriptions%2C%20entitlements%2C%20and%20customer%20management.%0A%0A%60%60%60bash%0Anpm%20install%20%40semaphore-pay%2Fclient%0A%60%60%60%0A%0A%23%23%23%20Peer%20Dependencies%0A%0A-%20%60react%60%20(optional%2C%20for%20zustand%20store)%0A%0A%23%23%23%20Framework%20Support%0A%0A%7C%20Framework%20%7C%20Package%20%7C%20Import%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20Vanilla%20TS%20%7C%20%60%40semaphore-pay%2Fclient%60%20%7C%20%60import%20SemaphorePayClient%60%20%7C%0A%7C%20React%20%7C%20%60%40semaphore-pay%2Fclient%2Freact%60%20%7C%20%60import%20%7B%20useSemaphorePay%20%7D%60%20%7C%0A%7C%20React%20Native%20%7C%20%60%40semaphore-pay%2Fclient%2Freact-native%60%20%7C%20%60import%20%7B%20useSemaphorePay%20%7D%60%20%7C%0A%0A%23%23%20Cloudflare%20Worker%20Setup%0A%0AIf%20deploying%20to%20Cloudflare%20Workers%3A%0A%0A%60%60%60bash%0Anpm%20install%20%40semaphore-pay%2Fserver%0Anpm%20install%20wrangler%20--save-dev%0A%60%60%60%0A%0A%60wrangler.jsonc%60%3A%0A%0A%60%60%60json%0A%7B%0A%20%20%22name%22%3A%20%22semaphore-api%22%2C%0A%20%20%22main%22%3A%20%22src%2Findex.ts%22%2C%0A%20%20%22compatibility_date%22%3A%20%222024-12-01%22%2C%0A%20%20%22d1_databases%22%3A%20%5B%0A%20%20%20%20%7B%0A%20%20%20%20%20%20%22binding%22%3A%20%22SEMAPHORE_DB%22%2C%0A%20%20%20%20%20%20%22database_name%22%3A%20%22semaphore-db%22%2C%0A%20%20%20%20%20%20%22database_id%22%3A%20%22your-d1-id%22%0A%20%20%20%20%7D%0A%20%20%5D%0A%7D%0A%60%60%60%0A%0A%23%23%20Environment%20Variables%0A%0A%60%60%60bash%0A%23%20Nomba%0ANOMBA_SANDBOX_CLIENT_ID%3D%0ANOMBA_SANDBOX_CLIENT_SECRET%3D%0ANOMBA_SANDBOX_ACCOUNT_ID%3D%0ANOMBA_WEBHOOK_SECRET%3D%0ANOMBA_CHECKOUT_CALLBACK_URL%3D%0A%0A%23%20Better%20Auth%0ABETTER_AUTH_SECRET%3D%0ABETTER_AUTH_URL%3D%0A%0A%23%20CORS%0AFRONTEND_URL%3Dhttps%3A%2F%2Fyour-frontend.com%0A%60%60%60%0A" style="display: none;"></div>
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20Install%20SDK%0A---%0A%0A%23%20Install%20SDK%0A%0A%23%23%20Server%20SDK%0A%0AThe%20server%20SDK%20handles%20admin%20operations%3A%20creating%20collections%2C%20plans%2C%20products%2C%20and%20managing%20customers.%0A%0A%60%60%60bash%0Anpm%20install%20%40semaphore-pay%2Fserver%0A%60%60%60%0A%0A%23%23%23%20Peer%20Dependencies%0A%0A-%20%60better-auth%60%20%E2%80%94%20authentication%0A-%20%60drizzle-orm%60%20%E2%80%94%20database%20ORM%0A-%20%60hono%60%20%E2%80%94%20HTTP%20framework%0A-%20%60ioredis%60%20%E2%80%94%20Redis%20client%20(optional%2C%20for%20caching)%0A%0A%23%23%23%20TypeScript%20Setup%0A%0A%60%60%60json%0A%7B%0A%20%20%22compilerOptions%22%3A%20%7B%0A%20%20%20%20%22moduleResolution%22%3A%20%22Bundler%22%2C%0A%20%20%20%20%22target%22%3A%20%22ESNext%22%2C%0A%20%20%20%20%22module%22%3A%20%22ESNext%22%0A%20%20%7D%0A%7D%0A%60%60%60%0A%0A%23%23%20Client%20SDK%0A%0AThe%20client%20SDK%20is%20for%20end-user%20applications.%20It%20handles%20subscriptions%2C%20entitlements%2C%20and%20customer%20management.%0A%0A%60%60%60bash%0Anpm%20install%20%40semaphore-pay%2Fclient%0A%60%60%60%0A%0A%23%23%23%20Peer%20Dependencies%0A%0A-%20%60react%60%20(optional%2C%20for%20React%20hooks)%0A-%20%60react-native%60%20(optional%2C%20for%20React%20Native%20components)%0A-%20%60react-native-webview%60%20(optional%2C%20for%20React%20Native%20paywall)%0A%0A%23%23%23%20Framework%20Support%0A%0A%7C%20Framework%20%7C%20Package%20%7C%20Import%20%7C%0A%7C---%7C---%7C---%7C%0A%7C%20Vanilla%20TS%20%7C%20%60%40semaphore-pay%2Fclient%60%20%7C%20%60import%20%7B%20SemaphorePayClient%20%7D%60%20%7C%0A%7C%20React%20%7C%20%60%40semaphore-pay%2Fclient%2Freact%60%20%7C%20%60import%20%7B%20useSemaphorePayStore%20%7D%60%20%7C%0A%7C%20React%20Native%20%7C%20%60%40semaphore-pay%2Fclient%2Freact-native%60%20%7C%20%60import%20%7B%20useSemaphorePay%2C%20SemaphorePayPaywall%2C%20SemaphorePayEntitlementGuard%20%7D%60%20%7C%0A%0A%23%23%20Cloudflare%20Worker%20Setup%0A%0AIf%20deploying%20to%20Cloudflare%20Workers%3A%0A%0A%60%60%60bash%0Anpm%20install%20%40semaphore-pay%2Fserver%0Anpm%20install%20wrangler%20--save-dev%0A%60%60%60%0A%0A%60wrangler.jsonc%60%3A%0A%0A%60%60%60json%0A%7B%0A%20%20%22name%22%3A%20%22semaphore-api%22%2C%0A%20%20%22main%22%3A%20%22src%2Findex.ts%22%2C%0A%20%20%22compatibility_date%22%3A%20%222024-12-01%22%2C%0A%20%20%22compatibility_flags%22%3A%20%5B%22nodejs_compat%22%5D%2C%0A%20%20%22d1_databases%22%3A%20%5B%0A%20%20%20%20%7B%0A%20%20%20%20%20%20%22binding%22%3A%20%22semaphore_db%22%2C%0A%20%20%20%20%20%20%22database_name%22%3A%20%22semaphore-db%22%2C%0A%20%20%20%20%20%20%22database_id%22%3A%20%22your-d1-id%22%0A%20%20%20%20%7D%0A%20%20%5D%2C%0A%20%20%22crons%22%3A%20%5B%220%20*%20*%20*%20*%22%2C%20%220%200%20*%20*%20*%22%5D%0A%7D%0A%60%60%60%0A%0A%23%23%20Environment%20Variables%0A%0A%60%60%60bash%0A%23%20Nomba%20(sandbox)%0ANOMBA_SANDBOX_CLIENT_ID%3D%0ANOMBA_SANDBOX_CLIENT_SECRET%3D%0ANOMBA_SANDBOX_ACCOUNT_ID%3D%0A%0A%23%20Nomba%20(production)%0ANOMBA_LIVE_CLIENT_ID%3D%0ANOMBA_LIVE_CLIENT_SECRET%3D%0ANOMBA_LIVE_ACCOUNT_ID%3D%0A%0A%23%20Nomba%20(shared)%0ANOMBA_WEBHOOK_SECRET%3D%0ANOMBA_CHECKOUT_CALLBACK_URL%3Dhttps%3A%2F%2Fyour-api.example.com%2Fwebhook%0A%0A%23%20Better%20Auth%0ABETTER_AUTH_SECRET%3D%0ABETTER_AUTH_URL%3D%0A%0A%23%20CORS%0AFRONTEND_URL%3Dhttps%3A%2F%2Fyour-frontend.com%0A%0A%23%20Cloudflare%20(for%20D1%20access)%0ACLOUDFLARE_ACCOUNT_ID%3D%0ACLOUDFLARE_DATABASE_ID%3D%0ACLOUDFLARE_D1_TOKEN%3D%0A%60%60%60%0A" style="display: none;"></div>
                   
                     <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
                       <ol>
@@ -1095,7 +1095,10 @@
 </code></pre>
 <h3 id="install-sdk-server-sdk-peer-dependencies" class="docmd-heading"><a href="#install-sdk-server-sdk-peer-dependencies" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Peer Dependencies</h3>
 <ul>
-<li><code>better-sqlite3</code> (SQLite) or <code>@cloudflare/workers-types</code> (D1)</li>
+<li><code>better-auth</code> — authentication</li>
+<li><code>drizzle-orm</code> — database ORM</li>
+<li><code>hono</code> — HTTP framework</li>
+<li><code>ioredis</code> — Redis client (optional, for caching)</li>
 </ul>
 <h3 id="install-sdk-server-sdk-typescript-setup" class="docmd-heading"><a href="#install-sdk-server-sdk-typescript-setup" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>TypeScript Setup</h3>
 <pre class="hljs"><code class="language-json">{
@@ -1112,7 +1115,9 @@
 </code></pre>
 <h3 id="install-sdk-client-sdk-peer-dependencies" class="docmd-heading"><a href="#install-sdk-client-sdk-peer-dependencies" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Peer Dependencies</h3>
 <ul>
-<li><code>react</code> (optional, for zustand store)</li>
+<li><code>react</code> (optional, for React hooks)</li>
+<li><code>react-native</code> (optional, for React Native components)</li>
+<li><code>react-native-webview</code> (optional, for React Native paywall)</li>
 </ul>
 <h3 id="install-sdk-client-sdk-framework-support" class="docmd-heading"><a href="#install-sdk-client-sdk-framework-support" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Framework Support</h3>
 <div class="table-wrapper"><table>
@@ -1127,17 +1132,17 @@
 <tr>
 <td>Vanilla TS</td>
 <td><code>@semaphore-pay/client</code></td>
-<td><code>import SemaphorePayClient</code></td>
+<td><code>import { SemaphorePayClient }</code></td>
 </tr>
 <tr>
 <td>React</td>
 <td><code>@semaphore-pay/client/react</code></td>
-<td><code>import { useSemaphorePay }</code></td>
+<td><code>import { useSemaphorePayStore }</code></td>
 </tr>
 <tr>
 <td>React Native</td>
 <td><code>@semaphore-pay/client/react-native</code></td>
-<td><code>import { useSemaphorePay }</code></td>
+<td><code>import { useSemaphorePay, SemaphorePayPaywall, SemaphorePayEntitlementGuard }</code></td>
 </tr>
 </tbody>
 </table>
@@ -1151,22 +1156,31 @@
   <span class="hljs-string">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;semaphore-api&quot;</span>,
   <span class="hljs-string">&quot;main&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;src/index.ts&quot;</span>,
   <span class="hljs-string">&quot;compatibility_date&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2024-12-01&quot;</span>,
+  <span class="hljs-string">&quot;compatibility_flags&quot;</span><span class="hljs-punctuation">:</span> [<span class="hljs-string">&quot;nodejs_compat&quot;</span>],
   <span class="hljs-string">&quot;d1_databases&quot;</span><span class="hljs-punctuation">:</span> [
     {
-      <span class="hljs-string">&quot;binding&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;SEMAPHORE_DB&quot;</span>,
+      <span class="hljs-string">&quot;binding&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;semaphore_db&quot;</span>,
       <span class="hljs-string">&quot;database_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;semaphore-db&quot;</span>,
       <span class="hljs-string">&quot;database_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;your-d1-id&quot;</span>
     }
-  ]
+  ],
+  <span class="hljs-string">&quot;crons&quot;</span><span class="hljs-punctuation">:</span> [<span class="hljs-string">&quot;0 * * * *&quot;</span>, <span class="hljs-string">&quot;0 0 * * *&quot;</span>]
 }
 </code></pre>
 <h2 id="install-sdk-environment-variables" class="docmd-heading"><a href="#install-sdk-environment-variables" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Environment Variables</h2>
-<pre class="hljs"><code class="language-bash"><span class="hljs-comment"># Nomba</span>
+<pre class="hljs"><code class="language-bash"><span class="hljs-comment"># Nomba (sandbox)</span>
 NOMBA_SANDBOX_CLIENT_ID<span class="hljs-punctuation">=</span>
 NOMBA_SANDBOX_CLIENT_SECRET<span class="hljs-punctuation">=</span>
 NOMBA_SANDBOX_ACCOUNT_ID<span class="hljs-punctuation">=</span>
+
+<span class="hljs-comment"># Nomba (production)</span>
+NOMBA_LIVE_CLIENT_ID<span class="hljs-punctuation">=</span>
+NOMBA_LIVE_CLIENT_SECRET<span class="hljs-punctuation">=</span>
+NOMBA_LIVE_ACCOUNT_ID<span class="hljs-punctuation">=</span>
+
+<span class="hljs-comment"># Nomba (shared)</span>
 NOMBA_WEBHOOK_SECRET<span class="hljs-punctuation">=</span>
-NOMBA_CHECKOUT_CALLBACK_URL<span class="hljs-punctuation">=</span>
+NOMBA_CHECKOUT_CALLBACK_URL<span class="hljs-punctuation">=</span>https<span class="hljs-punctuation">://</span>your<span class="hljs-punctuation">-</span>api.<span class="hljs-attr">example</span>.<span class="hljs-attr">com</span><span class="hljs-punctuation">/</span>webhook
 
 <span class="hljs-comment"># Better Auth</span>
 BETTER_AUTH_SECRET<span class="hljs-punctuation">=</span>
@@ -1174,6 +1188,11 @@ BETTER_AUTH_URL<span class="hljs-punctuation">=</span>
 
 <span class="hljs-comment"># CORS</span>
 FRONTEND_URL<span class="hljs-punctuation">=</span>https<span class="hljs-punctuation">://</span>your<span class="hljs-punctuation">-</span>frontend.<span class="hljs-attr">com</span>
+
+<span class="hljs-comment"># Cloudflare (for D1 access)</span>
+CLOUDFLARE_ACCOUNT_ID<span class="hljs-punctuation">=</span>
+CLOUDFLARE_DATABASE_ID<span class="hljs-punctuation">=</span>
+CLOUDFLARE_D1_TOKEN<span class="hljs-punctuation">=</span>
 </code></pre>
 
                 
@@ -1297,6 +1316,38 @@ FRONTEND_URL<span class="hljs-punctuation">=</span>https<span class="hljs-punctu
             <div class="page-footer-actions">
               
               
+                <span class="git-last-updated" data-timestamp="1783260582000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1783260582000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="Samuel Ayibatarri">
+                            
+                              <img src="https://www.gravatar.com/avatar/13df331127f962409f1f1ecd380d73ac?d=mp&amp;s=64" alt="Samuel Ayibatarri">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="Add sitemap.xml for improved SEO and indexing of documentation pages.">Add sitemap.xml for improved SEO and ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">Samuel Ayibatarri</span>
+                              <span class="git-commit-date" data-timestamp="1783260582000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
+              
               <span class="git-spacer"></span>
               
             </div>
@@ -1314,13 +1365,13 @@ FRONTEND_URL<span class="hljs-punctuation">=</span>https<span class="hljs-punctu
         </div>
       </div>
       
-      <script src="../../assets/js/docmd-main.js?v=mr7uqxlt"></script>
+      <script src="../../assets/js/docmd-main.js?v=mrb2qqn7"></script>
       
-      <script src="../../assets/js/docmd-git.js?v=mr7uqxlt"></script>
-      <script src="../../assets/js/docmd-image-lightbox.js?v=mr7uqxlt" ></script>
+      <script src="../../assets/js/docmd-git.js?v=mrb2qqn7"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mrb2qqn7" ></script>
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
-<script src="../../assets/js/docmd-search.js?v=mr7uqxlt" ></script>
-<script src="../../assets/js/docmd-git.js?v=mr7uqxlt" type="module"></script>
+<script src="../../assets/js/docmd-search.js?v=mrb2qqn7" ></script>
+<script src="../../assets/js/docmd-git.js?v=mrb2qqn7" type="module"></script>
 
   <!-- Search Modal (Injected by @docmd/plugin-search) -->
   <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"

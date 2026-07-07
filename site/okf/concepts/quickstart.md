@@ -3,10 +3,10 @@ type: concept
 title: "Quick Start"
 source: "https://docs.semaphorepay.tech/quickstart/"
 path: /quickstart/
-updated: 2026-07-05
+updated: 2026-07-07
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-05T13:54:02.051Z"
+  generated_at: "2026-07-07T20:01:08.650Z"
 ---
 ---
 title: Quick Start
@@ -18,7 +18,7 @@ Get Semaphore running in your project in 5 minutes.
 
 ## Prerequisites
 
-- Node.js 18+
+- Node.js 18+ or Bun
 - A Nomba account (sandbox or production)
 - Cloudflare account (for deployment)
 
@@ -35,17 +35,16 @@ npm install @semaphore-pay/client
 ## 2. Set Up Your Backend
 
 ```typescript
-import { createSemaphoreEngine } from '@semaphore-pay/server';
+import { initSemaphorePay } from '@semaphore-pay/server';
+import { drizzle } from 'drizzle-orm/d1';
+import * as sqliteSchema from '@semaphore-pay/server/schema/sqlite';
 
-const engine = createSemaphoreEngine({
-  db: env.SEMAPHORE_DB, // D1 database
-  nomba: {
-    clientId: env.NOMBA_CLIENT_ID,
-    clientSecret: env.NOMBA_CLIENT_SECRET,
-    accountId: env.NOMBA_ACCOUNT_ID,
-  },
-  webhookSecret: env.NOMBA_WEBHOOK_SECRET,
-  callbackUrl: env.NOMBA_CHECKOUT_CALLBACK_URL,
+const db = drizzle(env.SEMAPHORE_DB, { schema: sqliteSchema });
+
+const engine = initSemaphorePay({
+  dialect: 'sqlite',
+  db,
+  supportsTransactions: false,
 });
 ```
 
@@ -54,17 +53,29 @@ const engine = createSemaphoreEngine({
 A collection is like a RevenueCat project — an isolated tenant with its own API keys.
 
 ```typescript
-const collection = await engine.createCollection({
-  name: 'My App',
-  description: 'Production collection',
+import { createCollection, createApiKey } from '@semaphore-pay/server';
+
+const collection = await createCollection(engine, 'My App', 'sandbox');
+
+// Generate API keys for the collection
+const publicKey = await createApiKey(engine, {
+  collectionId: collection.id,
+  type: 'public',
+  environment: 'development',
+  userId: user.id,
 });
-// Returns: { id, name, publicKey, secretKey }
+
+const secretKey = await createApiKey(engine, {
+  collectionId: collection.id,
+  type: 'secret',
+  environment: 'development',
+});
 ```
 
 ## 4. Set Up the Client SDK
 
 ```typescript
-import SemaphorePayClient from '@semaphore-pay/client';
+import { SemaphorePayClient } from '@semaphore-pay/client';
 
 const client = new SemaphorePayClient({
   baseUrl: 'https://your-api.example.com',
@@ -76,40 +87,57 @@ const client = new SemaphorePayClient({
 ## 5. Create Your First Subscription
 
 ```typescript
+import { create, createProduct, subscribe } from '@semaphore-pay/server';
+
 // Server: create a plan
-const plan = await engine.createPlan(collectionId, {
+const plan = await create(engine, {
   name: 'Pro Plan',
   description: 'Full access to all features',
-  amount: 2999, // ₦29.99
-  currency: 'NGN',
-  interval: 'month',
-  intervalCount: 1,
+  priceAmount: 2999, // ₦29.99 in kobo
+  priceCurrency: 'NGN',
+  interval: 'monthly',
+}, {
+  collectionId: collection.id,
+  environment: 'development',
 });
 
 // Server: create a product
-const product = await engine.createProduct(collectionId, {
+const product = await createProduct(engine, {
   name: 'Pro Access',
-  planId: plan.id,
+  features: [],
+}, {
+  collectionId: collection.id,
+  environment: 'development',
 });
 
 // Client: subscribe a customer
-const subscription = await client.subscribe({
-  productId: product.id,
-  customerEmail: 'user@example.com',
-  paymentMethod: {
-    type: 'card',
-    token: 'tok_...',
-  },
+const subscription = await client.subscribeToPlan({
+  customerId: 'cust_abc123',
+  planId: plan.id,
 });
 ```
 
 ## 6. Handle Webhooks
 
 ```typescript
-// In your Cloudflare Worker
-app.post('/webhook/nomba', async (c) => {
-  const event = await engine.handleWebhook(c.req.raw);
-  // Event types: checkout.completed, subscription.renewed, etc.
+import { Hono } from 'hono';
+import { handleWebhook } from '@semaphore-pay/server';
+
+const app = new Hono();
+
+app.post('/webhook', async (c) => {
+  const rawBody = await c.req.text();
+  const signature = c.req.header('nomba-signature') ?? '';
+  const nombaTimestamp = c.req.header('nomba-timestamp') ?? '';
+
+  const result = await handleWebhook(engine, {
+    rawBody,
+    signature,
+    webhookSecret: c.env.NOMBA_WEBHOOK_SECRET,
+    nombaTimestamp,
+  });
+
+  return c.json(result);
 });
 ```
 

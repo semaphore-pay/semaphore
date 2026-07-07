@@ -1,6 +1,6 @@
 {
   "name": "@semaphore-pay/server",
-  "version": "0.1.21",
+  "version": "0.1.26",
   "license": "MIT",
   "module": "index.ts",
   "type": "module",
@@ -15,21 +15,53 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
       "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./api": {
+      "types": "./dist/api/api.service.d.ts",
+      "import": "./dist/api/api.service.js"
+    },
+    "./plan": {
+      "types": "./dist/plan/plan.api.d.ts",
+      "import": "./dist/plan/plan.api.js"
+    },
+    "./product": {
+      "types": "./dist/product/product.service.d.ts",
+      "import": "./dist/product/product.service.js"
+    },
+    "./customer": {
+      "types": "./dist/customer/customer.api.d.ts",
+      "import": "./dist/customer/customer.api.js"
+    },
     "./subscription": {
-      "import": "./dist/subscription/subscription.api.js",
-      "types": "./dist/subscription/subscription.api.d.ts"
+      "types": "./dist/subscription/subscription.api.d.ts",
+      "import": "./dist/subscription/subscription.api.js"
+    },
+    "./feature": {
+      "types": "./dist/feature/feature.api.d.ts",
+      "import": "./dist/feature/feature.api.js"
+    },
+    "./entitlement": {
+      "types": "./dist/entitlement/entitlement.api.d.ts",
+      "import": "./dist/entitlement/entitlement.api.js"
+    },
+    "./webhook": {
+      "types": "./dist/webhook/webhook.api.d.ts",
+      "import": "./dist/webhook/webhook.api.js"
+    },
+    "./nomba": {
+      "types": "./dist/nomba/nomba.d.ts",
+      "import": "./dist/nomba/nomba.js"
     },
     "./schema/sqlite": {
-      "import": "./dist/database/schema/sqlite.js",
-      "types": "./dist/database/schema/sqlite.d.ts"
+      "types": "./dist/database/schema/sqlite.d.ts",
+      "import": "./dist/database/schema/sqlite.js"
     },
     "./schema/pg": {
-      "import": "./dist/database/schema/pg.js",
-      "types": "./dist/database/schema/pg.d.ts"
+      "types": "./dist/database/schema/pg.d.ts",
+      "import": "./dist/database/schema/pg.js"
     }
   },
   "files": [
