@@ -87,6 +87,7 @@ export const paymentMethod = sqliteTable(
 
 export const feature = sqliteTable("feature", {
   id: text("id").primaryKey(),
+  name: text("name").notNull(),
   type: text("type").notNull(),
   createdAt,
   updatedAt,

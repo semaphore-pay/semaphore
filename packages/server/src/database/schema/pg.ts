@@ -83,6 +83,7 @@ export const paymentMethod = pgTable(
 
 export const feature = pgTable("feature", {
   id: text("id").primaryKey(),
+  name: text("name").notNull(),
   type: text("type").notNull(), // "boolean", "limit"
   createdAt,
   updatedAt,

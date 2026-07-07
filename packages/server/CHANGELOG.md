@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.16
+
+- `listFeatures` now returns all features, not just those attached to plans/products
+
+## 0.1.15
+
+- Added `name` field to feature table — human-readable display name separate from programmatic `id`
+
 ## 0.1.14
 
 - Added `createFeature`, `deleteFeature`, `listFeatures` — feature CRUD

@@ -3,6 +3,7 @@ import type { SemaphorePayEngine } from "../database/index";
 
 export interface Feature {
   id: string;
+  name: string;
   type: "boolean" | "limit";
   createdAt: Date;
   updatedAt: Date;
@@ -26,7 +27,7 @@ export interface ProductFeatureConfig {
 
 export async function createFeature(
   engine: SemaphorePayEngine<any>,
-  input: { id: string; type: "boolean" | "limit" },
+  input: { id: string; name: string; type: "boolean" | "limit" },
 ): Promise<Feature> {
   const schema = engine.schema;
   const now = new Date();
@@ -43,6 +44,7 @@ export async function createFeature(
     .insert(schema.feature)
     .values({
       id: input.id,
+      name: input.name,
       type: input.type,
       createdAt: now,
       updatedAt: now,
@@ -81,34 +83,11 @@ export async function deleteFeature(
 
 export async function listFeatures(
   engine: SemaphorePayEngine<any>,
-  input: { collectionId: string },
+  _input: { collectionId: string },
 ): Promise<Feature[]> {
   const schema = engine.schema;
 
-  const planFeatureRows = await engine.db
-    .select({ featureId: schema.planFeature.featureId })
-    .from(schema.planFeature)
-    .innerJoin(schema.plan, eq(schema.planFeature.planId, schema.plan.id))
-    .where(eq(schema.plan.collectionId, input.collectionId));
-
-  const productFeatureRows = await engine.db
-    .select({ featureId: schema.productFeature.featureId })
-    .from(schema.productFeature)
-    .innerJoin(schema.product, eq(schema.productFeature.productInternalId, schema.product.internalId))
-    .where(eq(schema.product.collectionId, input.collectionId));
-
-  const featureIds = [
-    ...new Set([
-      ...planFeatureRows.map((r: { featureId: string }) => r.featureId),
-      ...productFeatureRows.map((r: { featureId: string }) => r.featureId),
-    ]),
-  ];
-
-  if (featureIds.length === 0) return [];
-
-  return await engine.db.query.feature.findMany({
-    where: inArray(schema.feature.id, featureIds),
-  });
+  return await engine.db.query.feature.findMany();
 }
 
 export async function getPlanFeatures(

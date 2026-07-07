@@ -15,6 +15,7 @@ import {
 
 const createFeatureSchema = z.object({
   id: z.string().min(1),
+  name: z.string().min(1),
   type: z.enum(["boolean", "limit"]),
 });
 
