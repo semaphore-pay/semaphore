@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.1.21
+
+- Added `POST /payments/verify` endpoint — verify payment by orderReference (webhook fallback)
+- Added `processSuccessfulPayment()` — idempotent, shared by webhook handler and verify endpoint
+- Fixed webhook signature verification — replaced broken hex-based verifier with `NombaWebhookVerifier`
+- `handleWebhook` now accepts `nombaTimestamp` for correct HMAC verification
+- `POST /products/purchase` now stores `nombaOrderReference` on productPurchase record
+- Added `getMe` route — resolves customer from API key's userId
+- `resolveCustomerId` now async — looks up actual customer.id from userId for public keys
+- User routes mounted before admin to prevent `/customers/me` collision with `/customers/:id`
+- Public key now overrides userId on customer create (forces key-scoped userId)
+- Pre-built Nomba clients (`nombaClients` option) eliminate per-request race condition
+- Exported `processSuccessfulPayment` and `WebhookContext`
+
+## 0.1.20
+
+- Added `environment` field to collection table (sandbox/production)
+- `createCollection` now accepts `environment` parameter
+- `createNombaClient` supports `NombaMultiConfig` — picks sandbox or production credentials based on environment
+- Features now scoped per collection — `feature` table has `collectionId` FK
+- `createFeature`, `deleteFeature`, `listFeatures` all take `collectionId` parameter
+- Duplicate feature check now scoped to collection (same ID ok in different collections)
+- `deleteFeature` verifies feature belongs to collection before removing
+
+## 0.1.19
+
+- Added `listCustomers` — paginated customer list with search by name/email/userId
+- Exported `ListCustomersResult`, `CustomerWithDetails`, `CustomerSubscription`, `CustomerEntitlement` types
+
+## 0.1.18
+
+- Fixed cron: replaced all raw SQL with Drizzle join API for full D1 compatibility
+- Fixed bug: payment retry now correctly joins `paymentMethod` table for `nombaTokenId` (was referencing non-existent `sub.nombaPaymentMethodId`)
+- Removed unused `isNull` import
+
+## 0.1.17
+
+- Fixed cron: replaced `tx.query.*` relational queries with raw SQL to work on D1
+
 ## 0.1.16
 
 - `listFeatures` now returns all features, not just those attached to plans/products

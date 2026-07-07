@@ -87,6 +87,7 @@ export const paymentMethod = sqliteTable(
 
 export const feature = sqliteTable("feature", {
   id: text("id").primaryKey(),
+  collectionId: text("collection_id").notNull().references(() => collection.id),
   name: text("name").notNull(),
   type: text("type").notNull(),
   createdAt,
@@ -369,7 +370,8 @@ export const webhookEvent = sqliteTable(
 
 export const collection = sqliteTable("collection", {
   id: text("id").primaryKey(), // e.g., col_123abc
-  name: text("name").notNull(), 
+  name: text("name").notNull(),
+  environment: text("environment").notNull().default("sandbox"), // "sandbox" or "production"
   createdAt,
   updatedAt,
 });

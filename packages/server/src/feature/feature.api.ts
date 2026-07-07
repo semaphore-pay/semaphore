@@ -40,10 +40,10 @@ const attachProductFeatureSchema = z.object({
 export async function create(
   engine: SemaphorePayEngine<any>,
   input: unknown,
-  _context: { collectionId: string },
+  context: { collectionId: string },
 ) {
   const parsed = createFeatureSchema.parse(input);
-  return await createFeature(engine, parsed);
+  return await createFeature(engine, { ...parsed, collectionId: context.collectionId });
 }
 
 export async function list(
@@ -57,9 +57,9 @@ export async function list(
 export async function remove(
   engine: SemaphorePayEngine<any>,
   input: { featureId: string },
-  _context: { collectionId: string },
+  context: { collectionId: string },
 ) {
-  return await deleteFeature(engine, input);
+  return await deleteFeature(engine, { ...input, collectionId: context.collectionId });
 }
 
 export async function getPlanFeatureConfigs(

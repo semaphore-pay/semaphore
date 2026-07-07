@@ -1,4 +1,4 @@
-import { and, eq, lte, inArray, isNull, gte } from "drizzle-orm";
+import { and, eq, lte, inArray, gte } from "drizzle-orm";
 import type { SemaphorePayEngine } from "./database/index";
 
 const MAX_RETRY_ATTEMPTS = 3;
@@ -80,40 +80,46 @@ export async function runSemaphorePayCron(
       .returning({ id: schema.subscription.id });
 
     // 4. Queue renewals (create pending invoices for active subs due for renewal)
-    const dueRenewals = await tx.query.subscription.findMany({
-      where: and(
-        eq(schema.subscription.status, "active"),
-        eq(schema.subscription.cancelAtPeriodEnd, false),
-        lte(schema.subscription.currentPeriodEndAt, now)
-      ),
-      with: {
-        plan: true,
-        customer: true,
-      },
-    });
+    const dueRenewals = await tx
+      .select({
+        sub: schema.subscription,
+        planInterval: schema.plan.interval,
+        planPriceAmount: schema.plan.priceAmount,
+        planPriceCurrency: schema.plan.priceCurrency,
+        nombaCustomerId: schema.customer.nombaCustomerId,
+      })
+      .from(schema.subscription)
+      .innerJoin(schema.plan, eq(schema.subscription.planId, schema.plan.id))
+      .innerJoin(schema.customer, eq(schema.subscription.customerId, schema.customer.id))
+      .where(
+        and(
+          eq(schema.subscription.status, "active"),
+          eq(schema.subscription.cancelAtPeriodEnd, false),
+          lte(schema.subscription.currentPeriodEndAt, now)
+        )
+      );
 
-    for (const sub of dueRenewals) {
-      if (!sub.plan || sub.plan.interval === "none") continue;
+    for (const row of dueRenewals) {
+      if (!row.planInterval || row.planInterval === "none") continue;
+      if (!row.nombaCustomerId) continue;
 
-      const amount = sub.plan.priceAmount;
-      const currency = sub.plan.priceCurrency;
+      const amount = row.planPriceAmount;
+      const currency = row.planPriceCurrency;
 
-      if (sub.customer.nombaCustomerId) {
-        await tx.insert(schema.invoice).values({
-          id: crypto.randomUUID(),
-          collectionId: sub.collectionId,
-          customerId: sub.customerId,
-          subscriptionId: sub.id,
-          type: "renewal",
-          status: "pending",
-          amount,
-          currency,
-          periodStartAt: sub.currentPeriodEndAt,
-          periodEndAt: new Date(now.getTime() + (sub.plan.interval === "monthly" ? 30 : 365) * 24 * 60 * 60 * 1000),
-          createdAt: now,
-          updatedAt: now,
-        });
-      }
+      await tx.insert(schema.invoice).values({
+        id: crypto.randomUUID(),
+        collectionId: row.sub.collectionId,
+        customerId: row.sub.customerId,
+        subscriptionId: row.sub.id,
+        type: "renewal",
+        status: "pending",
+        amount,
+        currency,
+        periodStartAt: row.sub.currentPeriodEndAt,
+        periodEndAt: new Date(now.getTime() + (row.planInterval === "monthly" ? 30 : 365) * 24 * 60 * 60 * 1000),
+        createdAt: now,
+        updatedAt: now,
+      });
     }
 
     // 5. Retry failed payments for past_due subscriptions
@@ -123,38 +129,46 @@ export async function runSemaphorePayCron(
     let subscriptionsCanceledAfterRetries = 0;
 
     if (chargeFn) {
-      const retryableSubscriptions = await tx.query.subscription.findMany({
-        where: and(
-          eq(schema.subscription.status, "past_due"),
-          lte(schema.subscription.nextRetryAt, now),
-          lte(schema.subscription.retryCount, MAX_RETRY_ATTEMPTS - 1),
-        ),
-        with: {
-          plan: true,
-          customer: true,
-        },
-      });
+      const retryableSubscriptions = await tx
+        .select({
+          sub: schema.subscription,
+          planInterval: schema.plan.interval,
+          planPriceAmount: schema.plan.priceAmount,
+          planPriceCurrency: schema.plan.priceCurrency,
+          nombaTokenId: schema.paymentMethod.nombaTokenId,
+        })
+        .from(schema.subscription)
+        .innerJoin(schema.plan, eq(schema.subscription.planId, schema.plan.id))
+        .innerJoin(schema.customer, eq(schema.subscription.customerId, schema.customer.id))
+        .innerJoin(schema.paymentMethod, eq(schema.customer.id, schema.paymentMethod.customerId))
+        .where(
+          and(
+            eq(schema.subscription.status, "past_due"),
+            lte(schema.subscription.nextRetryAt, now),
+            lte(schema.subscription.retryCount, MAX_RETRY_ATTEMPTS - 1),
+            eq(schema.paymentMethod.isDefault, true),
+          )
+        );
 
-      for (const sub of retryableSubscriptions) {
-        if (!sub.plan || sub.plan.interval === "none") continue;
-        if (!sub.nombaPaymentMethodId) continue;
+      for (const row of retryableSubscriptions) {
+        if (!row.planInterval || row.planInterval === "none") continue;
+        if (!row.nombaTokenId) continue;
 
         paymentRetriesAttempted++;
-        const amount = sub.plan.priceAmount;
-        const currency = sub.plan.priceCurrency ?? "NGN";
+        const amount = row.planPriceAmount;
+        const currency = row.planPriceCurrency ?? "NGN";
 
         try {
           const result = await chargeFn({
-            tokenKey: sub.nombaPaymentMethodId,
+            tokenKey: row.nombaTokenId,
             amount,
             currency,
-            orderReference: `retry_${sub.id}_${now.getTime()}`,
+            orderReference: `retry_${row.sub.id}_${now.getTime()}`,
           });
 
           if (result.success) {
             paymentRetriesSucceeded++;
-            // Payment succeeded — reactivate subscription
-            const periodEndAt = sub.plan.interval === "monthly"
+            const periodEndAt = row.planInterval === "monthly"
               ? new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000)
               : new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000);
 
@@ -169,13 +183,13 @@ export async function runSemaphorePayCron(
                 currentPeriodEndAt: periodEndAt,
                 updatedAt: now,
               })
-              .where(eq(schema.subscription.id, sub.id));
+              .where(eq(schema.subscription.id, row.sub.id));
           } else {
-            await handleRetryFailure(tx, schema, sub, now);
+            await handleRetryFailure(tx, schema, row.sub, now);
             paymentRetriesFailed++;
           }
         } catch {
-          await handleRetryFailure(tx, schema, sub, now);
+          await handleRetryFailure(tx, schema, row.sub, now);
           paymentRetriesFailed++;
         }
       }

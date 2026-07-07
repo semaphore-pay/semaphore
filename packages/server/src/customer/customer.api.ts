@@ -3,6 +3,7 @@ import type { SemaphorePayEngine } from "../database/index";
 import {
   deleteCustomerRecord,
   getCustomerWithDetails,
+  listCustomers,
   upsertCustomerRecord,
 } from "./customer.service";
 
@@ -39,6 +40,29 @@ export async function upsertCustomer(
 ) {
   const parsedInput = upsertCustomerSchema.parse(input);
   return await upsertCustomerRecord(engine, {
+    ...parsedInput,
+    collectionId: context.collectionId,
+  });
+}
+
+const listCustomersSchema = z.object({
+  search: z.string().optional(),
+  limit: z.number().int().positive().max(200).optional(),
+  offset: z.number().int().min(0).optional(),
+});
+
+/**
+ * List customers for a collection with optional search and pagination.
+ *
+ * @returns A {@link ListCustomersResult} with customer rows.
+ */
+export async function listCustomersApi(
+  engine: SemaphorePayEngine<any>,
+  input: z.infer<typeof listCustomersSchema>,
+  context: { collectionId: string },
+) {
+  const parsedInput = listCustomersSchema.parse(input);
+  return await listCustomers(engine, {
     ...parsedInput,
     collectionId: context.collectionId,
   });

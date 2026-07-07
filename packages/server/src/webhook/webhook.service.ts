@@ -86,9 +86,7 @@ async function handlePaymentSuccess(
   data: Record<string, any>,
   context: WebhookContext,
 ) {
-  const schema = engine.schema;
   const reference = data?.order?.orderReference ?? data?.merchantTxRef ?? data?.orderReference;
-
   if (!reference) return;
 
   // Verify transaction server-side before activating
@@ -110,23 +108,70 @@ async function handlePaymentSuccess(
   const amount = data?.order?.amount ?? data?.transaction?.transactionAmount ?? data.amount;
   const currency = data?.order?.currency ?? data?.currency ?? "NGN";
 
+  await processSuccessfulPayment(engine, {
+    orderReference: reference,
+    subscriptionId: subscription.id,
+    amount,
+    currency,
+    tokenizedCards: data?.tokenizedCardData,
+  });
+}
+
+/**
+ * Process a successful payment for a subscription.
+ * Shared by webhook handler and the verify endpoint.
+ * Idempotent — checks invoice table before processing.
+ *
+ * @returns `{ processed: true }` if payment was activated, `{ alreadyProcessed: true }` if already handled.
+ */
+export async function processSuccessfulPayment(
+  engine: SemaphorePayEngine<any>,
+  input: {
+    orderReference: string;
+    subscriptionId: string;
+    amount: number;
+    currency?: string;
+    tokenizedCards?: Array<{ tokenKey: string; cardType?: string; cardBrand?: string; last4?: string; expiryMonth?: number; expiryYear?: number }>;
+  },
+): Promise<{ processed: boolean; alreadyProcessed: boolean }> {
+  const schema = engine.schema;
+
+  // Idempotency: check if invoice already paid for this reference
+  const existingInvoice = await engine.db.query.invoice.findFirst({
+    where: and(
+      eq(schema.invoice.nombaTransactionId, input.orderReference),
+      eq(schema.invoice.status, "paid"),
+    ),
+  });
+
+  if (existingInvoice) {
+    return { processed: false, alreadyProcessed: true };
+  }
+
+  const subscription = await engine.db.query.subscription.findFirst({
+    where: eq(schema.subscription.id, input.subscriptionId),
+  });
+
+  if (!subscription) {
+    return { processed: false, alreadyProcessed: false };
+  }
+
+  const amount = input.amount;
+  const currency = input.currency ?? "NGN";
+
   await upsertInvoiceRecord(engine, {
     collectionId: subscription.collectionId,
     customerId: subscription.customerId,
     subscriptionId: subscription.id,
     amount,
     currency,
-    nombaTransactionId: reference,
+    nombaTransactionId: input.orderReference,
     status: "paid",
   });
 
   // Save tokenized card data if present — needed for recurring billing
-  const tokenizedCards = data?.tokenizedCardData as
-    | Array<{ tokenKey: string; cardType?: string; cardBrand?: string; last4?: string; expiryMonth?: number; expiryYear?: number }>
-    | undefined;
-
-  if (tokenizedCards?.length) {
-    for (const card of tokenizedCards) {
+  if (input.tokenizedCards?.length) {
+    for (const card of input.tokenizedCards) {
       if (!card.tokenKey) continue;
 
       const existing = await engine.db.query.paymentMethod.findFirst({
@@ -183,6 +228,8 @@ async function handlePaymentSuccess(
   if (plan?.interval !== "none" && plan?.interval !== "yearly") {
     await resetEntitlementBalances(engine, subscription.id, now);
   }
+
+  return { processed: true, alreadyProcessed: false };
 }
 
 async function handlePaymentFailed(

@@ -1,10 +1,68 @@
-import { and, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, or, sql, ilike, count } from "drizzle-orm";
 import type { SemaphorePayEngine } from "../database/index";
 import type {
   CustomerEntitlement,
   CustomerWithDetails,
   ListCustomersResult,
 } from "./customer.types";
+
+/**
+ * List customers for a collection with optional search and pagination.
+ * Returns basic customer rows without subscription/entitlement details.
+ */
+export async function listCustomers(
+  engine: SemaphorePayEngine<any>,
+  input: {
+    collectionId: string;
+    search?: string;
+    limit?: number;
+    offset?: number;
+  },
+): Promise<ListCustomersResult> {
+  const schema = engine.schema;
+  const limit = input.limit ?? 50;
+  const offset = input.offset ?? 0;
+
+  const where = and(
+    eq(schema.customer.collectionId, input.collectionId),
+    isNull(schema.customer.deletedAt),
+    input.search
+      ? or(
+          ilike(schema.customer.name, `%${input.search}%`),
+          ilike(schema.customer.email, `%${input.search}%`),
+          ilike(schema.customer.userId, `%${input.search}%`),
+        )
+      : undefined,
+  );
+
+  const [data, countResult] = await Promise.all([
+    engine.db
+      .select()
+      .from(schema.customer)
+      .where(where)
+      .orderBy(desc(schema.customer.createdAt))
+      .limit(limit)
+      .offset(offset),
+    engine.db
+      .select({ value: count() })
+      .from(schema.customer)
+      .where(where),
+  ]);
+
+  const total = Number((countResult as any)[0]?.value ?? 0);
+
+  return {
+    data: data.map((row: any) => ({
+      ...row,
+      subscriptions: [],
+      entitlements: {},
+    })),
+    total,
+    hasMore: offset + data.length < total,
+    limit,
+    offset,
+  };
+}
 
 /**
  * Upsert a customer: update if `id` matches an existing record,

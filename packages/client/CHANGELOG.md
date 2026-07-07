@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.2
+
+- **BREAKING:** `getCustomer()` removed — replaced with `getMe()` (resolves customer from key's userId)
+- **BREAKING:** Fixed request path — all requests now correctly prepend `/client` prefix
+- Added `verifyPayment(orderReference)` — verify payment via backend + Nomba API
+- Added `waitForPayment(orderReference, opts?)` — polls with exponential backoff (0s/5s/20s/40s/80s/160s)
+- Added `VerifyPaymentResult` type
+
 ## 0.1.1
 
 - Fixed `tsconfig.build.json` to include `.tsx` files (React Native components now build correctly)

@@ -83,6 +83,7 @@ export const paymentMethod = pgTable(
 
 export const feature = pgTable("feature", {
   id: text("id").primaryKey(),
+  collectionId: text("collection_id").notNull().references(() => collection.id),
   name: text("name").notNull(),
   type: text("type").notNull(), // "boolean", "limit"
   createdAt,
@@ -358,7 +359,8 @@ export const webhookEvent = pgTable(
 
 export const collection = pgTable("collection", {
   id: text("id").primaryKey(), // e.g., col_123abc
-  name: text("name").notNull(), 
+  name: text("name").notNull(),
+  environment: text("environment").notNull().default("sandbox"), // "sandbox" or "production"
   createdAt,
   updatedAt,
 });

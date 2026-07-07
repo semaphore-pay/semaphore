@@ -1,5 +1,6 @@
 import type { SemaphorePayEngine } from "../database/index";
 import { processNombaEvent, type WebhookContext } from "./webhook.service";
+import { NombaWebhookVerifier } from "../nomba/nomba.webhooks";
 
 /** Required inputs for verifying and processing a Nomba webhook. */
 export interface WebhookInput {
@@ -9,41 +10,14 @@ export interface WebhookInput {
   signature: string;
   /** Your webhook secret configured in the Nomba dashboard. */
   webhookSecret: string;
-}
-
-async function verifyNombaSignature(
-  rawBody: string,
-  signature: string,
-  secret: string,
-): Promise<boolean> {
-  const encoder = new TextEncoder();
-  const keyData = encoder.encode(secret);
-  const messageData = encoder.encode(rawBody);
-
-  const cryptoKey = await crypto.subtle.importKey(
-    "raw",
-    keyData,
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["verify"],
-  );
-
-  const signatureBytes = new Uint8Array(
-    signature.match(/.{1,2}/g)?.map((byte) => parseInt(byte, 16)) || [],
-  );
-
-  return await crypto.subtle.verify(
-    "HMAC",
-    cryptoKey,
-    signatureBytes,
-    messageData,
-  );
+  /** Value of the `nomba-timestamp` header (optional, falls back to transaction.time). */
+  nombaTimestamp?: string;
 }
 
 /**
  * Verify and process an incoming Nomba webhook event.
  *
- * 1. Validates the HMAC-SHA256 signature against the raw body.
+ * 1. Validates the HMAC-SHA256 signature against the colon-joined fields.
  * 2. Parses the JSON payload.
  * 3. Routes to {@link processNombaEvent} which handles
  *    idempotency, event type routing, and subscription activation.
@@ -60,13 +34,30 @@ export async function handleWebhook(
     throw new Error("Missing required webhook verification parameters.");
   }
 
-  const isValid = await verifyNombaSignature(
-    input.rawBody,
-    input.signature,
-    input.webhookSecret,
-  );
+  // Use NombaWebhookVerifier for correct HMAC verification.
+  // It hashes: event_type:requestId:userId:walletId:transactionId:type:time:responseCode:timestamp
+  const verifier = new NombaWebhookVerifier(input.webhookSecret);
 
-  if (!isValid) {
+  // Try with provided nomba-timestamp first, then fall back to transaction.time
+  let valid = false;
+  try {
+    const ts = input.nombaTimestamp ?? "";
+    valid = verifier.verify(input.rawBody, ts, input.signature);
+  } catch {
+    // fall through
+  }
+
+  if (!valid) {
+    try {
+      const payload = JSON.parse(input.rawBody);
+      const txTime = payload.data?.transaction?.time ?? "";
+      valid = verifier.verify(input.rawBody, txTime, input.signature);
+    } catch {
+      // fall through
+    }
+  }
+
+  if (!valid) {
     throw new Error("Invalid Nomba webhook signature. Payload rejected.");
   }
 

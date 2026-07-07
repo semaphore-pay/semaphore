@@ -8,6 +8,7 @@ import { createProduct, listProducts } from "../product/product.service";
 import { create as createPlan, list as listPlans, get as getPlan } from "../plan/plan.api";
 import { purchaseProduct } from "../product/product.api";
 import { handleWebhook } from "../webhook/webhook.api";
+import { processSuccessfulPayment } from "../webhook/webhook.service";
 import { runSemaphorePayCron } from "../cron";
 import { NombaClient } from "../nomba/nomba";
 
@@ -30,16 +31,31 @@ export type NombaConfig = {
   environment?: "sandbox" | "production";
 };
 
+export type NombaMultiConfig = {
+  sandbox: NombaConfig;
+  production: NombaConfig;
+};
+
 /**
- * Create a NombaClient from config. Reused across webhook, cron, and checkout.
+ * Create a NombaClient from config. Picks sandbox or production credentials
+ * based on the environment parameter.
  */
-function createNombaClient(nombaConfig: NombaConfig, environment?: string): NombaClient {
+function createNombaClient(nombaConfig: NombaConfig | NombaMultiConfig, environment?: string): NombaClient {
+  const isMultiConfig = 'sandbox' in nombaConfig && 'production' in nombaConfig;
+  let config: NombaConfig;
+
+  if (isMultiConfig) {
+    const multi = nombaConfig as NombaMultiConfig;
+    config = environment === 'production' ? multi.production : multi.sandbox;
+  } else {
+    config = nombaConfig as NombaConfig;
+  }
+
   return new NombaClient({
-    clientId: nombaConfig.clientId,
-    clientSecret: nombaConfig.clientSecret,
-    accountId: nombaConfig.accountId,
-    environment:
-      nombaConfig.environment ?? (environment === "production" ? "production" : "sandbox"),
+    clientId: config.clientId,
+    clientSecret: config.clientSecret,
+    accountId: config.accountId,
+    environment: config.environment ?? (environment === "production" ? "production" : "sandbox"),
   });
 }
 
@@ -49,13 +65,13 @@ function createNombaClient(nombaConfig: NombaConfig, environment?: string): Nomb
  *
  * @returns The created collection row.
  */
-export async function createCollection(engine: SemaphorePayEngine<any>, name: string) {
+export async function createCollection(engine: SemaphorePayEngine<any>, name: string, environment: string = 'sandbox') {
   const schema = engine.schema;
   const collectionId = `col_${crypto.randomUUID().replace(/-/g, "")}`;
 
   const rows = await engine.db
     .insert(schema.collection)
-    .values({ id: collectionId, name: name })
+    .values({ id: collectionId, name, environment })
     .returning();
 
   return rows[0];
@@ -158,10 +174,10 @@ function requireSecretKey(api: Hono<Env>) {
  * automatically from the key's userId. Secret keys pass through
  * whatever customerId was in the request body.
  */
-function resolveCustomerId(
+async function resolveCustomerId(
   c: any,
   bodyCustomerId?: string,
-): { customerId: string } | { error: string; status: 400 | 500 } {
+): Promise<{ customerId: string } | { error: string; status: 400 | 500 }> {
   const keyType = c.get("keyType") as string;
   const keyUserId = c.get("keyUserId") as string | undefined;
 
@@ -169,6 +185,19 @@ function resolveCustomerId(
     if (!keyUserId) {
       return { error: "Public key missing userId scope.", status: 500 };
     }
+    // Look up customer by userId to get the actual customer.id
+    const e = (c.env as any)._engine;
+    const collectionId = c.get("collectionId");
+    if (e) {
+      const customer = await e.db.query.customer.findFirst({
+        where: and(
+          eq(e.schema.customer.userId, keyUserId),
+          eq(e.schema.customer.collectionId, collectionId),
+        ),
+      });
+      if (customer) return { customerId: customer.id };
+    }
+    // Fallback: use userId as customerId (for upsert flows)
     return { customerId: keyUserId };
   }
 
@@ -206,36 +235,64 @@ export function createSemaphorePayRouter(
       callbackUrl: string;
       environment?: "sandbox" | "production";
     };
+    /** Pre-built Nomba clients keyed by environment. When provided, these are
+     *  used directly instead of creating clients per-request from `options.nomba`. */
+    nombaClients?: {
+      sandbox?: import("../nomba/nomba").NombaClient;
+      production?: import("../nomba/nomba").NombaClient;
+      callbackUrl?: string;
+    };
   },
 ) {
   /* ------------------------------------------------------------------
-   * Inject engine into Hono context so middleware can reach it without
-   * closing over the outer scope (avoids stale-reference bugs).
+   * The engine is stored in Hono context as `_engine` so route handlers
+   * can read it without closing over the constructor argument. This
+   * allows the outer app to override the engine per-request (e.g. in
+   * Cloudflare Workers where env is available only at request time).
    * ------------------------------------------------------------------ */
-  const api = new Hono<Env & { _semaphorePayDb: any; _semaphorePayApiKeySchema: any }>();
+  const api = new Hono<Env & { _engine: SemaphorePayEngine<any>; _semaphorePayDb: any; _semaphorePayApiKeySchema: any }>();
 
   api.use("*", async (c, next) => {
-    (c as any).env._semaphorePayDb = engine.db;
-    (c as any).env._semaphorePayApiKeySchema = engine.schema.apiKey;
+    if (!(c.env as any)._engine) {
+      (c.env as any)._engine = engine;
+      (c.env as any)._semaphorePayDb = engine.db;
+      (c.env as any)._semaphorePayApiKeySchema = engine.schema.apiKey;
+    }
     await next();
   });
+
+  /** Read engine from context — falls back to closure for backward compat. */
+  const getEngine = (c: any): SemaphorePayEngine<any> => c.env._engine ?? engine;
+
+  /** Pick the pre-built Nomba client for the given environment, or create one on the fly. */
+  function getNombaClient(environment?: string): NombaClient {
+    if (options?.nombaClients) {
+      const key = environment === "production" ? "production" : "sandbox";
+      const client = options.nombaClients[key as "sandbox" | "production"];
+      if (client) return client;
+    }
+    // Fallback: create a client from flat config
+    if (options?.nomba) return createNombaClient(options.nomba, environment);
+    throw new Error("Nomba is not configured.");
+  }
 
   /* ------------------------------------------------------------------
    * 0. Unauthenticated routes (no API key needed)
    * ------------------------------------------------------------------ */
   api.post("/admin/collections", async (c) => {
+    const e = getEngine(c);
     const body = await c.req.json();
     const userId = body.userId as string | undefined;
 
-    const collection = await createCollection(engine, body.name);
+    const collection = await createCollection(e, body.name);
 
-    const publicKey = await createApiKey(engine, {
+    const publicKey = await createApiKey(e, {
       collectionId: collection.id,
       type: "public",
       environment: "development",
       userId,
     });
-    const secretKey = await createApiKey(engine, {
+    const secretKey = await createApiKey(e, {
       collectionId: collection.id,
       type: "secret",
       environment: "development",
@@ -248,6 +305,7 @@ export function createSemaphorePayRouter(
   });
 
   api.post("/webhooks/nomba", async (c) => {
+    const e = getEngine(c);
     const rawBody = await c.req.text();
     const signature = c.req.header("nomba-signature") ?? "";
 
@@ -255,11 +313,11 @@ export function createSemaphorePayRouter(
       return c.json({ error: "Missing webhook secret." }, 500);
     }
 
-    const nombaContext = options?.nomba
-      ? { nomba: { transactions: createNombaClient(options.nomba).transactions } }
+    const nombaContext = options?.nomba || options?.nombaClients
+      ? { nomba: { transactions: getNombaClient().transactions } }
       : {};
 
-    const result = await handleWebhook(engine, {
+    const result = await handleWebhook(e, {
       rawBody,
       signature,
       webhookSecret: options.webhookSecret,
@@ -275,24 +333,27 @@ export function createSemaphorePayRouter(
   requireAnyKey(catalog);
 
   catalog.get("/products", async (c) => {
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
     const environment = c.get("environment");
-    const result = await listProducts(engine, { collectionId, environment });
+    const result = await listProducts(e, { collectionId, environment });
     return c.json(result);
   });
 
   catalog.get("/plans", async (c) => {
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
     const environment = c.get("environment");
-    const result = await listPlans(engine, {}, { collectionId, environment });
+    const result = await listPlans(e, {}, { collectionId, environment });
     return c.json(result);
   });
 
   catalog.get("/plans/:planId", async (c) => {
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
     const environment = c.get("environment");
     const planId = c.req.param("planId");
-    const result = await getPlan(engine, { planId }, { collectionId, environment });
+    const result = await getPlan(e, { planId }, { collectionId, environment });
     return c.json(result ?? null);
   });
 
@@ -303,42 +364,51 @@ export function createSemaphorePayRouter(
    * ------------------------------------------------------------------ */
   const admin = new Hono<Env>();
   requireAnyKey(admin);
-  requireSecretKey(admin);
 
   admin.get("/customers/:id", async (c) => {
+    if (c.get("keyType") !== "secret") return c.json({ error: "Secret API key required." }, 403);
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
     const customerId = c.req.param("id");
-    const result = await getCustomer(engine, { customerId }, { collectionId });
+    const result = await getCustomer(e, { customerId }, { collectionId });
     return c.json(result ?? null);
   });
 
   admin.delete("/customers/:id", async (c) => {
+    if (c.get("keyType") !== "secret") return c.json({ error: "Secret API key required." }, 403);
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
     const customerId = c.req.param("id");
-    const result = await deleteCustomer(engine, { customerId }, { collectionId });
+    const result = await deleteCustomer(e, { customerId }, { collectionId });
     return c.json(result);
   });
 
   admin.post("/products", async (c) => {
+    if (c.get("keyType") !== "secret") return c.json({ error: "Secret API key required." }, 403);
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
     const environment = c.get("environment");
     const body = await c.req.json();
-    const result = await createProduct(engine, { ...body, collectionId, environment });
+    const result = await createProduct(e, { ...body, collectionId, environment });
     return c.json(result);
   });
 
   admin.post("/plans", async (c) => {
+    if (c.get("keyType") !== "secret") return c.json({ error: "Secret API key required." }, 403);
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
     const environment = c.get("environment");
     const body = await c.req.json();
-    const result = await createPlan(engine, body, { collectionId, environment });
+    const result = await createPlan(e, body, { collectionId, environment });
     return c.json(result);
   });
 
   admin.post("/admin/cron/run", async (c) => {
-    const chargeFn = options?.nomba
+    if (c.get("keyType") !== "secret") return c.json({ error: "Secret API key required." }, 403);
+    const e = getEngine(c);
+    const chargeFn = (options?.nomba || options?.nombaClients)
       ? async (input: { tokenKey: string; amount: number; currency: string; orderReference: string }) => {
-          const nomba = createNombaClient(options.nomba!);
+          const nomba = getNombaClient();
           try {
             const result = await nomba.tokenizedCards.charge({
               tokenKey: input.tokenKey,
@@ -347,7 +417,7 @@ export function createSemaphorePayRouter(
                 amount: input.amount,
                 currency: input.currency as any,
                 customerEmail: "",
-                callbackUrl: options.nomba!.callbackUrl,
+                callbackUrl: options?.nomba?.callbackUrl ?? "",
               },
             });
             return { success: result.status, status: result.message };
@@ -357,11 +427,9 @@ export function createSemaphorePayRouter(
         }
       : undefined;
 
-    const result = await runSemaphorePayCron(engine, chargeFn);
+    const result = await runSemaphorePayCron(e, chargeFn);
     return c.json(result);
   });
-
-  api.route("/", admin);
 
   /* ------------------------------------------------------------------
    * 3. User-scoped routes (public key auto-resolves customerId
@@ -370,53 +438,80 @@ export function createSemaphorePayRouter(
   const user = new Hono<Env>();
   requireAnyKey(user);
 
-  user.post("/customers", async (c) => {
+  user.get("/customers/me", async (c) => {
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
+    const keyUserId = c.get("keyUserId");
+    const keyType = c.get("keyType");
+    if (keyType === "public" && !keyUserId) return c.json({ error: "Key has no userId scope." }, 400);
+    if (!keyUserId) return c.json(null);
+    // Look up by userId (not by customer.id)
+    const customer = await e.db.query.customer.findFirst({
+      where: and(
+        eq(e.schema.customer.userId, keyUserId),
+        eq(e.schema.customer.collectionId, collectionId),
+      ),
+    });
+    return c.json(customer ?? null);
+  });
+
+  user.post("/customers", async (c) => {
+    const e = getEngine(c);
+    const collectionId = c.get("collectionId");
+    const keyUserId = c.get("keyUserId");
+    const keyType = c.get("keyType");
     const body = await c.req.json();
+    // Public keys: force userId from the key, ignore body userId
+    if (keyType === "public" && keyUserId) {
+      body.userId = keyUserId;
+    }
     if (!body.userId) {
       return c.json({ error: "userId is required in the request body." }, 400);
     }
-    const result = await upsertCustomer(engine, body, { collectionId });
+    const result = await upsertCustomer(e, body, { collectionId });
     return c.json(result);
   });
 
   user.post("/entitlements/check", async (c) => {
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
     const body = await c.req.json();
-    const resolved = resolveCustomerId(c, body.customerId);
+    const resolved = await resolveCustomerId(c, body.customerId);
     if ("error" in resolved) return c.json({ error: resolved.error }, resolved.status);
     body.customerId = resolved.customerId;
 
-    const result = await check(engine, body, { collectionId });
+    const result = await check(e, body, { collectionId });
     return c.json(result);
   });
 
   user.post("/entitlements/report", async (c) => {
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
     const body = await c.req.json();
-    const resolved = resolveCustomerId(c, body.customerId);
+    const resolved = await resolveCustomerId(c, body.customerId);
     if ("error" in resolved) return c.json({ error: resolved.error }, resolved.status);
     body.customerId = resolved.customerId;
 
-    const result = await report(engine, body, { collectionId });
+    const result = await report(e, body, { collectionId });
     return c.json(result);
   });
 
   user.post("/subscriptions/subscribe", async (c) => {
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
     const environment = c.get("environment");
     const body = await c.req.json();
-    const resolved = resolveCustomerId(c, body.customerId);
+    const resolved = await resolveCustomerId(c, body.customerId);
     if ("error" in resolved) return c.json({ error: resolved.error }, resolved.status);
     body.customerId = resolved.customerId;
 
-    const result = await subscribe(engine, body, { collectionId, environment });
+    const result = await subscribe(e, body, { collectionId, environment });
 
     if (result.status !== "pending_payment") {
       return c.json(result);
     }
 
-    if (!options?.nomba) {
+    if (!options?.nomba && !options?.nombaClients) {
       return c.json({
         ...result,
         checkout: null,
@@ -424,11 +519,11 @@ export function createSemaphorePayRouter(
       });
     }
 
-    const plan = await engine.db.query.plan.findFirst({
+    const plan = await e.db.query.plan.findFirst({
       where: and(
-        eq(engine.schema.plan.id, body.planId),
-        eq(engine.schema.plan.collectionId, collectionId),
-        eq(engine.schema.plan.environment, environment),
+        eq(e.schema.plan.id, body.planId),
+        eq(e.schema.plan.collectionId, collectionId),
+        eq(e.schema.plan.environment, environment),
       ),
     });
 
@@ -436,10 +531,10 @@ export function createSemaphorePayRouter(
       throw new Error("Paid plan not found or missing price amount.");
     }
 
-    const customer = await engine.db.query.customer.findFirst({
+    const customer = await e.db.query.customer.findFirst({
       where: and(
-        eq(engine.schema.customer.id, body.customerId),
-        eq(engine.schema.customer.collectionId, collectionId),
+        eq(e.schema.customer.id, body.customerId),
+        eq(e.schema.customer.collectionId, collectionId),
       ),
     });
 
@@ -447,7 +542,8 @@ export function createSemaphorePayRouter(
       throw new Error("Customer email is required for Nomba checkout.");
     }
 
-    const nomba = createNombaClient(options.nomba, environment);
+    const nomba = getNombaClient(environment);
+    const callbackUrl = options?.nombaClients?.callbackUrl ?? options?.nomba?.callbackUrl ?? "";
 
     const checkout = await nomba.checkout.createOrder({
       order: {
@@ -455,18 +551,18 @@ export function createSemaphorePayRouter(
         amount: plan.priceAmount,
         currency: (plan.priceCurrency ?? "NGN") as any,
         customerEmail: customer.email,
-        callbackUrl: options.nomba.callbackUrl,
+        callbackUrl,
       },
       tokenizeCard: true,
     });
 
-    await engine.db
-      .update(engine.schema.subscription)
+    await e.db
+      .update(e.schema.subscription)
       .set({
         nombaOrderReference: checkout.orderReference,
         updatedAt: new Date(),
       })
-      .where(eq(engine.schema.subscription.id, result.subscriptionId));
+      .where(eq(e.schema.subscription.id, result.subscriptionId));
 
     return c.json({
       ...result,
@@ -476,42 +572,150 @@ export function createSemaphorePayRouter(
   });
 
   user.post("/subscriptions/:id/cancel", async (c) => {
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
     const subscriptionId = c.req.param("id");
-    const result = await cancel(engine, subscriptionId, { collectionId });
+    const result = await cancel(e, subscriptionId, { collectionId });
     return c.json(result);
   });
 
+  /* ------------------------------------------------------------------
+   * 4. Payment verification (fallback for webhooks)
+   * ------------------------------------------------------------------ */
+  user.post("/payments/verify", async (c) => {
+    const e = getEngine(c);
+    const collectionId = c.get("collectionId");
+    const body = await c.req.json();
+    const orderReference = body.orderReference as string;
+
+    if (!orderReference) {
+      return c.json({ error: "orderReference is required." }, 400);
+    }
+
+    // Find subscription by order reference
+    const subscription = await e.db.query.subscription.findFirst({
+      where: and(
+        eq(e.schema.subscription.nombaOrderReference, orderReference),
+        eq(e.schema.subscription.collectionId, collectionId),
+      ),
+    });
+
+    if (!subscription) {
+      // Try one-time product purchase: orderRef format is "prod_{purchaseId}"
+      if (orderReference.startsWith("prod_")) {
+        const purchaseId = orderReference.slice(5);
+        const purchase = await e.db.query.productPurchase.findFirst({
+          where: and(
+            eq(e.schema.productPurchase.id, purchaseId),
+            eq(e.schema.productPurchase.collectionId, collectionId),
+          ),
+        });
+
+        if (purchase) {
+          return c.json({
+            status: purchase.status === "completed" ? "success" : "pending",
+            processed: false,
+            alreadyProcessed: purchase.status === "completed",
+          });
+        }
+      }
+
+      // Fallback: search productPurchase by nombaOrderReference
+      const productPurchase = await e.db.query.productPurchase.findFirst({
+        where: and(
+          eq(e.schema.productPurchase.nombaOrderReference, orderReference),
+          eq(e.schema.productPurchase.collectionId, collectionId),
+        ),
+      });
+
+      if (productPurchase) {
+        return c.json({
+          status: productPurchase.status === "completed" ? "success" : "pending",
+          processed: false,
+          alreadyProcessed: productPurchase.status === "completed",
+        });
+      }
+
+      return c.json({ error: "No subscription or purchase found for this order reference." }, 404);
+    }
+
+    // If already active, nothing to do
+    if (subscription.status === "active") {
+      return c.json({ status: "success", processed: false, alreadyProcessed: true });
+    }
+
+    // Verify transaction via Nomba API
+    if (!options?.nomba && !options?.nombaClients) {
+      return c.json({ error: "Nomba credentials not configured for verification." }, 500);
+    }
+
+    const nomba = getNombaClient();
+    try {
+      const txResult = await nomba.transactions.fetchSingle({
+        orderReference,
+      });
+
+      if (txResult.status !== "SUCCESS") {
+        return c.json({
+          status: txResult.status === "PENDING_BILLING" ? "pending" : "failed",
+          nombaStatus: txResult.status,
+          processed: false,
+        });
+      }
+
+      // Transaction is SUCCESS — process the payment
+      const result = await processSuccessfulPayment(e, {
+        orderReference,
+        subscriptionId: subscription.id,
+        amount: typeof txResult.amount === "string" ? Number(txResult.amount) : (txResult.amount ?? 0),
+      });
+
+      return c.json({
+        status: "success",
+        processed: result.processed,
+        alreadyProcessed: result.alreadyProcessed,
+      });
+    } catch (err) {
+      return c.json({
+        status: "error",
+        error: err instanceof Error ? err.message : "Transaction verification failed",
+        processed: false,
+      }, 500);
+    }
+  });
+
   user.post("/products/purchase", async (c) => {
+    const e = getEngine(c);
     const collectionId = c.get("collectionId");
     const environment = c.get("environment");
     const body = await c.req.json();
-    const resolved = resolveCustomerId(c, body.customerId);
+    const resolved = await resolveCustomerId(c, body.customerId);
     if ("error" in resolved) return c.json({ error: resolved.error }, resolved.status);
     body.customerId = resolved.customerId;
 
-    const result = await purchaseProduct(engine, body, { collectionId, environment });
+    const result = await purchaseProduct(e, body, { collectionId, environment });
 
     // If Nomba is configured and the product has a price, create a checkout order
-    if (options?.nomba && result.status === "completed") {
-      const product = await engine.db.query.product.findFirst({
+    if ((options?.nomba || options?.nombaClients) && result.status === "completed") {
+      const product = await e.db.query.product.findFirst({
         where: and(
-          eq(engine.schema.product.internalId, body.productInternalId),
-          eq(engine.schema.product.collectionId, collectionId),
+          eq(e.schema.product.internalId, body.productInternalId),
+          eq(e.schema.product.collectionId, collectionId),
         ),
       });
 
       if (product?.priceAmount && product.priceAmount > 0) {
-        const customer = await engine.db.query.customer.findFirst({
+        const customer = await e.db.query.customer.findFirst({
           where: and(
-            eq(engine.schema.customer.id, body.customerId),
-            eq(engine.schema.customer.collectionId, collectionId),
+            eq(e.schema.customer.id, body.customerId),
+            eq(e.schema.customer.collectionId, collectionId),
           ),
         });
 
         if (customer?.email) {
-          const nomba = createNombaClient(options.nomba, environment);
+          const nomba = getNombaClient(environment);
           const orderRef = `prod_${result.purchaseId}`;
+          const callbackUrl = options?.nombaClients?.callbackUrl ?? options?.nomba?.callbackUrl ?? "";
 
           const checkout = await nomba.checkout.createOrder({
             order: {
@@ -519,10 +723,19 @@ export function createSemaphorePayRouter(
               amount: product.priceAmount,
               currency: (product.priceCurrency ?? "NGN") as any,
               customerEmail: customer.email,
-              callbackUrl: options.nomba.callbackUrl,
+              callbackUrl,
             },
             tokenizeCard: true,
           });
+
+          // Store Nomba's order reference on the productPurchase record
+          await e.db
+            .update(e.schema.productPurchase)
+            .set({
+              nombaOrderReference: checkout.orderReference,
+              updatedAt: new Date(),
+            })
+            .where(eq(e.schema.productPurchase.id, result.purchaseId));
 
           return c.json({
             ...result,
@@ -536,7 +749,12 @@ export function createSemaphorePayRouter(
     return c.json(result);
   });
 
+  /* ------------------------------------------------------------------
+   * Mount user routes BEFORE admin so /customers/me doesn't collide
+   * with admin's /customers/:id
+   * ------------------------------------------------------------------ */
   api.route("/", user);
+  api.route("/", admin);
 
   return api;
 }

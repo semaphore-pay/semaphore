@@ -27,23 +27,24 @@ export interface ProductFeatureConfig {
 
 export async function createFeature(
   engine: SemaphorePayEngine<any>,
-  input: { id: string; name: string; type: "boolean" | "limit" },
+  input: { id: string; name: string; type: "boolean" | "limit"; collectionId: string },
 ): Promise<Feature> {
   const schema = engine.schema;
   const now = new Date();
 
   const existing = await engine.db.query.feature.findFirst({
-    where: eq(schema.feature.id, input.id),
+    where: and(eq(schema.feature.id, input.id), eq(schema.feature.collectionId, input.collectionId)),
   });
 
   if (existing) {
-    throw new Error(`Feature "${input.id}" already exists`);
+    throw new Error(`Feature "${input.id}" already exists in this collection`);
   }
 
   const [row] = await engine.db
     .insert(schema.feature)
     .values({
       id: input.id,
+      collectionId: input.collectionId,
       name: input.name,
       type: input.type,
       createdAt: now,
@@ -56,9 +57,20 @@ export async function createFeature(
 
 export async function deleteFeature(
   engine: SemaphorePayEngine<any>,
-  input: { featureId: string },
+  input: { featureId: string; collectionId: string },
 ): Promise<void> {
   const schema = engine.schema;
+
+  const feature = await engine.db.query.feature.findFirst({
+    where: and(
+      eq(schema.feature.id, input.featureId),
+      eq(schema.feature.collectionId, input.collectionId),
+    ),
+  });
+
+  if (!feature) {
+    throw new Error(`Feature "${input.featureId}" not found in this collection`);
+  }
 
   const inPlan = await engine.db.query.planFeature.findFirst({
     where: eq(schema.planFeature.featureId, input.featureId),
@@ -83,11 +95,13 @@ export async function deleteFeature(
 
 export async function listFeatures(
   engine: SemaphorePayEngine<any>,
-  _input: { collectionId: string },
+  input: { collectionId: string },
 ): Promise<Feature[]> {
   const schema = engine.schema;
 
-  return await engine.db.query.feature.findMany();
+  return await engine.db.query.feature.findMany({
+    where: eq(schema.feature.collectionId, input.collectionId),
+  });
 }
 
 export async function getPlanFeatures(

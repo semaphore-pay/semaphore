@@ -150,6 +150,18 @@ export interface EntitlementReportResult {
   } | null;
 }
 
+/** Result of verifyPayment(). */
+export interface VerifyPaymentResult {
+  /** "success" | "pending" | "failed" | "error" */
+  status: string;
+  /** Whether the payment was just processed (subscription activated). */
+  processed: boolean;
+  /** Whether the payment was already processed before this call. */
+  alreadyProcessed: boolean;
+  /** Nomba's transaction status if available (e.g. "SUCCESS", "PENDING_BILLING"). */
+  nombaStatus?: string;
+}
+
 export class HttpError extends Error {
   public readonly status: number;
   public readonly body: unknown;
@@ -200,8 +212,9 @@ export class SemaphorePayClient {
     return await this.request("POST", "/customers", input);
   }
 
-  async getCustomer(customerId: string) {
-    return await this.request("GET", `/customers/${encodeURIComponent(customerId)}`);
+  /** Get the current customer resolved from the API key's userId. */
+  async getMe() {
+    return await this.request("GET", "/customers/me");
   }
 
   // ──── Plans (read-only catalog) ────
@@ -249,6 +262,67 @@ export class SemaphorePayClient {
     return await this.request<EntitlementReportResult>("POST", "/entitlements/report", input);
   }
 
+  // ──── Payment Verification ────
+
+  /**
+   * Verify a payment by order reference. Calls the backend which checks
+   * the transaction status via the Nomba API. If the transaction is
+   * successful and not yet processed, activates the subscription.
+   *
+   * Use this as a fallback when webhooks are not received.
+   */
+  async verifyPayment(orderReference: string): Promise<VerifyPaymentResult> {
+    return await this.request<VerifyPaymentResult>("POST", "/payments/verify", {
+      orderReference,
+    });
+  }
+
+  /**
+   * Poll `verifyPayment` with exponential backoff until the payment is
+   * confirmed or max attempts are exhausted.
+   *
+   * @param orderReference - The order reference from checkout.
+   * @param opts.maxAttempts - Total poll attempts (default: 6).
+   * @param opts.delays - Array of delays in ms between attempts.
+   *   Defaults to [0, 5000, 20000, 40000, 80000, 160000] (~5 min total).
+   * @returns The final verification result.
+   */
+  async waitForPayment(
+    orderReference: string,
+    opts?: {
+      maxAttempts?: number;
+      delays?: number[];
+      onAttempt?: (attempt: number, result: VerifyPaymentResult) => void;
+    },
+  ): Promise<VerifyPaymentResult> {
+    const delays = opts?.delays ?? [0, 5000, 20000, 40000, 80000, 160000];
+    const maxAttempts = opts?.maxAttempts ?? delays.length;
+
+    let lastResult: VerifyPaymentResult = { status: "pending", processed: false, alreadyProcessed: false };
+
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const delay = delays[attempt] ?? delays[delays.length - 1] ?? 0;
+      if (delay > 0) {
+        await new Promise((r) => setTimeout(r, delay));
+      }
+
+      try {
+        lastResult = await this.verifyPayment(orderReference);
+        opts?.onAttempt?.(attempt + 1, lastResult);
+
+        // Stop if payment is confirmed or already processed
+        if (lastResult.status === "success" || lastResult.alreadyProcessed) {
+          return lastResult;
+        }
+      } catch (err) {
+        // Network error — continue polling
+        lastResult = { status: "error", processed: false, alreadyProcessed: false };
+      }
+    }
+
+    return lastResult;
+  }
+
   // ──── Internal ────
 
   private async request<T>(
@@ -261,7 +335,7 @@ export class SemaphorePayClient {
       "x-api-key": this.apiKey,
     };
 
-    const response = await fetch(`${this.baseUrl}${path}`, {
+    const response = await fetch(`${this.baseUrl}/client${path}`, {
       method,
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),
