@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.28
+
+- Fixed Nomba checkout amount conversion — server now divides kobo by 100 before sending to Nomba API (Nomba expects main currency unit, not kobo)
+- Subscription and product purchase checkout amounts now match displayed prices
+
 ## 0.1.27
 
 - Added test plans with `test_15min` interval — 15-minute billing cycles for fast dunning testing

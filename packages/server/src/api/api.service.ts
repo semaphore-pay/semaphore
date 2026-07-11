@@ -553,7 +553,7 @@ export function createSemaphorePayRouter(
     const checkout = await nomba.checkout.createOrder({
       order: {
         orderReference: result.nombaOrderReference ?? undefined,
-        amount: plan.priceAmount,
+        amount: plan.priceAmount / 100,
         currency: (plan.priceCurrency ?? "NGN") as any,
         customerEmail: customer.email,
         callbackUrl,
@@ -725,7 +725,7 @@ export function createSemaphorePayRouter(
           const checkout = await nomba.checkout.createOrder({
             order: {
               orderReference: orderRef,
-              amount: product.priceAmount,
+              amount: product.priceAmount / 100,
               currency: (product.priceCurrency ?? "NGN") as any,
               customerEmail: customer.email,
               callbackUrl,
