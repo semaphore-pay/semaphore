@@ -23,6 +23,24 @@ export interface CronResult {
   subscriptionsCanceledAfterRetries: number;
 }
 
+function getPeriodEndAt(planInterval: string, now: Date): Date {
+  if (planInterval === "test_15min") {
+    return new Date(now.getTime() + 15 * 60 * 1000);
+  }
+  if (planInterval === "monthly") {
+    return new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+  }
+  return new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000);
+}
+
+function getRetryBackoffMinutes(planInterval: string, currentRetryCount: number): number {
+  if (planInterval === "test_15min") {
+    return currentRetryCount === 1 ? 1 : currentRetryCount === 2 ? 3 : 5;
+  }
+  const backoffDays = currentRetryCount === 1 ? 1 : currentRetryCount === 2 ? 3 : 7;
+  return backoffDays * 24 * 60;
+}
+
 export async function runSemaphorePayCron(
   engine: SemaphorePayEngine<any>,
   chargeFn?: ChargeFn,
@@ -116,7 +134,7 @@ export async function runSemaphorePayCron(
         amount,
         currency,
         periodStartAt: row.sub.currentPeriodEndAt,
-        periodEndAt: new Date(now.getTime() + (row.planInterval === "monthly" ? 30 : 365) * 24 * 60 * 60 * 1000),
+        periodEndAt: getPeriodEndAt(row.planInterval, now),
         createdAt: now,
         updatedAt: now,
       });
@@ -168,9 +186,7 @@ export async function runSemaphorePayCron(
 
           if (result.success) {
             paymentRetriesSucceeded++;
-            const periodEndAt = row.planInterval === "monthly"
-              ? new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000)
-              : new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000);
+            const periodEndAt = getPeriodEndAt(row.planInterval, now);
 
             await tx
               .update(schema.subscription)
@@ -185,11 +201,11 @@ export async function runSemaphorePayCron(
               })
               .where(eq(schema.subscription.id, row.sub.id));
           } else {
-            await handleRetryFailure(tx, schema, row.sub, now);
+            await handleRetryFailure(tx, schema, row.sub, now, row.planInterval);
             paymentRetriesFailed++;
           }
         } catch {
-          await handleRetryFailure(tx, schema, row.sub, now);
+          await handleRetryFailure(tx, schema, row.sub, now, row.planInterval);
           paymentRetriesFailed++;
         }
       }
@@ -234,11 +250,12 @@ async function handleRetryFailure(
   schema: any,
   sub: any,
   now: Date,
+  planInterval: string,
 ) {
   const maxRetries = MAX_RETRY_ATTEMPTS;
   const currentRetryCount = (sub.retryCount ?? 0) + 1;
-  const backoffDays = currentRetryCount === 1 ? 1 : currentRetryCount === 2 ? 3 : 7;
-  const nextRetryAt = new Date(now.getTime() + backoffDays * 24 * 60 * 60 * 1000);
+  const backoffMinutes = getRetryBackoffMinutes(planInterval, currentRetryCount);
+  const nextRetryAt = new Date(now.getTime() + backoffMinutes * 60 * 1000);
 
   if (currentRetryCount >= maxRetries) {
     await tx

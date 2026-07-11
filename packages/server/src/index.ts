@@ -79,6 +79,7 @@ export {
   reactivatePlanApi,
   remove,
   remove as deletePlan,
+  createTestPlan,
 } from "./plan/plan.api";
 export type { Plan, PlanInterval, CreatePlanInput, CreatePlanRequest, ListPlansResult } from "./plan/plan.types";
 

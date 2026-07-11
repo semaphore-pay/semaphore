@@ -2,7 +2,7 @@
 export type Environment = "development" | "production";
 
 /** Plan billing interval. */
-export type PlanInterval = "monthly" | "yearly" | "none";
+export type PlanInterval = "monthly" | "yearly" | "none" | "test_15min";
 
 /** Options passed to the SemaphorePayClient constructor. */
 export interface SemaphorePayClientOptions {

@@ -5,7 +5,7 @@ import { upsertCustomer, getCustomer, deleteCustomer } from "../customer/custome
 import { check, report } from "../entitlement/entitlement.api";
 import { subscribe, cancel } from "../subscription/subscription.api";
 import { createProduct, listProducts } from "../product/product.service";
-import { create as createPlan, list as listPlans, get as getPlan } from "../plan/plan.api";
+import { create as createPlan, list as listPlans, get as getPlan, createTestPlan } from "../plan/plan.api";
 import { purchaseProduct } from "../product/product.api";
 import { handleWebhook } from "../webhook/webhook.api";
 import { processSuccessfulPayment } from "../webhook/webhook.service";
@@ -73,6 +73,11 @@ export async function createCollection(engine: SemaphorePayEngine<any>, name: st
     .insert(schema.collection)
     .values({ id: collectionId, name, environment })
     .returning();
+
+  // Auto-create test plan for sandbox/development environments
+  if (environment === 'sandbox' || environment === 'development') {
+    await createTestPlan(engine, { collectionId, environment: 'development' });
+  }
 
   return rows[0];
 }

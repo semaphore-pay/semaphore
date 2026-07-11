@@ -10,7 +10,7 @@ const createPlanSchema = z.object({
   description: z.string().optional(),
   priceAmount: z.number().int().nonnegative(),
   priceCurrency: z.string().default("NGN"),
-  interval: z.enum(["monthly", "yearly", "none"]),
+  interval: z.enum(["monthly", "yearly", "none", "test_15min"]),
   trialPeriodDays: z.number().int().nonnegative().default(30),
   features: z.array(z.object({
     featureId: z.string(),
@@ -32,7 +32,7 @@ export async function create(
 ) {
   const parsedInput = createPlanSchema.parse(input);
 
-  if (parsedInput.interval !== "none") {
+  if (parsedInput.interval !== "none" && parsedInput.interval !== "test_15min") {
     const schema = engine.schema;
     const existingMonthly = await engine.db.query.plan.findFirst({
       where: and(
@@ -72,6 +72,27 @@ export async function create(
     ...parsedInput,
     collectionId: context.collectionId,
     environment: context.environment,
+  });
+}
+
+export async function createTestPlan(
+  engine: SemaphorePayEngine<any>,
+  input: { collectionId: string; environment: "development" | "production" }
+) {
+  return createPlan(engine, {
+    id: `plan_test_${Date.now()}_test_15min`,
+    name: "Test Plan (15 min cycle)",
+    priceAmount: 100000,
+    priceCurrency: "NGN",
+    interval: "test_15min",
+    trialPeriodDays: 0,
+    features: [],
+    badge: "Test",
+    ctaText: "Start Test",
+    sortOrder: -1,
+    isActive: true,
+    collectionId: input.collectionId,
+    environment: input.environment,
   });
 }
 

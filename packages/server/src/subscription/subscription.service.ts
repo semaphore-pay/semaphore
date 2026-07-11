@@ -19,6 +19,12 @@ function getResetIntervalMs(resetInterval: string | null): number {
   }
 }
 
+function getPeriodEndAt(interval: string, now: Date): Date | null {
+  if (interval === "none") return null;
+  if (interval === "test_15min") return new Date(now.getTime() + 15 * 60 * 1000);
+  return new Date(now.getTime() + (interval === "monthly" ? 30 : 365) * 24 * 60 * 60 * 1000);
+}
+
 export async function subscribeToPlan(
   engine: SemaphorePayEngine<any>,
   input: SubscribeToPlanInput
@@ -64,14 +70,12 @@ export async function subscribeToPlan(
     });
 
     const isFreePlan = targetPlan.priceAmount === 0;
-    const hasTrial = targetPlan.trialPeriodDays > 0 && targetPlan.interval !== "none" && !isFreePlan;
+    const hasTrial = targetPlan.trialPeriodDays > 0 && targetPlan.interval !== "none" && targetPlan.interval !== "test_15min" && !isFreePlan;
     const subscriptionId = crypto.randomUUID();
     const orderReference = isFreePlan ? null : `ord_${crypto.randomUUID().replace(/-/g, "").slice(0, 12)}`;
     const now = new Date();
     const trialEndAt = hasTrial ? new Date(now.getTime() + targetPlan.trialPeriodDays * 24 * 60 * 60 * 1000) : null;
-    const periodEndAt = targetPlan.interval === "none" 
-      ? null 
-      : new Date(now.getTime() + (targetPlan.interval === "monthly" ? 30 : 365) * 24 * 60 * 60 * 1000);
+    const periodEndAt = getPeriodEndAt(targetPlan.interval, now);
 
     await tx.insert(schema.subscription).values({
       id: subscriptionId,

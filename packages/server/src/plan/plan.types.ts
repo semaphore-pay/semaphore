@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export type PlanInterval = "monthly" | "yearly" | "none";
+export type PlanInterval = "monthly" | "yearly" | "none" | "test_15min";
 
 /** Zod schema for a plan feature definition. */
 export const planFeatureSchema = z.object({
@@ -15,14 +15,14 @@ export type PlanFeatureInput = z.infer<typeof planFeatureSchema>;
 
 /** Zod schema for creating a plan. */
 export const createPlanSchema = z.object({
-  id: z.string().regex(/^plan_[a-z0-9_]+_(monthly|yearly|none)$/, {
+  id: z.string().regex(/^plan_[a-z0-9_]+_(monthly|yearly|none|test_15min)$/, {
     message: "Plan ID must follow convention: plan_{name}_{interval}",
   }),
   name: z.string().min(1),
   description: z.string().optional(),
   priceAmount: z.number().int().nonnegative(),
   priceCurrency: z.string().default("NGN"),
-  interval: z.enum(["monthly", "yearly", "none"]),
+  interval: z.enum(["monthly", "yearly", "none", "test_15min"]),
   trialPeriodDays: z.number().int().nonnegative().default(30),
   features: z.array(planFeatureSchema).optional().default([]),
   badge: z.string().optional(),

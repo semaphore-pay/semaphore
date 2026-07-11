@@ -10,6 +10,20 @@ export interface WebhookContext {
   };
 }
 
+function getPeriodEndAt(planInterval: string | undefined, now: Date): Date | null {
+  if (!planInterval || planInterval === "none") return null;
+  if (planInterval === "test_15min") return new Date(now.getTime() + 15 * 60 * 1000);
+  return new Date(now.getTime() + (planInterval === "monthly" ? 30 : 365) * 24 * 60 * 60 * 1000);
+}
+
+function getRetryBackoffMinutes(planInterval: string | undefined, currentRetryCount: number): number {
+  if (planInterval === "test_15min") {
+    return currentRetryCount === 1 ? 1 : currentRetryCount === 2 ? 3 : 5;
+  }
+  const backoffDays = currentRetryCount === 1 ? 1 : currentRetryCount === 2 ? 3 : 7;
+  return backoffDays * 24 * 60;
+}
+
 export async function processNombaEvent(
   engine: SemaphorePayEngine<any>,
   payload: Record<string, any>,
@@ -206,9 +220,7 @@ export async function processSuccessfulPayment(
   });
 
   const now = new Date();
-  const periodEndAt = plan?.interval === "none"
-    ? null
-    : new Date(now.getTime() + (plan?.interval === "monthly" ? 30 : 365) * 24 * 60 * 60 * 1000);
+  const periodEndAt = getPeriodEndAt(plan?.interval, now);
 
   await engine.db
     .update(schema.subscription)
@@ -241,10 +253,15 @@ async function handlePaymentFailed(
   const now = new Date();
   const maxRetries = 3;
 
+  // Get plan interval for backoff calculation
+  const plan = await engine.db.query.plan.findFirst({
+    where: eq(schema.plan.id, subscription.planId),
+  });
+
   // Increment retry count and schedule next retry with exponential backoff
   const currentRetryCount = (subscription.retryCount ?? 0) + 1;
-  const backoffDays = currentRetryCount === 1 ? 1 : currentRetryCount === 2 ? 3 : 7;
-  const nextRetryAt = new Date(now.getTime() + backoffDays * 24 * 60 * 60 * 1000);
+  const backoffMinutes = getRetryBackoffMinutes(plan?.interval, currentRetryCount);
+  const nextRetryAt = new Date(now.getTime() + backoffMinutes * 60 * 1000);
 
   if (currentRetryCount >= maxRetries) {
     // Max retries reached — cancel the subscription
@@ -300,11 +317,15 @@ async function resetEntitlementBalances(
 
   for (const ent of entitlements) {
     if (ent.limit !== null && ent.limit > 0) {
+      const plan = await engine.db.query.plan.findFirst({
+        where: eq(schema.plan.id, ent.sourceId),
+      });
+      const resetAt = getPeriodEndAt(plan?.interval, now);
       await engine.db
         .update(schema.entitlement)
         .set({
           balance: ent.limit,
-          nextResetAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
+          nextResetAt: resetAt,
           updatedAt: now,
         })
         .where(eq(schema.entitlement.id, ent.id));
