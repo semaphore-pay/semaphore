@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+- Added `test_15min` to `PlanInterval` type for test plans with 15-minute billing cycles
+
 ## 0.1.2
 
 - **BREAKING:** `getCustomer()` removed — replaced with `getMe()` (resolves customer from key's userId)

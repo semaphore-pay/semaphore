@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.27
+
+- Added test plans with `test_15min` interval — 15-minute billing cycles for fast dunning testing
+- Added `createTestPlan()` helper — auto-creates ₦1,000 test plan on collection creation (sandbox/dev)
+- Subscription: skip trial for test plans, 15-min period calculation
+- Cron: 15-min renewal period + accelerated retry backoff (1min/3min/5min vs 1/3/7 days)
+- Webhook: same fast timing for payment success/failed handling
+- Exported `createTestPlan` from main entry point
+- Updated docs: testing guide with test cards, dunning test flow, cron timeline
+
 ## 0.1.26
 
 - Fixed `SemaphorePayEngine` type compatibility — annotated `createCustomer` return type as `Promise<string>` to resolve `SemaphorePayEngine<"sqlite">` vs `SemaphorePayEngine<any>` mismatch
