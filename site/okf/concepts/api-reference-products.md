@@ -3,10 +3,10 @@ type: concept
 title: "Products API"
 source: "https://docs.semaphorepay.tech/api-reference/products/"
 path: /api-reference/products/
-updated: 2026-07-07
+updated: 2026-07-14
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-07T20:01:08.632Z"
+  generated_at: "2026-07-14T15:56:13.454Z"
 ---
 ---
 title: Products API
@@ -24,11 +24,11 @@ Cookie: semaphore.session=...
 
 ```json
 {
+  "id": "prod_pro_access",
   "name": "Pro Access",
-  "description": "Unlimited access",
   "features": [
-    { "featureId": "api_calls", "type": "limit", "limit": 10000 },
-    { "featureId": "export", "type": "boolean" }
+    { "id": "api_calls", "type": "limit", "limit": 10000 },
+    { "id": "export", "type": "boolean" }
   ]
 }
 ```
@@ -37,15 +37,15 @@ Cookie: semaphore.session=...
 
 | Field | Type | Required | Description |
 |---|---|---|---|
+| `id` | string | yes | Unique product identifier (e.g. `"prod_pro_access"`) |
 | `name` | string | yes | Product name |
-| `description` | string | no | Product description |
 | `features` | FeatureInput[] | no | Features attached to this product |
 
 ### FeatureInput
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `featureId` | string | yes | Feature identifier (e.g. `"api_calls"`) |
+| `id` | string | yes | Feature identifier (e.g. `"api_calls"`) |
 | `type` | string | yes | `"boolean"` for on/off, `"limit"` for metered |
 | `limit` | number | no | Max units for metered features |
 | `resetInterval` | string | no | `"day"`, `"week"`, `"month"`, or `"year"` |
@@ -99,7 +99,7 @@ Cookie: semaphore.session=...
 {
   "name": "Pro Access Updated",
   "features": [
-    { "featureId": "api_calls", "type": "limit", "limit": 20000 }
+    { "id": "api_calls", "type": "limit", "limit": 20000 }
   ]
 }
 ```

@@ -3,10 +3,10 @@ type: concept
 title: "Semaphore — Subscription Billing for Nomba"
 source: "https://docs.semaphorepay.tech/"
 path: /
-updated: 2026-07-07
+updated: 2026-07-14
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-07T20:01:08.647Z"
+  generated_at: "2026-07-14T15:56:13.473Z"
 ---
 ---
 title: Semaphore — Subscription Billing for Nomba

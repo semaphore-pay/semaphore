@@ -3,10 +3,10 @@ type: concept
 title: "Subscriptions API"
 source: "https://docs.semaphorepay.tech/api-reference/subscriptions/"
 path: /api-reference/subscriptions/
-updated: 2026-07-07
+updated: 2026-07-14
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-07T20:01:08.636Z"
+  generated_at: "2026-07-14T15:56:13.455Z"
 ---
 ---
 title: Subscriptions API

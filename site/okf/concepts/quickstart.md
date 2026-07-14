@@ -3,10 +3,10 @@ type: concept
 title: "Quick Start"
 source: "https://docs.semaphorepay.tech/quickstart/"
 path: /quickstart/
-updated: 2026-07-07
+updated: 2026-07-14
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-07T20:01:08.650Z"
+  generated_at: "2026-07-14T15:56:13.476Z"
 ---
 ---
 title: Quick Start
@@ -87,10 +87,10 @@ const client = new SemaphorePayClient({
 ## 5. Create Your First Subscription
 
 ```typescript
-import { create, createProduct, subscribe } from '@semaphore-pay/server';
+import { createPlan, createProduct, subscribe } from '@semaphore-pay/server';
 
 // Server: create a plan
-const plan = await create(engine, {
+const plan = await createPlan(engine, {
   name: 'Pro Plan',
   description: 'Full access to all features',
   priceAmount: 2999, // ₦29.99 in kobo
@@ -103,6 +103,7 @@ const plan = await create(engine, {
 
 // Server: create a product
 const product = await createProduct(engine, {
+  id: 'prod_pro_access',
   name: 'Pro Access',
   features: [],
 }, {

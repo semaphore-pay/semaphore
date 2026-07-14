@@ -76,7 +76,20 @@
         { "title": "Products", "path": "/api-reference/products" },
         { "title": "Customers", "path": "/api-reference/customers" },
         { "title": "Subscriptions", "path": "/api-reference/subscriptions" },
-        { "title": "Entitlements", "path": "/api-reference/entitlements" }
+        { "title": "Features", "path": "/api-reference/features" },
+        { "title": "Entitlements", "path": "/api-reference/entitlements" },
+        { "title": "Metrics", "path": "/api-reference/metrics" },
+        { "title": "Balance", "path": "/api-reference/balance" }
+      ]
+    },
+    {
+      "title": "Dashboard",
+      "icon": "layout-dashboard",
+      "children": [
+        { "title": "Overview", "path": "/dashboard" },
+        { "title": "Setup", "path": "/dashboard/setup" },
+        { "title": "Authentication", "path": "/dashboard/auth" },
+        { "title": "API Mapping", "path": "/dashboard/api" }
       ]
     },
     {

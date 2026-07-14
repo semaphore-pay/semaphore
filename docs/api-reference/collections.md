@@ -15,8 +15,7 @@ Cookie: semaphore.session=...
 ```json
 {
   "name": "My App",
-  "description": "Production",
-  "environment": "sandbox"
+  "environment": "development"
 }
 ```
 
@@ -25,8 +24,7 @@ Cookie: semaphore.session=...
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `name` | string | yes | Collection name |
-| `description` | string | no | Collection description |
-| `environment` | string | no | `"sandbox"` (default) or `"production"` |
+| `environment` | string | no | `"development"` (default) or `"production"` |
 
 ### Response
 
@@ -35,8 +33,7 @@ Cookie: semaphore.session=...
   "collection": {
     "id": "col_abc123",
     "name": "My App",
-    "description": "Production",
-    "environment": "sandbox",
+    "environment": "development",
     "createdAt": "2026-07-05T12:00:00Z"
   },
   "keys": {
@@ -60,7 +57,7 @@ Cookie: semaphore.session=...
   {
     "id": "col_abc123",
     "name": "My App",
-    "environment": "sandbox",
+    "environment": "development",
     "plans": 3,
     "products": 5,
     "customers": 123,
@@ -83,8 +80,7 @@ Cookie: semaphore.session=...
 {
   "id": "col_abc123",
   "name": "My App",
-  "description": "Production",
-  "environment": "sandbox",
+  "environment": "development",
   "plans": 3,
   "products": 5,
   "customers": 123,
@@ -92,6 +88,26 @@ Cookie: semaphore.session=...
   "createdAt": "2026-07-05T12:00:00Z"
 }
 ```
+
+## Update Collection
+
+```http
+PUT /api/v1/billing/collections/:id
+Content-Type: application/json
+Cookie: semaphore.session=...
+```
+
+```json
+{
+  "name": "My App (Updated)",
+  "callbackUrl": "https://your-api.example.com/webhook"
+}
+```
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | string | no | New collection name |
+| `callbackUrl` | string | no | Webhook callback URL |
 
 ## Get Collection Analytics
 

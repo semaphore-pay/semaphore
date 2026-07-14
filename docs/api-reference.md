@@ -38,6 +38,7 @@ No auth required — verified by HMAC-SHA256 signature from Nomba.
 | `POST` | `/collections` | Create a collection |
 | `GET` | `/collections` | List all collections |
 | `GET` | `/collections/:id` | Get a collection |
+| `PUT` | `/collections/:id` | Update a collection |
 | `GET` | `/collections/:id/analytics` | Get collection analytics |
 | `DELETE` | `/collections/:id` | Delete a collection |
 
@@ -115,7 +116,14 @@ No auth required — verified by HMAC-SHA256 signature from Nomba.
 |---|---|---|
 | `GET` | `/collections/:id/metrics/trend` | Get metric trend (current vs previous) |
 | `GET` | `/collections/:id/metrics/history` | Get metric history |
+| `POST` | `/collections/:id/metrics/refresh` | Refresh metric snapshot |
 | `GET` | `/collections/:id/balance` | Get collection balance |
+
+### Cron
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/collections/:id/cron/run` | Manually trigger renewal cron |
 
 ## Client SDK API (`/client`)
 

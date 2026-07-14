@@ -4,6 +4,46 @@
 
 ---
 
+## [Balance API](https://docs.semaphorepay.tech/api-reference/balance/)
+
+---
+title: Balance API
+---
+
+# Balance API
+
+View collection balance and payout information.
+
+## Get Balance
+
+```http
+GET /api/v1/billing/collections/:collectionId/balance
+Cookie: semaphore.session=...
+```
+
+### Response
+
+```json
+{
+  "available": 1500000,
+  "pending": 250000,
+  "totalEarned": 5000000,
+  "platformFeeRate": 0.05,
+  "currency": "NGN"
+}
+```
+
+| Field | Description |
+|---|---|
+| `available` | Balance available for payout (in kobo) |
+| `pending` | Amount awaiting settlement (in kobo) |
+| `totalEarned` | Total revenue collected (in kobo) |
+| `platformFeeRate` | Semaphore fee rate (e.g. `0.05` = 5%) |
+| `currency` | ISO 4217 currency code |
+
+
+---
+
 ## [Collections API](https://docs.semaphorepay.tech/api-reference/collections/)
 
 ---
@@ -23,8 +63,7 @@ Cookie: semaphore.session=...
 ```json
 {
   "name": "My App",
-  "description": "Production",
-  "environment": "sandbox"
+  "environment": "development"
 }
 ```
 
@@ -33,8 +72,7 @@ Cookie: semaphore.session=...
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `name` | string | yes | Collection name |
-| `description` | string | no | Collection description |
-| `environment` | string | no | `"sandbox"` (default) or `"production"` |
+| `environment` | string | no | `"development"` (default) or `"production"` |
 
 ### Response
 
@@ -43,8 +81,7 @@ Cookie: semaphore.session=...
   "collection": {
     "id": "col_abc123",
     "name": "My App",
-    "description": "Production",
-    "environment": "sandbox",
+    "environment": "development",
     "createdAt": "2026-07-05T12:00:00Z"
   },
   "keys": {
@@ -68,7 +105,7 @@ Cookie: semaphore.session=...
   {
     "id": "col_abc123",
     "name": "My App",
-    "environment": "sandbox",
+    "environment": "development",
     "plans": 3,
     "products": 5,
     "customers": 123,
@@ -91,8 +128,7 @@ Cookie: semaphore.session=...
 {
   "id": "col_abc123",
   "name": "My App",
-  "description": "Production",
-  "environment": "sandbox",
+  "environment": "development",
   "plans": 3,
   "products": 5,
   "customers": 123,
@@ -100,6 +136,26 @@ Cookie: semaphore.session=...
   "createdAt": "2026-07-05T12:00:00Z"
 }
 ```
+
+## Update Collection
+
+```http
+PUT /api/v1/billing/collections/:id
+Content-Type: application/json
+Cookie: semaphore.session=...
+```
+
+```json
+{
+  "name": "My App (Updated)",
+  "callbackUrl": "https://your-api.example.com/webhook"
+}
+```
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | string | no | New collection name |
+| `callbackUrl` | string | no | Webhook callback URL |
 
 ## Get Collection Analytics
 
@@ -452,6 +508,139 @@ x-api-key: pk_...
 
 ---
 
+## [Features API](https://docs.semaphorepay.tech/api-reference/features/)
+
+---
+title: Features API
+---
+
+# Features API
+
+Features define what capabilities a plan or product provides. They are boolean (on/off) or limit (metered with quota).
+
+## Create Feature
+
+```http
+POST /api/v1/billing/collections/:collectionId/features
+Content-Type: application/json
+Cookie: semaphore.session=...
+```
+
+```json
+{
+  "id": "api_calls",
+  "name": "API Calls",
+  "type": "limit"
+}
+```
+
+### Parameters
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | string | yes | Unique feature identifier (e.g. `"api_calls"`) |
+| `name` | string | yes | Display name |
+| `type` | string | yes | `"boolean"` for on/off, `"limit"` for metered |
+
+## List Features
+
+```http
+GET /api/v1/billing/collections/:collectionId/features
+Cookie: semaphore.session=...
+```
+
+## Delete Feature
+
+```http
+DELETE /api/v1/billing/collections/:collectionId/features/:featureId
+Cookie: semaphore.session=...
+```
+
+## Attach Feature to Plan
+
+```http
+POST /api/v1/billing/collections/:collectionId/features/attach-plan
+Content-Type: application/json
+Cookie: semaphore.session=...
+```
+
+```json
+{
+  "planId": "plan_pro_monthly",
+  "featureId": "api_calls",
+  "type": "limit",
+  "limit": 10000,
+  "resetInterval": "month"
+}
+```
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `planId` | string | yes | Plan to attach to |
+| `featureId` | string | yes | Feature to attach |
+| `type` | string | yes | `"boolean"` or `"limit"` |
+| `limit` | number | no | Max units (for limit features) |
+| `resetInterval` | string | no | `"day"`, `"week"`, `"month"`, or `"year"` |
+| `config` | object | no | Custom configuration |
+
+## Detach Feature from Plan
+
+```http
+POST /api/v1/billing/collections/:collectionId/features/detach-plan
+Content-Type: application/json
+Cookie: semaphore.session=...
+```
+
+```json
+{
+  "planId": "plan_pro_monthly",
+  "featureId": "api_calls"
+}
+```
+
+## Attach Feature to Product
+
+```http
+POST /api/v1/billing/collections/:collectionId/features/attach-product
+Content-Type: application/json
+Cookie: semaphore.session=...
+```
+
+```json
+{
+  "productInternalId": "prod_a1b2c3d4",
+  "featureId": "pro_mode",
+  "type": "boolean"
+}
+```
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `productInternalId` | string | yes | Product internal ID to attach to |
+| `featureId` | string | yes | Feature to attach |
+| `type` | string | yes | `"boolean"` or `"limit"` |
+| `limit` | number | no | Max units (for limit features) |
+| `resetInterval` | string | no | `"day"`, `"week"`, `"month"`, or `"year"` |
+| `config` | object | no | Custom configuration |
+
+## Detach Feature from Product
+
+```http
+POST /api/v1/billing/collections/:collectionId/features/detach-product
+Content-Type: application/json
+Cookie: semaphore.session=...
+```
+
+```json
+{
+  "productInternalId": "prod_a1b2c3d4",
+  "featureId": "pro_mode"
+}
+```
+
+
+---
+
 ## [API Reference](https://docs.semaphorepay.tech/api-reference/)
 
 ---
@@ -494,6 +683,7 @@ No auth required — verified by HMAC-SHA256 signature from Nomba.
 | `POST` | `/collections` | Create a collection |
 | `GET` | `/collections` | List all collections |
 | `GET` | `/collections/:id` | Get a collection |
+| `PUT` | `/collections/:id` | Update a collection |
 | `GET` | `/collections/:id/analytics` | Get collection analytics |
 | `DELETE` | `/collections/:id` | Delete a collection |
 
@@ -571,7 +761,14 @@ No auth required — verified by HMAC-SHA256 signature from Nomba.
 |---|---|---|
 | `GET` | `/collections/:id/metrics/trend` | Get metric trend (current vs previous) |
 | `GET` | `/collections/:id/metrics/history` | Get metric history |
+| `POST` | `/collections/:id/metrics/refresh` | Refresh metric snapshot |
 | `GET` | `/collections/:id/balance` | Get collection balance |
+
+### Cron
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/collections/:id/cron/run` | Manually trigger renewal cron |
 
 ## Client SDK API (`/client`)
 
@@ -627,6 +824,81 @@ These endpoints are used by `@semaphore-pay/client`. All require `x-api-key` hea
 
 ---
 
+## [Metrics API](https://docs.semaphorepay.tech/api-reference/metrics/)
+
+---
+title: Metrics API
+---
+
+# Metrics API
+
+Track MRR, ARR, subscriber counts, and historical trends for a collection.
+
+## Get Metric Trend
+
+Returns current period metrics compared to the previous period.
+
+```http
+GET /api/v1/billing/collections/:collectionId/metrics/trend
+Cookie: semaphore.session=...
+```
+
+### Response
+
+```json
+{
+  "mrr": { "current": 299900, "previous": 249900, "change": 50000 },
+  "arr": { "current": 3598800, "previous": 2998800, "change": 600000 },
+  "activeSubscribers": { "current": 89, "previous": 72, "change": 17 },
+  "trialing": { "current": 12, "previous": 8, "change": 4 },
+  "churnRate": { "current": 0.05, "previous": 0.08, "change": -0.03 }
+}
+```
+
+## Get Metric History
+
+Returns historical metric snapshots.
+
+```http
+GET /api/v1/billing/collections/:collectionId/metrics/history?limit=30
+Cookie: semaphore.session=...
+```
+
+### Query Parameters
+
+| Param | Type | Description |
+|---|---|---|
+| `limit` | number | Number of snapshots (default: 30) |
+
+## Refresh Metric Snapshot
+
+Manually trigger a metric snapshot refresh.
+
+```http
+POST /api/v1/billing/collections/:collectionId/metrics/refresh
+Cookie: semaphore.session=...
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "snapshot": {
+    "mrr": 299900,
+    "arr": 3598800,
+    "activeSubscribers": 89,
+    "trialing": 12,
+    "canceled": 45,
+    "pastDue": 3,
+    "collectedAt": "2026-07-14T12:00:00Z"
+  }
+}
+```
+
+
+---
+
 ## [Plans API](https://docs.semaphorepay.tech/api-reference/plans/)
 
 ---
@@ -645,6 +917,7 @@ Cookie: semaphore.session=...
 
 ```json
 {
+  "id": "plan_pro_monthly",
   "name": "Pro",
   "description": "Full access",
   "priceAmount": 5000,
@@ -658,6 +931,7 @@ Cookie: semaphore.session=...
 
 | Field | Type | Required | Description |
 |---|---|---|---|
+| `id` | string | yes | Unique plan ID (e.g. `"plan_pro_monthly"`) |
 | `name` | string | yes | Plan name |
 | `description` | string | no | Plan description |
 | `priceAmount` | number | yes | Price in kobo (₦50.00 = 5000) |
@@ -765,11 +1039,11 @@ Cookie: semaphore.session=...
 
 ```json
 {
+  "id": "prod_pro_access",
   "name": "Pro Access",
-  "description": "Unlimited access",
   "features": [
-    { "featureId": "api_calls", "type": "limit", "limit": 10000 },
-    { "featureId": "export", "type": "boolean" }
+    { "id": "api_calls", "type": "limit", "limit": 10000 },
+    { "id": "export", "type": "boolean" }
   ]
 }
 ```
@@ -778,15 +1052,15 @@ Cookie: semaphore.session=...
 
 | Field | Type | Required | Description |
 |---|---|---|---|
+| `id` | string | yes | Unique product identifier (e.g. `"prod_pro_access"`) |
 | `name` | string | yes | Product name |
-| `description` | string | no | Product description |
 | `features` | FeatureInput[] | no | Features attached to this product |
 
 ### FeatureInput
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `featureId` | string | yes | Feature identifier (e.g. `"api_calls"`) |
+| `id` | string | yes | Feature identifier (e.g. `"api_calls"`) |
 | `type` | string | yes | `"boolean"` for on/off, `"limit"` for metered |
 | `limit` | number | no | Max units for metered features |
 | `resetInterval` | string | no | `"day"`, `"week"`, `"month"`, or `"year"` |
@@ -840,7 +1114,7 @@ Cookie: semaphore.session=...
 {
   "name": "Pro Access Updated",
   "features": [
-    { "featureId": "api_calls", "type": "limit", "limit": 20000 }
+    { "id": "api_calls", "type": "limit", "limit": 20000 }
   ]
 }
 ```
@@ -1062,7 +1336,7 @@ Each collection is completely isolated. Data, API keys, and billing are separate
 ```typescript
 import { createCollection } from '@semaphore-pay/server';
 
-const collection = await createCollection(engine, 'My App', 'sandbox');
+const collection = await createCollection(engine, 'My App', 'development');
 ```
 
 Response:
@@ -1071,7 +1345,7 @@ Response:
 {
   "id": "col_abc123",
   "name": "My App",
-  "environment": "sandbox",
+  "environment": "development",
   "createdAt": "2026-07-05T12:00:00Z"
 }
 ```
@@ -1082,7 +1356,7 @@ Each collection has an environment:
 
 | Environment | Purpose | Nomba Keys |
 |---|---|---|
-| `sandbox` | Development and testing | `NOMBA_SANDBOX_*` |
+| `development` | Development and testing | `NOMBA_SANDBOX_*` |
 | `production` | Live payments | `NOMBA_LIVE_*` |
 
 ## API Keys
@@ -1105,18 +1379,6 @@ Never expose secret keys in client-side code. Use public keys for end-user appli
 const collections = await fetch('/api/v1/billing/collections');
 // Returns: [{ id, name, environment, plans, products, customers, activeSubscriptions }]
 ```
-
-## Deleting a Collection
-
-```typescript
-import { deleteCollection } from '@semaphore-pay/server';
-
-await deleteCollection(engine, 'col_abc123');
-```
-
-::: danger
-Deleting a collection removes all associated API keys. This action is irreversible.
-:::
 
 
 ---
@@ -1147,14 +1409,14 @@ import { createFeatureApi } from '@semaphore-pay/server';
 
 // Boolean feature
 await createFeatureApi(engine, {
-  featureId: 'pro_mode',
+  id: 'pro_mode',
   name: 'Pro Mode',
   type: 'boolean',
 }, { collectionId: 'col_abc123' });
 
 // Limit feature
 await createFeatureApi(engine, {
-  featureId: 'api_calls',
+  id: 'api_calls',
   name: 'API Calls',
   type: 'limit',
 }, { collectionId: 'col_abc123' });
@@ -1168,6 +1430,7 @@ import { attachPlan } from '@semaphore-pay/server';
 await attachPlan(engine, {
   planId: 'plan_pro_monthly',
   featureId: 'api_calls',
+  type: 'limit',
   limit: 10000,
   resetInterval: 'month',
 }, { collectionId: 'col_abc123' });
@@ -1181,6 +1444,7 @@ import { attachProduct } from '@semaphore-pay/server';
 await attachProduct(engine, {
   productInternalId: 'prod_a1b2c3d4',
   featureId: 'pro_mode',
+  type: 'boolean',
 }, { collectionId: 'col_abc123' });
 ```
 
@@ -1288,9 +1552,9 @@ Plans define pricing. Products are what customers actually use.
 A plan defines how much to charge and how often.
 
 ```typescript
-import { create } from '@semaphore-pay/server';
+import { createPlan } from '@semaphore-pay/server';
 
-const plan = await create(engine, {
+const plan = await createPlan(engine, {
   name: 'Pro',
   description: 'Full access',
   priceAmount: 5000, // ₦50.00 in kobo
@@ -1334,12 +1598,12 @@ Products are what customers subscribe to or purchase. Each product has its own f
 import { createProduct } from '@semaphore-pay/server';
 
 const product = await createProduct(engine, {
+  id: 'prod_pro_access',
   name: 'Pro Access',
-  description: 'Unlimited access to all features',
   features: [
-    { featureId: 'api_calls', type: 'limit', limit: 10000 },
-    { featureId: 'export', type: 'boolean' },
-    { featureId: 'pro_mode', type: 'boolean' },
+    { id: 'api_calls', type: 'limit', limit: 10000 },
+    { id: 'export', type: 'boolean' },
+    { id: 'pro_mode', type: 'boolean' },
   ],
 }, {
   collectionId: 'col_abc123',
@@ -1351,15 +1615,15 @@ const product = await createProduct(engine, {
 
 | Field | Type | Description |
 |---|---|---|
+| `id` | string | Unique product identifier (e.g. `"prod_pro_access"`) |
 | `name` | string | Display name |
-| `description` | string | Optional description |
 | `features` | FeatureInput[] | Features attached to this product |
 
 ### FeatureInput
 
 | Field | Type | Description |
 |---|---|---|
-| `featureId` | string | Feature identifier (e.g. `"api_calls"`) |
+| `id` | string | Feature identifier (e.g. `"api_calls"`) |
 | `type` | string | `"boolean"` for on/off, `"limit"` for metered |
 | `limit` | number | Max units for metered features |
 | `resetInterval` | string | `"day"`, `"week"`, `"month"`, or `"year"` |
@@ -1367,11 +1631,11 @@ const product = await createProduct(engine, {
 ## Listing
 
 ```typescript
-import { list } from '@semaphore-pay/server';
+import { listPlans } from '@semaphore-pay/server';
 import { listProducts } from '@semaphore-pay/server';
 
 // List plans
-const plans = await list(engine, {}, {
+const plans = await listPlans(engine, {}, {
   collectionId: 'col_abc123',
   environment: 'development',
 });
@@ -1386,10 +1650,10 @@ const products = await listProducts(engine, {
 ## Getting by ID
 
 ```typescript
-import { get } from '@semaphore-pay/server';
+import { getPlan } from '@semaphore-pay/server';
 import { getProduct } from '@semaphore-pay/server';
 
-const plan = await get(engine, { planId: 'plan_pro_monthly' }, {
+const plan = await getPlan(engine, { planId: 'plan_pro_monthly' }, {
   collectionId: 'col_abc123',
   environment: 'development',
 });
@@ -1406,7 +1670,7 @@ const product = await getProduct(engine, {
 | Aspect | Plan | Product |
 |---|---|---|
 | Purpose | Defines pricing & billing | Defines features & access |
-| Price | Has `priceAmount` | No price (links to plan via subscription) |
+| Price | Has `priceAmount` | Optional `priceAmount` (can have standalone pricing) |
 | Features | Can have features attached | Has features directly |
 | Subscription | Customer subscribes to plan | Customer gets access via plan subscription |
 
@@ -1527,12 +1791,319 @@ await report(engine, {
 ## Fetching Subscriptions
 
 ```typescript
-import { list as listSubscriptions } from '@semaphore-pay/server/subscription';
+import { list as listSubscriptions } from '@semaphore-pay/server';
 
 const subscriptions = await listSubscriptions(engine, {
   status: 'active',
   limit: 20,
 }, { collectionId: 'col_abc123' });
+```
+
+
+---
+
+## [Dashboard API Mapping](https://docs.semaphorepay.tech/dashboard/api/)
+
+---
+title: Dashboard API Mapping
+---
+
+# Dashboard API Mapping
+
+The dashboard calls the backend at `/api/v1/billing/*`. Here's how each dashboard section maps to API endpoints.
+
+## Collections
+
+| Dashboard Action | API Call |
+|---|---|
+| List collections | `GET /collections` |
+| Create collection | `POST /collections` |
+| Update collection | `PUT /collections/:id` |
+| Delete collection | `DELETE /collections/:id` |
+| View analytics | `GET /collections/:id/analytics` |
+
+## API Keys
+
+| Dashboard Action | API Call |
+|---|---|
+| List keys | `GET /collections/:id/api-keys` |
+| Generate key | `POST /collections/:id/api-keys` |
+| Revoke key | `DELETE /collections/:id/api-keys/:key` |
+
+## Plans
+
+| Dashboard Action | API Call |
+|---|---|
+| List plans | `GET /collections/:id/plans` |
+| Create plan | `POST /collections/:id/plans` |
+| Deactivate plan | `POST /collections/:id/plans/:planId/deactivate` |
+| Reactivate plan | `POST /collections/:id/plans/:planId/reactivate` |
+| Delete plan | `DELETE /collections/:id/plans/:planId` |
+
+## Products
+
+| Dashboard Action | API Call |
+|---|---|
+| List products | `GET /collections/:id/products` |
+| Create product | `POST /collections/:id/products` |
+| Update product | `PUT /collections/:id/products/:productId` |
+| Delete product | `DELETE /collections/:id/products/:productId` |
+
+## Customers
+
+| Dashboard Action | API Call |
+|---|---|
+| List customers | `GET /collections/:id/customers` |
+| Get customer | `GET /collections/:id/customers/:customerId` |
+| Upsert customer | `POST /collections/:id/customers` |
+
+## Subscriptions
+
+| Dashboard Action | API Call |
+|---|---|
+| List subscriptions | `GET /collections/:id/subscriptions` |
+| Get subscription | `GET /collections/:id/subscriptions/:subId` |
+| Subscribe | `POST /collections/:id/subscriptions/subscribe` |
+| Cancel | `POST /collections/:id/subscriptions/:subId/cancel` |
+| Pause | `POST /collections/:id/subscriptions/:subId/pause` |
+| Resume | `POST /collections/:id/subscriptions/:subId/resume` |
+| Reactivate | `POST /collections/:id/subscriptions/:subId/reactivate` |
+
+## Features & Entitlements
+
+| Dashboard Action | API Call |
+|---|---|
+| List features | `GET /collections/:id/features` |
+| Create feature | `POST /collections/:id/features` |
+| Delete feature | `DELETE /collections/:id/features/:featureId` |
+| Attach to plan | `POST /collections/:id/features/attach-plan` |
+| Detach from plan | `POST /collections/:id/features/detach-plan` |
+| Attach to product | `POST /collections/:id/features/attach-product` |
+| Detach from product | `POST /collections/:id/features/detach-product` |
+| Check entitlement | `POST /collections/:id/entitlements/check` |
+| Report usage | `POST /collections/:id/entitlements/report` |
+
+## Analytics & Balance
+
+| Dashboard Action | API Call |
+|---|---|
+| Metric trend | `GET /collections/:id/metrics/trend` |
+| Metric history | `GET /collections/:id/metrics/history` |
+| Refresh metrics | `POST /collections/:id/metrics/refresh` |
+| Get balance | `GET /collections/:id/balance` |
+
+## Authentication
+
+| Dashboard Action | API Call |
+|---|---|
+| Request magic link | `POST /api/auth/magic-link/request` |
+| Verify magic link | `GET /api/auth/magic-link/verify` |
+| Get session | `GET /api/auth/get-session` |
+| Sign out | `POST /api/auth/sign-out` |
+
+
+---
+
+## [Dashboard Authentication](https://docs.semaphorepay.tech/dashboard/auth/)
+
+---
+title: Dashboard Authentication
+---
+
+# Dashboard Authentication
+
+The dashboard uses **Better Auth** with magic link (email-based passwordless) authentication.
+
+## Flow
+
+```
+1. User enters email → POST /api/auth/magic-link/request
+2. User clicks link in email → redirected to dashboard
+3. Session cookie set → all API requests authenticated
+```
+
+## Configuration
+
+```typescript
+// src/lib/auth-client.ts
+import { createAuthClient } from 'better-auth/client';
+import { magicLinkClient } from 'better-auth/client/plugins';
+
+export const authClient = createAuthClient({
+  baseURL: import.meta.env.VITE_AUTH_BASE_URL,
+  plugins: [magicLinkClient()],
+});
+```
+
+## Protected Routes
+
+All dashboard routes require authentication. The `ProtectedRoute` component checks the session:
+
+```typescript
+// src/App.tsx
+function ProtectedRoute({ children }) {
+  const { data: session, isPending } = authClient.useSession();
+
+  if (isPending) return <Spinner />;
+  if (!session) return <Navigate to="/login" />;
+
+  return children;
+}
+```
+
+## API Requests
+
+All dashboard API calls use `credentials: "include"` to send the session cookie:
+
+```typescript
+// src/lib/api.ts
+async function req<T>(path: string, options?: RequestInit): Promise<T> {
+  const res = await fetch(`${BASE_URL}/api/v1/billing${path}`, {
+    credentials: 'include',
+    ...options,
+  });
+  return res.json();
+}
+```
+
+## Sign Out
+
+```typescript
+await authClient.signOut();
+window.location.href = '/';
+```
+
+
+---
+
+## [Dashboard](https://docs.semaphorepay.tech/dashboard/)
+
+---
+title: Dashboard
+---
+
+# Dashboard
+
+The Semaphore Pay Dashboard is a React admin panel for managing your billing collections, plans, products, customers, entitlements, and analytics.
+
+## Overview
+
+```
+semaphore-pay-dashboard (React SPA)
+       ↓ HTTP calls (cookie auth)
+semaphore-pay-backend (Cloudflare Worker)
+       ↓ imports
+@semaphore-pay/server (SDK)
+       ↓
+Nomba API
+```
+
+## Features
+
+| Feature | Description |
+|---|---|
+| **Analytics** | MRR, ARR, active subscribers, churn rate. Interactive charts via Recharts. |
+| **Plans** | Create, deactivate, reactivate, delete plans. View subscriber count and MRR per plan. |
+| **Products** | CRUD products with features, pricing, groups. CSV export. |
+| **Customers** | Paginated list with search, detail views with subscription history. |
+| **Entitlements** | Create features (boolean/limit). Attach/detach to plans and products via drag-and-drop. |
+| **Settings** | Collection config, API key management, payout balance. |
+| **Auth** | Magic link email sign-in via Better Auth. |
+
+## Tech Stack
+
+| Layer | Tech |
+|---|---|
+| Framework | React 19 + TypeScript |
+| Build | Vite + Rolldown |
+| Styling | Tailwind CSS v4 + shadcn/ui |
+| State | Zustand |
+| Charts | Recharts |
+| Routing | React Router v7 |
+| Auth | Better Auth (magic link) |
+
+## Quick Links
+
+- [Setup](/dashboard/setup) — installation and environment variables
+- [Authentication](/dashboard/auth) — Better Auth magic link flow
+- [API Mapping](/dashboard/api) — how dashboard routes map to the backend
+
+
+---
+
+## [Dashboard Setup](https://docs.semaphorepay.tech/dashboard/setup/)
+
+---
+title: Dashboard Setup
+---
+
+# Dashboard Setup
+
+## Prerequisites
+
+- Node.js 18+ or Bun
+- The `semaphore-pay-backend` running (locally or deployed)
+
+## Install
+
+```bash
+git clone https://github.com/your-org/semaphore-pay-dashboard.git
+cd semaphore-pay-dashboard
+bun install
+```
+
+## Environment Variables
+
+Create `.env.local`:
+
+```bash
+VITE_API_BASE_URL=http://localhost:8787
+VITE_AUTH_BASE_URL=http://localhost:8787
+```
+
+For production:
+
+```bash
+VITE_API_BASE_URL=https://api.semaphorepay.tech
+VITE_AUTH_BASE_URL=https://api.semaphorepay.tech
+```
+
+## Run
+
+```bash
+bun dev
+```
+
+Dashboard runs at `http://localhost:5173`.
+
+## Build
+
+```bash
+bun run build
+```
+
+Output goes to `dist/`.
+
+## How It Works
+
+1. User signs in via magic link (Better Auth)
+2. Session cookie is set on the backend domain
+3. All API requests go to `/api/v1/billing/*` with `credentials: "include"`
+4. Collection ID and environment are stored in `localStorage`
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── dashboard/       # Panel components (Analytics, Plans, Products, etc.)
+│   └── ui/              # shadcn/ui primitives
+├── lib/
+│   ├── api.ts           # Fetch wrapper for /api/v1/billing/*
+│   └── auth-client.ts   # Better Auth client config
+├── store/               # Zustand stores (auth, plans, products, etc.)
+├── pages/               # Login, Privacy, Terms
+└── App.tsx              # Routes + ProtectedRoute
 ```
 
 
@@ -2176,6 +2747,10 @@ Webhooks notify your backend when payment events occur. Semaphore receives event
 NOMBA_CHECKOUT_CALLBACK_URL=https://your-api.example.com/webhook
 ```
 
+::: info
+The backend's built-in webhook route is `POST /webhook`. If using the SDK router directly (`createSemaphorePayRouter`), the path is `POST /webhooks/nomba`.
+:::
+
 ## Webhook Endpoint
 
 ```typescript
@@ -2372,9 +2947,9 @@ console.log(publicKey.key); // pk_... for client SDK
 Plans define pricing and billing intervals.
 
 ```typescript
-import { create } from '@semaphore-pay/server';
+import { createPlan } from '@semaphore-pay/server';
 
-const plan = await create(engine, {
+const plan = await createPlan(engine, {
   name: 'Pro',
   description: 'Full access',
   priceAmount: 5000, // ₦50.00 in kobo
@@ -2395,11 +2970,11 @@ Products are what customers subscribe to. Each product has its own features.
 import { createProduct } from '@semaphore-pay/server';
 
 const product = await createProduct(engine, {
+  id: 'prod_pro_access',
   name: 'Pro Access',
-  description: 'Unlimited access to all features',
   features: [
-    { featureId: 'api_calls', type: 'limit', limit: 10000 },
-    { featureId: 'export', type: 'boolean' },
+    { id: 'api_calls', type: 'limit', limit: 10000 },
+    { id: 'export', type: 'boolean' },
   ],
 }, {
   collectionId: collection.id,
@@ -2540,10 +3115,10 @@ const client = new SemaphorePayClient({
 ## 5. Create Your First Subscription
 
 ```typescript
-import { create, createProduct, subscribe } from '@semaphore-pay/server';
+import { createPlan, createProduct, subscribe } from '@semaphore-pay/server';
 
 // Server: create a plan
-const plan = await create(engine, {
+const plan = await createPlan(engine, {
   name: 'Pro Plan',
   description: 'Full access to all features',
   priceAmount: 2999, // ₦29.99 in kobo
@@ -2556,6 +3131,7 @@ const plan = await create(engine, {
 
 // Server: create a product
 const product = await createProduct(engine, {
+  id: 'prod_pro_access',
   name: 'Pro Access',
   features: [],
 }, {

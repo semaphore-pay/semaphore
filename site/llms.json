@@ -3,6 +3,12 @@
   "description": "",
   "pages": [
     {
+      "title": "Balance API",
+      "url": "https://docs.semaphorepay.tech/api-reference/balance/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
       "title": "Collections API",
       "url": "https://docs.semaphorepay.tech/api-reference/collections/",
       "description": "",
@@ -21,8 +27,20 @@
       "priority": "medium"
     },
     {
+      "title": "Features API",
+      "url": "https://docs.semaphorepay.tech/api-reference/features/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
       "title": "API Reference",
       "url": "https://docs.semaphorepay.tech/api-reference/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Metrics API",
+      "url": "https://docs.semaphorepay.tech/api-reference/metrics/",
       "description": "",
       "priority": "medium"
     },
@@ -65,6 +83,30 @@
     {
       "title": "Subscriptions",
       "url": "https://docs.semaphorepay.tech/concepts/subscriptions/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Dashboard API Mapping",
+      "url": "https://docs.semaphorepay.tech/dashboard/api/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Dashboard Authentication",
+      "url": "https://docs.semaphorepay.tech/dashboard/auth/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Dashboard",
+      "url": "https://docs.semaphorepay.tech/dashboard/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Dashboard Setup",
+      "url": "https://docs.semaphorepay.tech/dashboard/setup/",
       "description": "",
       "priority": "medium"
     },

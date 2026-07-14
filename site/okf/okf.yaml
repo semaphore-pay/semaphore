@@ -1,20 +1,28 @@
-okf_version: 0.8.9
+okf_version: 0.8.13
 bundle:
   name: semaphore-pay
   title: "Semaphore Pay"
   description: ""
   url: "https://docs.semaphorepay.tech"
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-07T20:01:08.651Z"
+  generated_at: "2026-07-14T15:56:13.478Z"
   default_type: concept
 stats:
-  concepts: 21
+  concepts: 28
   by_type:
-    concept: 17
+    concept: 24
     guide: 4
   locales: 
   versions: 
 concepts:
+  - id: api-reference-balance
+    type: concept
+    title: "Balance API"
+    path: /api-reference/balance/
+    file: concepts/api-reference-balance.md
+    locale: ""
+    version: ""
+    tags: 
   - id: api-reference-collections
     type: concept
     title: "Collections API"
@@ -36,6 +44,22 @@ concepts:
     title: "Entitlements API"
     path: /api-reference/entitlements/
     file: concepts/api-reference-entitlements.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: api-reference-features
+    type: concept
+    title: "Features API"
+    path: /api-reference/features/
+    file: concepts/api-reference-features.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: api-reference-metrics
+    type: concept
+    title: "Metrics API"
+    path: /api-reference/metrics/
+    file: concepts/api-reference-metrics.md
     locale: ""
     version: ""
     tags: 
@@ -100,6 +124,38 @@ concepts:
     title: Subscriptions
     path: /concepts/subscriptions/
     file: concepts/concepts-subscriptions.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: dashboard-api
+    type: concept
+    title: "Dashboard API Mapping"
+    path: /dashboard/api/
+    file: concepts/dashboard-api.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: dashboard-auth
+    type: concept
+    title: "Dashboard Authentication"
+    path: /dashboard/auth/
+    file: concepts/dashboard-auth.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: dashboard
+    type: concept
+    title: Dashboard
+    path: /dashboard/
+    file: concepts/dashboard.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: dashboard-setup
+    type: concept
+    title: "Dashboard Setup"
+    path: /dashboard/setup/
+    file: concepts/dashboard-setup.md
     locale: ""
     version: ""
     tags: 

@@ -3,10 +3,10 @@ type: guide
 title: Webhooks
 source: "https://docs.semaphorepay.tech/guides/webhooks/"
 path: /guides/webhooks/
-updated: 2026-07-07
+updated: 2026-07-14
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-07T20:01:08.645Z"
+  generated_at: "2026-07-14T15:56:13.472Z"
 ---
 ---
 title: Webhooks
@@ -22,6 +22,10 @@ Webhooks notify your backend when payment events occur. Semaphore receives event
 # Environment variable
 NOMBA_CHECKOUT_CALLBACK_URL=https://your-api.example.com/webhook
 ```
+
+::: info
+The backend's built-in webhook route is `POST /webhook`. If using the SDK router directly (`createSemaphorePayRouter`), the path is `POST /webhooks/nomba`.
+:::
 
 ## Webhook Endpoint
 

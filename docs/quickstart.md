@@ -77,10 +77,10 @@ const client = new SemaphorePayClient({
 ## 5. Create Your First Subscription
 
 ```typescript
-import { create, createProduct, subscribe } from '@semaphore-pay/server';
+import { createPlan, createProduct, subscribe } from '@semaphore-pay/server';
 
 // Server: create a plan
-const plan = await create(engine, {
+const plan = await createPlan(engine, {
   name: 'Pro Plan',
   description: 'Full access to all features',
   priceAmount: 2999, // ₦29.99 in kobo
@@ -93,6 +93,7 @@ const plan = await create(engine, {
 
 // Server: create a product
 const product = await createProduct(engine, {
+  id: 'prod_pro_access',
   name: 'Pro Access',
   features: [],
 }, {

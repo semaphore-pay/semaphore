@@ -31,7 +31,7 @@ Each collection is completely isolated. Data, API keys, and billing are separate
 ```typescript
 import { createCollection } from '@semaphore-pay/server';
 
-const collection = await createCollection(engine, 'My App', 'sandbox');
+const collection = await createCollection(engine, 'My App', 'development');
 ```
 
 Response:
@@ -40,7 +40,7 @@ Response:
 {
   "id": "col_abc123",
   "name": "My App",
-  "environment": "sandbox",
+  "environment": "development",
   "createdAt": "2026-07-05T12:00:00Z"
 }
 ```
@@ -51,7 +51,7 @@ Each collection has an environment:
 
 | Environment | Purpose | Nomba Keys |
 |---|---|---|
-| `sandbox` | Development and testing | `NOMBA_SANDBOX_*` |
+| `development` | Development and testing | `NOMBA_SANDBOX_*` |
 | `production` | Live payments | `NOMBA_LIVE_*` |
 
 ## API Keys
@@ -74,15 +74,3 @@ Never expose secret keys in client-side code. Use public keys for end-user appli
 const collections = await fetch('/api/v1/billing/collections');
 // Returns: [{ id, name, environment, plans, products, customers, activeSubscriptions }]
 ```
-
-## Deleting a Collection
-
-```typescript
-import { deleteCollection } from '@semaphore-pay/server';
-
-await deleteCollection(engine, 'col_abc123');
-```
-
-::: danger
-Deleting a collection removes all associated API keys. This action is irreversible.
-:::

@@ -3,10 +3,10 @@ type: concept
 title: "Plans API"
 source: "https://docs.semaphorepay.tech/api-reference/plans/"
 path: /api-reference/plans/
-updated: 2026-07-07
+updated: 2026-07-14
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-07T20:01:08.631Z"
+  generated_at: "2026-07-14T15:56:13.453Z"
 ---
 ---
 title: Plans API
@@ -24,6 +24,7 @@ Cookie: semaphore.session=...
 
 ```json
 {
+  "id": "plan_pro_monthly",
   "name": "Pro",
   "description": "Full access",
   "priceAmount": 5000,
@@ -37,6 +38,7 @@ Cookie: semaphore.session=...
 
 | Field | Type | Required | Description |
 |---|---|---|---|
+| `id` | string | yes | Unique plan ID (e.g. `"plan_pro_monthly"`) |
 | `name` | string | yes | Plan name |
 | `description` | string | no | Plan description |
 | `priceAmount` | number | yes | Price in kobo (₦50.00 = 5000) |

@@ -110,7 +110,7 @@ await report(engine, {
 ## Fetching Subscriptions
 
 ```typescript
-import { list as listSubscriptions } from '@semaphore-pay/server/subscription';
+import { list as listSubscriptions } from '@semaphore-pay/server';
 
 const subscriptions = await listSubscriptions(engine, {
   status: 'active',

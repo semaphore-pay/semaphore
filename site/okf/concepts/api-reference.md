@@ -3,10 +3,10 @@ type: concept
 title: "API Reference"
 source: "https://docs.semaphorepay.tech/api-reference/"
 path: /api-reference/
-updated: 2026-07-07
+updated: 2026-07-14
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-07T20:01:08.637Z"
+  generated_at: "2026-07-14T15:56:13.456Z"
 ---
 ---
 title: API Reference
@@ -48,6 +48,7 @@ No auth required — verified by HMAC-SHA256 signature from Nomba.
 | `POST` | `/collections` | Create a collection |
 | `GET` | `/collections` | List all collections |
 | `GET` | `/collections/:id` | Get a collection |
+| `PUT` | `/collections/:id` | Update a collection |
 | `GET` | `/collections/:id/analytics` | Get collection analytics |
 | `DELETE` | `/collections/:id` | Delete a collection |
 
@@ -125,7 +126,14 @@ No auth required — verified by HMAC-SHA256 signature from Nomba.
 |---|---|---|
 | `GET` | `/collections/:id/metrics/trend` | Get metric trend (current vs previous) |
 | `GET` | `/collections/:id/metrics/history` | Get metric history |
+| `POST` | `/collections/:id/metrics/refresh` | Refresh metric snapshot |
 | `GET` | `/collections/:id/balance` | Get collection balance |
+
+### Cron
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/collections/:id/cron/run` | Manually trigger renewal cron |
 
 ## Client SDK API (`/client`)
 

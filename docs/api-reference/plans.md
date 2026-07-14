@@ -14,6 +14,7 @@ Cookie: semaphore.session=...
 
 ```json
 {
+  "id": "plan_pro_monthly",
   "name": "Pro",
   "description": "Full access",
   "priceAmount": 5000,
@@ -27,6 +28,7 @@ Cookie: semaphore.session=...
 
 | Field | Type | Required | Description |
 |---|---|---|---|
+| `id` | string | yes | Unique plan ID (e.g. `"plan_pro_monthly"`) |
 | `name` | string | yes | Plan name |
 | `description` | string | no | Plan description |
 | `priceAmount` | number | yes | Price in kobo (₦50.00 = 5000) |

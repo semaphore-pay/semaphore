@@ -4,10 +4,13 @@
 
 ## Documentation Files
 
+- [Balance API](https://docs.semaphorepay.tech/api-reference/balance/)
 - [Collections API](https://docs.semaphorepay.tech/api-reference/collections/)
 - [Customers API](https://docs.semaphorepay.tech/api-reference/customers/)
 - [Entitlements API](https://docs.semaphorepay.tech/api-reference/entitlements/)
+- [Features API](https://docs.semaphorepay.tech/api-reference/features/)
 - [API Reference](https://docs.semaphorepay.tech/api-reference/)
+- [Metrics API](https://docs.semaphorepay.tech/api-reference/metrics/)
 - [Plans API](https://docs.semaphorepay.tech/api-reference/plans/)
 - [Products API](https://docs.semaphorepay.tech/api-reference/products/)
 - [Subscriptions API](https://docs.semaphorepay.tech/api-reference/subscriptions/)
@@ -15,6 +18,10 @@
 - [Entitlements](https://docs.semaphorepay.tech/concepts/entitlements/)
 - [Products & Plans](https://docs.semaphorepay.tech/concepts/products-plans/)
 - [Subscriptions](https://docs.semaphorepay.tech/concepts/subscriptions/)
+- [Dashboard API Mapping](https://docs.semaphorepay.tech/dashboard/api/)
+- [Dashboard Authentication](https://docs.semaphorepay.tech/dashboard/auth/)
+- [Dashboard](https://docs.semaphorepay.tech/dashboard/)
+- [Dashboard Setup](https://docs.semaphorepay.tech/dashboard/setup/)
 - [Deploy to Cloudflare](https://docs.semaphorepay.tech/deploy/cloudflare/)
 - [Environment Variables](https://docs.semaphorepay.tech/deploy/env/)
 - [React Native](https://docs.semaphorepay.tech/guides/react-native/)

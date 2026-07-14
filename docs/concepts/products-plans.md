@@ -11,9 +11,9 @@ Plans define pricing. Products are what customers actually use.
 A plan defines how much to charge and how often.
 
 ```typescript
-import { create } from '@semaphore-pay/server';
+import { createPlan } from '@semaphore-pay/server';
 
-const plan = await create(engine, {
+const plan = await createPlan(engine, {
   name: 'Pro',
   description: 'Full access',
   priceAmount: 5000, // ₦50.00 in kobo
@@ -57,12 +57,12 @@ Products are what customers subscribe to or purchase. Each product has its own f
 import { createProduct } from '@semaphore-pay/server';
 
 const product = await createProduct(engine, {
+  id: 'prod_pro_access',
   name: 'Pro Access',
-  description: 'Unlimited access to all features',
   features: [
-    { featureId: 'api_calls', type: 'limit', limit: 10000 },
-    { featureId: 'export', type: 'boolean' },
-    { featureId: 'pro_mode', type: 'boolean' },
+    { id: 'api_calls', type: 'limit', limit: 10000 },
+    { id: 'export', type: 'boolean' },
+    { id: 'pro_mode', type: 'boolean' },
   ],
 }, {
   collectionId: 'col_abc123',
@@ -74,15 +74,15 @@ const product = await createProduct(engine, {
 
 | Field | Type | Description |
 |---|---|---|
+| `id` | string | Unique product identifier (e.g. `"prod_pro_access"`) |
 | `name` | string | Display name |
-| `description` | string | Optional description |
 | `features` | FeatureInput[] | Features attached to this product |
 
 ### FeatureInput
 
 | Field | Type | Description |
 |---|---|---|
-| `featureId` | string | Feature identifier (e.g. `"api_calls"`) |
+| `id` | string | Feature identifier (e.g. `"api_calls"`) |
 | `type` | string | `"boolean"` for on/off, `"limit"` for metered |
 | `limit` | number | Max units for metered features |
 | `resetInterval` | string | `"day"`, `"week"`, `"month"`, or `"year"` |
@@ -90,11 +90,11 @@ const product = await createProduct(engine, {
 ## Listing
 
 ```typescript
-import { list } from '@semaphore-pay/server';
+import { listPlans } from '@semaphore-pay/server';
 import { listProducts } from '@semaphore-pay/server';
 
 // List plans
-const plans = await list(engine, {}, {
+const plans = await listPlans(engine, {}, {
   collectionId: 'col_abc123',
   environment: 'development',
 });
@@ -109,10 +109,10 @@ const products = await listProducts(engine, {
 ## Getting by ID
 
 ```typescript
-import { get } from '@semaphore-pay/server';
+import { getPlan } from '@semaphore-pay/server';
 import { getProduct } from '@semaphore-pay/server';
 
-const plan = await get(engine, { planId: 'plan_pro_monthly' }, {
+const plan = await getPlan(engine, { planId: 'plan_pro_monthly' }, {
   collectionId: 'col_abc123',
   environment: 'development',
 });
@@ -129,6 +129,6 @@ const product = await getProduct(engine, {
 | Aspect | Plan | Product |
 |---|---|---|
 | Purpose | Defines pricing & billing | Defines features & access |
-| Price | Has `priceAmount` | No price (links to plan via subscription) |
+| Price | Has `priceAmount` | Optional `priceAmount` (can have standalone pricing) |
 | Features | Can have features attached | Has features directly |
 | Subscription | Customer subscribes to plan | Customer gets access via plan subscription |

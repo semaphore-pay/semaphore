@@ -22,14 +22,14 @@ import { createFeatureApi } from '@semaphore-pay/server';
 
 // Boolean feature
 await createFeatureApi(engine, {
-  featureId: 'pro_mode',
+  id: 'pro_mode',
   name: 'Pro Mode',
   type: 'boolean',
 }, { collectionId: 'col_abc123' });
 
 // Limit feature
 await createFeatureApi(engine, {
-  featureId: 'api_calls',
+  id: 'api_calls',
   name: 'API Calls',
   type: 'limit',
 }, { collectionId: 'col_abc123' });
@@ -43,6 +43,7 @@ import { attachPlan } from '@semaphore-pay/server';
 await attachPlan(engine, {
   planId: 'plan_pro_monthly',
   featureId: 'api_calls',
+  type: 'limit',
   limit: 10000,
   resetInterval: 'month',
 }, { collectionId: 'col_abc123' });
@@ -56,6 +57,7 @@ import { attachProduct } from '@semaphore-pay/server';
 await attachProduct(engine, {
   productInternalId: 'prod_a1b2c3d4',
   featureId: 'pro_mode',
+  type: 'boolean',
 }, { collectionId: 'col_abc123' });
 ```
 

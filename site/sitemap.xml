@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://docs.semaphorepay.tech/api-reference/balance/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://docs.semaphorepay.tech/api-reference/collections/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -12,6 +17,16 @@
   </url>
   <url>
     <loc>https://docs.semaphorepay.tech/api-reference/entitlements/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docs.semaphorepay.tech/api-reference/features/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docs.semaphorepay.tech/api-reference/metrics/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -52,6 +67,26 @@
   </url>
   <url>
     <loc>https://docs.semaphorepay.tech/concepts/subscriptions/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docs.semaphorepay.tech/dashboard/api/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docs.semaphorepay.tech/dashboard/auth/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docs.semaphorepay.tech/dashboard/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docs.semaphorepay.tech/dashboard/setup/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

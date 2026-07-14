@@ -3,10 +3,10 @@ type: concept
 title: "First API Call"
 source: "https://docs.semaphorepay.tech/quickstart/first-call/"
 path: /quickstart/first-call/
-updated: 2026-07-07
+updated: 2026-07-14
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-07-07T20:01:08.648Z"
+  generated_at: "2026-07-14T15:56:13.474Z"
 ---
 ---
 title: First API Call
@@ -57,9 +57,9 @@ console.log(publicKey.key); // pk_... for client SDK
 Plans define pricing and billing intervals.
 
 ```typescript
-import { create } from '@semaphore-pay/server';
+import { createPlan } from '@semaphore-pay/server';
 
-const plan = await create(engine, {
+const plan = await createPlan(engine, {
   name: 'Pro',
   description: 'Full access',
   priceAmount: 5000, // ₦50.00 in kobo
@@ -80,11 +80,11 @@ Products are what customers subscribe to. Each product has its own features.
 import { createProduct } from '@semaphore-pay/server';
 
 const product = await createProduct(engine, {
+  id: 'prod_pro_access',
   name: 'Pro Access',
-  description: 'Unlimited access to all features',
   features: [
-    { featureId: 'api_calls', type: 'limit', limit: 10000 },
-    { featureId: 'export', type: 'boolean' },
+    { id: 'api_calls', type: 'limit', limit: 10000 },
+    { id: 'export', type: 'boolean' },
   ],
 }, {
   collectionId: collection.id,
