@@ -42,6 +42,7 @@ export {
 } from "./api/api.service";
 
 export { runSemaphorePayCron } from "./cron";
+export type { ChargeFn } from "./cron";
 
 // ── Customer ─────────────────────────────────────────────
 export {
@@ -155,3 +156,4 @@ export type { WebhookContext } from "./webhook/webhook.service";
 // ── Nomba ────────────────────────────────────────────────
 export { NombaClient } from "./nomba/nomba";
 export type { NombaClientOptions } from "./nomba/nomba";
+export { buildChargeFn } from "./nomba/charge-fn";

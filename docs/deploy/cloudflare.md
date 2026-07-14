@@ -114,5 +114,6 @@ npx @docmd/core build
 Output is in `site/` directory. Upload to Cloudflare Pages:
 
 ```bash
-npx wrangler pages deploy site --project-name=semaphore-docs
+cd site
+npx wrangler pages deploy . --project-name=semaphore-docs
 ```

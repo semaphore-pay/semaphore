@@ -11,6 +11,7 @@ import { purchaseProduct } from "../product/product.api";
 import { handleWebhook } from "../webhook/webhook.api";
 import { processSuccessfulPayment } from "../webhook/webhook.service";
 import { runSemaphorePayCron } from "../cron";
+import { buildChargeFn } from "../nomba/charge-fn";
 import { listFeatures } from "../feature/feature.service";
 import { NombaClient } from "../nomba/nomba";
 
@@ -460,24 +461,13 @@ export function createSemaphorePayRouter(
     if (c.get("keyType") !== "secret") return c.json({ error: "Secret API key required." }, 403);
     const e = getEngine(c);
     const chargeFn = (options?.nomba || options?.nombaClients)
-      ? async (input: { tokenKey: string; amount: number; currency: string; orderReference: string }) => {
-          const nomba = getNombaClient();
-          try {
-            const result = await nomba.tokenizedCards.charge({
-              tokenKey: input.tokenKey,
-              order: {
-                orderReference: input.orderReference,
-                amount: input.amount,
-                currency: input.currency as any,
-                customerEmail: "",
-                callbackUrl: options?.nomba?.callbackUrl ?? "",
-              },
-            });
-            return { success: result.status, status: result.message };
-          } catch {
-            return { success: false };
-          }
-        }
+      ? buildChargeFn(
+          {
+            get sandbox() { return getNombaClient("sandbox"); },
+            get production() { return getNombaClient("production"); },
+          },
+          options?.nomba?.callbackUrl ?? "",
+        )
       : undefined;
 
     const result = await runSemaphorePayCron(e, chargeFn);

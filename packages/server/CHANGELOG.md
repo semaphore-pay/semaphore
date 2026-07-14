@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.37
+
+### Fixed
+- **Payment retry dunning now actually charges customers** — `runSemaphorePayCron` previously accepted an optional `chargeFn` for retrying failed payments on past-due subscriptions, but the retry logic was gated behind `if (chargeFn)` and no callers passed it. The SDK now exports `buildChargeFn` which builds a working charge function from pre-configured Nomba clients. Backend cron and manual trigger both pass `chargeFn` now.
+
+### Added
+- `buildChargeFn(clients, callbackUrl)` — creates a `ChargeFn` that charges a customer's saved tokenized card via Nomba API, selecting the correct client based on subscription collection environment
+- `ChargeFn` type now includes `customerEmail` (required by Nomba API) and `environment` (selects sandbox/production Nomba client)
+- Cron retry query now joins `collection` table to resolve per-collection environment and selects `customer.email` for the charge request
+
 ## 0.1.36
 
 ### Added

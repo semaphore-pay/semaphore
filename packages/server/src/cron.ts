@@ -8,6 +8,8 @@ export type ChargeFn = (input: {
   amount: number;
   currency: string;
   orderReference: string;
+  customerEmail: string;
+  environment: "sandbox" | "production";
 }) => Promise<{ success: boolean; status?: string }>;
 
 export interface CronResult {
@@ -154,11 +156,14 @@ export async function runSemaphorePayCron(
           planPriceAmount: schema.plan.priceAmount,
           planPriceCurrency: schema.plan.priceCurrency,
           nombaTokenId: schema.paymentMethod.nombaTokenId,
+          customerEmail: schema.customer.email,
+          environment: schema.collection.environment,
         })
         .from(schema.subscription)
         .innerJoin(schema.plan, eq(schema.subscription.planId, schema.plan.id))
         .innerJoin(schema.customer, eq(schema.subscription.customerId, schema.customer.id))
         .innerJoin(schema.paymentMethod, eq(schema.customer.id, schema.paymentMethod.customerId))
+        .innerJoin(schema.collection, eq(schema.subscription.collectionId, schema.collection.id))
         .where(
           and(
             eq(schema.subscription.status, "past_due"),
@@ -182,6 +187,8 @@ export async function runSemaphorePayCron(
             amount,
             currency,
             orderReference: `retry_${row.sub.id}_${now.getTime()}`,
+            customerEmail: row.customerEmail ?? "",
+            environment: (row.environment as "sandbox" | "production") ?? "sandbox",
           });
 
           if (result.success) {
