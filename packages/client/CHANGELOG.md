@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.1.6
+
+### Added
+- `listSubscriptions()` — fetches active subscriptions for the current customer, used to restore subscription state on page reload
+- `listPurchases()` — fetches product purchases for the current customer, used to restore purchase state on page reload
+
+## 0.1.5
+
+### Added
+- `Feature` interface now exported from `@semaphore-pay/client` (was in source but missing from dist types)
+
+## 0.1.4
+
+### Added
+- Initial release with `SemaphorePayClient`
+- Plan, Product, Feature, FeatureInput types
+- Subscription management (subscribe, cancel)
+- Product purchases
+- Entitlement checking and reporting
+- Payment verification with polling
+- React hooks (`useSemaphorePayStore`)
+- React Native support
+
 ## 0.1.3
 
 - Added `test_15min` to `PlanInterval` type for test plans with 15-minute billing cycles

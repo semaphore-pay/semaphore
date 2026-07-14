@@ -69,6 +69,18 @@ export async function subscribeToPlan(
       orderBy: [desc(schema.subscription.createdAt)],
     });
 
+    if (activeSub) {
+      if (activeSub.planId === input.planId) {
+        return {
+          subscriptionId: activeSub.id,
+          status: activeSub.status as "active" | "pending_payment" | "trialing",
+          nombaOrderReference: activeSub.nombaOrderReference,
+          trialEndAt: activeSub.trialEndAt,
+        };
+      }
+      throw new Error("Customer already has an active subscription. Cancel it before subscribing to a different plan.");
+    }
+
     const isFreePlan = targetPlan.priceAmount === 0;
     const hasTrial = targetPlan.trialPeriodDays > 0 && targetPlan.interval !== "none" && targetPlan.interval !== "test_15min" && !isFreePlan;
     const subscriptionId = crypto.randomUUID();
@@ -105,18 +117,9 @@ export async function subscribeToPlan(
         balance: isBoolean ? null : feature.limit,
         limit: isBoolean ? null : feature.limit,
         nextResetAt: isBoolean || targetPlan.interval === "none" ? null : periodEndAt,
+        sourceType: "subscription",
+        sourceId: targetPlan.id,
       });
-    }
-
-    if (activeSub && isFreePlan) {
-      await tx
-        .update(schema.subscription)
-        .set({
-          status: "canceled",
-          endedAt: now,
-          updatedAt: now,
-        })
-        .where(eq(schema.subscription.id, activeSub.id));
     }
 
     return {

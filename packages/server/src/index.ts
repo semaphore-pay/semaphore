@@ -34,6 +34,7 @@ export { getSemaphorePayHooks } from "./auth";
 // ── API Service ──────────────────────────────────────────
 export {
   createCollection,
+  updateCollection,
   createApiKey,
   createSemaphorePayRouter,
   type NombaConfig,
@@ -66,6 +67,7 @@ export {
 export {
   createProduct,
   listProducts,
+  listPurchases,
 } from "./product/product.service";
 export type { CreateProductInput, CreateProductRequest } from "./product/product.types";
 

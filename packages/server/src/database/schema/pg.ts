@@ -361,6 +361,7 @@ export const collection = pgTable("collection", {
   id: text("id").primaryKey(), // e.g., col_123abc
   name: text("name").notNull(),
   environment: text("environment").notNull().default("sandbox"), // "sandbox" or "production"
+  callbackUrl: text("callback_url"), // Per-collection Nomba checkout callback URL
   createdAt,
   updatedAt,
 });

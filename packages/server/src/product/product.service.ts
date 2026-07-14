@@ -1,4 +1,4 @@
-import { and, eq, inArray, ne } from "drizzle-orm";
+import { and, eq, inArray, ne, desc } from "drizzle-orm";
 import type { SemaphorePayEngine } from "../database/index";
 import type { CreateProductInput } from "./product.types";
 
@@ -54,6 +54,33 @@ export async function createProduct(
 
     return rows[0];
   });
+}
+
+export async function listPurchases(
+  engine: SemaphorePayEngine<any>,
+  input: { customerId: string; collectionId: string }
+) {
+  const schema = engine.schema;
+
+  const purchases = await engine.db
+    .select({
+      id: schema.productPurchase.id,
+      customerId: schema.productPurchase.customerId,
+      productInternalId: schema.productPurchase.productInternalId,
+      status: schema.productPurchase.status,
+      purchasedAt: schema.productPurchase.purchasedAt,
+      createdAt: schema.productPurchase.createdAt,
+    })
+    .from(schema.productPurchase)
+    .where(
+      and(
+        eq(schema.productPurchase.customerId, input.customerId),
+        eq(schema.productPurchase.collectionId, input.collectionId),
+      ),
+    )
+    .orderBy(desc(schema.productPurchase.createdAt));
+
+  return { purchases, total: purchases.length };
 }
 
 export async function listProducts(

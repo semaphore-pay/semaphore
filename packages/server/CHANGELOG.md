@@ -1,5 +1,52 @@
 # Changelog
 
+## 0.1.36
+
+### Added
+- `GET /client/subscriptions` — returns subscriptions for the current customer (used by client to restore subscription state on page reload)
+- `GET /client/purchases` — returns product purchases for the current customer
+- `listPurchases` export from package entry point
+
+### Fixed
+- `subscribeToPlan` now prevents duplicate active subscriptions — returns existing subscription if customer already has one for the same plan, throws error if trying to subscribe to a different plan while one is active
+- `attachFeatureToPlan` now backfills entitlement rows for all active subscribers of the plan — features added to a plan after subscription are immediately available
+- `getActiveEntitlements` now lazily backfills missing entitlement rows — if a customer has an active subscription whose plan includes a feature but no entitlement row exists, one is created on the fly
+
+## 0.1.35
+
+- Fixed: `processSuccessfulPayment` now wraps `data.tokenizedCardData` (single object from Nomba webhook) into an array — tokenized cards are now correctly stored in `paymentMethod` table for recurring billing
+- Fixed: Tokenized card field mapping matches Nomba webhook payload — `cardType` → `brand`, `cardPan` → `last4`, `tokenExpiryMonth` → `expiryMonth`, `tokenExpiryYear` → `expiryYear`
+- Fixed: `subscribeToPlan` now sets `sourceType: "subscription"` and `sourceId: targetPlan.id` on entitlement rows — `resetEntitlementBalances` can now find the plan and reset metered balances correctly on renewal
+- Fixed: `TokenizedCardData` type updated to match Nomba webhook payload — replaced `tokenExpirationDate` string with `tokenExpiryYear` and `tokenExpiryMonth` optional fields
+
+## 0.1.34
+
+- Fixed: `createTestPlan` now uses `generatePlanId("Test Plan (15 min cycle)", "test_15min")` → `plan_test_plan_15_min_cycle__test_15min` — matches expected `plan_{name}_{interval}` format validated by `createPlan`, removing redundant `Date.now()` timestamp
+
+## 0.1.33
+
+- Fixed: Added `./database` export to package.json — internal imports from `../database/index` now resolve correctly when published to npm
+
+## 0.1.32
+
+- Exported `updateCollection` from main entry point — allows updating collection `name` and `callbackUrl` via admin API
+- Fixed: Nomba checkout amount conversion — server divides kobo by 100 before sending to Nomba API (Nomba expects main currency unit, not kobo)
+- Fixed: Per-collection callback URL now used for checkout (falls back to global config)
+
+## 0.1.31
+
+- Changed default `trialPeriodDays` for plans from 30 to 0 — paid plans now go straight to `pending_payment` (no trial) unless explicitly configured
+
+## 0.1.30
+
+- Added `GET /client/features` endpoint — returns collection features with `featureId`, `type`, `limit`, `resetInterval` for dynamic entitlement UI
+
+## 0.1.29
+
+- Added per-collection Nomba checkout callback URL (`callbackUrl` field on collection table)
+- Subscription and product purchase checkout now use collection-specific callback URL (falls back to global config)
+- Migration: added `callback_url` column to `semaphore_pay_collection` table
+
 ## 0.1.28
 
 - Fixed Nomba checkout amount conversion — server now divides kobo by 100 before sending to Nomba API (Nomba expects main currency unit, not kobo)

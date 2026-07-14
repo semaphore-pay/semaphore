@@ -181,8 +181,10 @@ export interface TokenizedCardData {
   cardType: string;
   /** Masked card PAN, e.g. "234818********7580". */
   cardPan: string;
-  /** e.g. "20/20" (MM/YY-ish format as returned by Nomba). */
-  tokenExpirationDate: string;
+  /** Card expiry year, e.g. "2027" (as returned in webhook payload). */
+  tokenExpiryYear?: string;
+  /** Card expiry month, e.g. "12" (as returned in webhook payload). */
+  tokenExpiryMonth?: string;
 }
 
 export interface TokenizedCardPaymentRequest {

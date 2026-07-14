@@ -1,4 +1,4 @@
-import { and, eq, or, inArray } from "drizzle-orm";
+import { and, eq, or, inArray, isNull, sql } from "drizzle-orm";
 import type { SemaphorePayEngine } from "../database/index";
 
 export interface Feature {
@@ -152,20 +152,62 @@ export async function attachFeatureToPlan(
     throw new Error(`Feature "${input.featureId}" is already attached to plan "${input.planId}"`);
   }
 
-  const [row] = await engine.db
-    .insert(schema.planFeature)
-    .values({
-      planId: input.planId,
-      featureId: input.featureId,
-      limit: input.type === "boolean" ? null : (input.limit ?? null),
-      resetInterval: input.resetInterval ?? null,
-      config: input.config ?? null,
-      createdAt: now,
-      updatedAt: now,
-    })
-    .returning();
+  return await engine.transaction(async (tx: any) => {
+    const [row] = await tx
+      .insert(schema.planFeature)
+      .values({
+        planId: input.planId,
+        featureId: input.featureId,
+        limit: input.type === "boolean" ? null : (input.limit ?? null),
+        resetInterval: input.resetInterval ?? null,
+        config: input.config ?? null,
+        createdAt: now,
+        updatedAt: now,
+      })
+      .returning();
 
-  return row;
+    const activeSubscriptions = await tx
+      .select({
+        id: schema.subscription.id,
+        customerId: schema.subscription.customerId,
+        currentPeriodEndAt: schema.subscription.currentPeriodEndAt,
+      })
+      .from(schema.subscription)
+      .where(
+        and(
+          eq(schema.subscription.planId, input.planId),
+          inArray(schema.subscription.status, ["active", "trialing", "past_due"]),
+          or(
+            isNull(schema.subscription.endedAt),
+            sql`${schema.subscription.endedAt} > ${now.toISOString()}`
+          ),
+        ),
+      );
+
+    const isBoolean = input.type === "boolean";
+    const featureLimit = isBoolean ? null : (input.limit ?? null);
+
+    for (const sub of activeSubscriptions) {
+      let nextResetAt: Date | null = null;
+      if (!isBoolean && input.resetInterval && sub.currentPeriodEndAt) {
+        nextResetAt = sub.currentPeriodEndAt;
+      }
+
+      await tx.insert(schema.entitlement).values({
+        id: crypto.randomUUID(),
+        customerId: sub.customerId,
+        subscriptionId: sub.id,
+        featureId: input.featureId,
+        balance: featureLimit,
+        limit: featureLimit,
+        nextResetAt,
+        sourceType: "subscription",
+        sourceId: input.planId,
+      });
+    }
+
+    return row;
+  });
 }
 
 export async function detachFeatureFromPlan(

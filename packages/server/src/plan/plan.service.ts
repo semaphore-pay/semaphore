@@ -2,7 +2,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import type { SemaphorePayEngine } from "../database/index";
 import type { CreatePlanInput, Plan, PlanFeatureInput, PlanInterval } from "./plan.types";
 
-function generatePlanId(name: string, interval: PlanInterval): string {
+export function generatePlanId(name: string, interval: PlanInterval): string {
   const sanitized = name.toLowerCase().replace(/[^a-z0-9]+/g, "_");
   return `plan_${sanitized}_${interval}`;
 }

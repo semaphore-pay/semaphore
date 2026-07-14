@@ -1,7 +1,7 @@
 import * as z from "zod";
 import type { SemaphorePayEngine } from "../database/index";
-import { createPlan, listPlans, getPlan, deactivatePlan, reactivatePlan as reactivatePlanService, deletePlan } from "./plan.service";
-import type { CreatePlanInput } from "./plan.types";
+import { createPlan, listPlans, getPlan, deactivatePlan, reactivatePlan as reactivatePlanService, deletePlan, generatePlanId } from "./plan.service";
+import type { CreatePlanInput, PlanInterval } from "./plan.types";
 import { and, eq } from "drizzle-orm";
 
 const createPlanSchema = z.object({
@@ -11,7 +11,7 @@ const createPlanSchema = z.object({
   priceAmount: z.number().int().nonnegative(),
   priceCurrency: z.string().default("NGN"),
   interval: z.enum(["monthly", "yearly", "none", "test_15min"]),
-  trialPeriodDays: z.number().int().nonnegative().default(30),
+  trialPeriodDays: z.number().int().nonnegative().default(0),
   features: z.array(z.object({
     featureId: z.string(),
     type: z.enum(["boolean", "limit"]),
@@ -79,12 +79,14 @@ export async function createTestPlan(
   engine: SemaphorePayEngine<any>,
   input: { collectionId: string; environment: "development" | "production" }
 ) {
+  const name = "Test Plan (15 min cycle)";
+  const interval = "test_15min" as PlanInterval;
   return createPlan(engine, {
-    id: `plan_test_${Date.now()}_test_15min`,
-    name: "Test Plan (15 min cycle)",
+    id: generatePlanId(name, interval),
+    name,
     priceAmount: 100000,
     priceCurrency: "NGN",
-    interval: "test_15min",
+    interval,
     trialPeriodDays: 0,
     features: [],
     badge: "Test",

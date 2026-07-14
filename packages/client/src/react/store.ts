@@ -76,10 +76,12 @@ export const useSemaphorePayStore = create<SemaphorePayStore>((set) => ({
   },
 
   setSubscriptionStatus: (status) => {
+    console.log('[Store] setSubscriptionStatus:', status);
     set({
       subscriptionStatus: status,
       subscribed: status === "active" || status === "trialing",
     });
+    console.log('[Store] new subscribed:', status === "active" || status === "trialing");
   },
 
   setError: (error) => set({ error }),

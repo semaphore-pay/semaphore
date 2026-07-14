@@ -4,12 +4,14 @@ import type { SemaphorePayEngine } from "../database/index";
 import { upsertCustomer, getCustomer, deleteCustomer } from "../customer/customer.api";
 import { check, report } from "../entitlement/entitlement.api";
 import { subscribe, cancel } from "../subscription/subscription.api";
-import { createProduct, listProducts } from "../product/product.service";
+import { listSubscriptions } from "../subscription/subscription.service";
+import { createProduct, listProducts, listPurchases } from "../product/product.service";
 import { create as createPlan, list as listPlans, get as getPlan, createTestPlan } from "../plan/plan.api";
 import { purchaseProduct } from "../product/product.api";
 import { handleWebhook } from "../webhook/webhook.api";
 import { processSuccessfulPayment } from "../webhook/webhook.service";
 import { runSemaphorePayCron } from "../cron";
+import { listFeatures } from "../feature/feature.service";
 import { NombaClient } from "../nomba/nomba";
 
 type Env = {
@@ -65,19 +67,49 @@ function createNombaClient(nombaConfig: NombaConfig | NombaMultiConfig, environm
  *
  * @returns The created collection row.
  */
-export async function createCollection(engine: SemaphorePayEngine<any>, name: string, environment: string = 'sandbox') {
+export async function createCollection(engine: SemaphorePayEngine<any>, name: string, environment: string = 'sandbox', callbackUrl?: string) {
   const schema = engine.schema;
   const collectionId = `col_${crypto.randomUUID().replace(/-/g, "")}`;
 
   const rows = await engine.db
     .insert(schema.collection)
-    .values({ id: collectionId, name, environment })
+    .values({ id: collectionId, name, environment, callbackUrl })
     .returning();
 
   // Auto-create test plan for sandbox/development environments
   if (environment === 'sandbox' || environment === 'development') {
     await createTestPlan(engine, { collectionId, environment: 'development' });
   }
+
+  return rows[0];
+}
+
+/**
+ * Update a collection's mutable fields.
+ *
+ * @param engine - The SemaphorePay engine.
+ * @param collectionId - The collection to update.
+ * @param input - Fields to update (name, callbackUrl).
+ * @returns The updated collection row.
+ */
+export async function updateCollection(
+  engine: SemaphorePayEngine<any>,
+  collectionId: string,
+  input: { name?: string; callbackUrl?: string }
+): Promise<any> {
+  const schema = engine.schema;
+  const updates: Record<string, any> = {};
+  if (input.name !== undefined) updates.name = input.name;
+  if (input.callbackUrl !== undefined) updates.callbackUrl = input.callbackUrl;
+  if (Object.keys(updates).length === 0) return null;
+
+  updates.updatedAt = new Date();
+
+  const rows = await engine.db
+    .update(schema.collection)
+    .set(updates)
+    .where(eq(schema.collection.id, collectionId))
+    .returning();
 
   return rows[0];
 }
@@ -362,6 +394,13 @@ export function createSemaphorePayRouter(
     return c.json(result ?? null);
   });
 
+  catalog.get("/features", async (c) => {
+    const e = getEngine(c);
+    const collectionId = c.get("collectionId");
+    const result = await listFeatures(e, { collectionId });
+    return c.json(result);
+  });
+
   api.route("/", catalog);
 
   /* ------------------------------------------------------------------
@@ -385,6 +424,15 @@ export function createSemaphorePayRouter(
     const collectionId = c.get("collectionId");
     const customerId = c.req.param("id");
     const result = await deleteCustomer(e, { customerId }, { collectionId });
+    return c.json(result);
+  });
+
+  admin.put("/collections/:id", async (c) => {
+    if (c.get("keyType") !== "secret") return c.json({ error: "Secret API key required." }, 403);
+    const e = getEngine(c);
+    const collectionId = c.req.param("id");
+    const body = await c.req.json();
+    const result = await updateCollection(e, collectionId, body);
     return c.json(result);
   });
 
@@ -548,7 +596,11 @@ export function createSemaphorePayRouter(
     }
 
     const nomba = getNombaClient(environment);
-    const callbackUrl = options?.nombaClients?.callbackUrl ?? options?.nomba?.callbackUrl ?? "";
+    // Get collection's callback URL from DB
+    const collection = await e.db.query.collection.findFirst({
+      where: eq(e.schema.collection.id, collectionId),
+    });
+    const callbackUrl = collection?.callbackUrl ?? options?.nombaClients?.callbackUrl ?? options?.nomba?.callbackUrl ?? "";
 
     const checkout = await nomba.checkout.createOrder({
       order: {
@@ -581,6 +633,39 @@ export function createSemaphorePayRouter(
     const collectionId = c.get("collectionId");
     const subscriptionId = c.req.param("id");
     const result = await cancel(e, subscriptionId, { collectionId });
+    return c.json(result);
+  });
+
+  user.get("/subscriptions", async (c) => {
+    const e = getEngine(c);
+    const collectionId = c.get("collectionId");
+    const environment = c.get("environment");
+    const keyUserId = c.get("keyUserId");
+    if (!keyUserId) return c.json({ subscriptions: [], total: 0 });
+    const customer = await e.db.query.customer.findFirst({
+      where: and(
+        eq(e.schema.customer.userId, keyUserId),
+        eq(e.schema.customer.collectionId, collectionId),
+      ),
+    });
+    if (!customer) return c.json({ subscriptions: [], total: 0 });
+    const result = await listSubscriptions(e, { customerId: customer.id, collectionId, environment });
+    return c.json(result);
+  });
+
+  user.get("/purchases", async (c) => {
+    const e = getEngine(c);
+    const collectionId = c.get("collectionId");
+    const keyUserId = c.get("keyUserId");
+    if (!keyUserId) return c.json({ purchases: [], total: 0 });
+    const customer = await e.db.query.customer.findFirst({
+      where: and(
+        eq(e.schema.customer.userId, keyUserId),
+        eq(e.schema.customer.collectionId, collectionId),
+      ),
+    });
+    if (!customer) return c.json({ purchases: [], total: 0 });
+    const result = await listPurchases(e, { customerId: customer.id, collectionId });
     return c.json(result);
   });
 
@@ -720,7 +805,11 @@ export function createSemaphorePayRouter(
         if (customer?.email) {
           const nomba = getNombaClient(environment);
           const orderRef = `prod_${result.purchaseId}`;
-          const callbackUrl = options?.nombaClients?.callbackUrl ?? options?.nomba?.callbackUrl ?? "";
+          // Get collection's callback URL from DB
+          const collection = await e.db.query.collection.findFirst({
+            where: eq(e.schema.collection.id, collectionId),
+          });
+          const callbackUrl = collection?.callbackUrl ?? options?.nombaClients?.callbackUrl ?? options?.nomba?.callbackUrl ?? "";
 
           const checkout = await nomba.checkout.createOrder({
             order: {

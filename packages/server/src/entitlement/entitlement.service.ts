@@ -153,7 +153,111 @@ async function getActiveEntitlements(
       ),
     );
 
-  return [...subRows, ...purchaseRows] as ActiveEntitlementRow[];
+  if (subRows.length > 0 || purchaseRows.length > 0) {
+    return [...subRows, ...purchaseRows] as ActiveEntitlementRow[];
+  }
+
+  // Lazy backfill: no entitlement rows found. Check if customer has an active
+  // subscription whose plan includes this feature but no entitlement was created.
+  const now = new Date();
+
+  const missingSubscriptions = await tx
+    .select({
+      subscriptionId: schema.subscription.id,
+      customerId: schema.subscription.customerId,
+      currentPeriodEndAt: schema.subscription.currentPeriodEndAt,
+      pfLimit: schema.planFeature.limit,
+      pfResetInterval: schema.planFeature.resetInterval,
+      planId: schema.plan.id,
+      planInterval: schema.plan.interval,
+    })
+    .from(schema.subscription)
+    .innerJoin(
+      schema.plan,
+      eq(schema.plan.id, schema.subscription.planId),
+    )
+    .innerJoin(
+      schema.planFeature,
+      and(
+        eq(schema.planFeature.planId, schema.subscription.planId),
+        eq(schema.planFeature.featureId, featureId),
+      ),
+    )
+    .where(
+      and(
+        eq(schema.subscription.customerId, customerId),
+        eq(schema.subscription.collectionId, collectionId),
+        inArray(schema.subscription.status, ["active", "trialing"]),
+        or(
+          isNull(schema.subscription.endedAt),
+          sql`${schema.subscription.endedAt} > ${now.toISOString()}`,
+        ),
+      ),
+    );
+
+  for (const row of missingSubscriptions) {
+    const existingEntitlement = await tx.query.entitlement.findFirst({
+      where: and(
+        eq(schema.entitlement.subscriptionId, row.subscriptionId),
+        eq(schema.entitlement.featureId, featureId),
+      ),
+    });
+    if (existingEntitlement) continue;
+
+    const isBoolean = row.pfLimit === null;
+    const entitlementLimit = isBoolean ? null : row.pfLimit;
+    const nextResetAt = isBoolean || row.planInterval === "none"
+      ? null
+      : row.currentPeriodEndAt;
+
+    await tx.insert(schema.entitlement).values({
+      id: crypto.randomUUID(),
+      customerId: row.customerId,
+      subscriptionId: row.subscriptionId,
+      featureId,
+      balance: entitlementLimit,
+      limit: entitlementLimit,
+      nextResetAt,
+      sourceType: "subscription",
+      sourceId: row.planId,
+    });
+  }
+
+  // Re-query after backfill
+  const backfilledSubRows = await tx
+    .select({
+      id: schema.entitlement.id,
+      balance: schema.entitlement.balance,
+      nextResetAt: schema.entitlement.nextResetAt,
+      originalLimit: schema.planFeature.limit,
+      resetInterval: schema.planFeature.resetInterval,
+    })
+    .from(schema.entitlement)
+    .innerJoin(
+      schema.subscription,
+      eq(schema.entitlement.subscriptionId, schema.subscription.id),
+    )
+    .innerJoin(
+      schema.planFeature,
+      and(
+        eq(schema.planFeature.planId, schema.subscription.planId),
+        eq(schema.planFeature.featureId, schema.entitlement.featureId),
+      ),
+    )
+    .where(
+      and(
+        eq(schema.entitlement.customerId, customerId),
+        eq(schema.entitlement.featureId, featureId),
+        eq(schema.subscription.collectionId, collectionId),
+        inArray(schema.subscription.status, ["active", "trialing"]),
+        or(
+          isNull(schema.subscription.endedAt),
+          sql`${schema.subscription.endedAt} > ${now.toISOString()}`,
+        ),
+      ),
+    );
+
+  return [...backfilledSubRows, ...purchaseRows] as ActiveEntitlementRow[];
 }
 
 async function resetStaleEntitlements(

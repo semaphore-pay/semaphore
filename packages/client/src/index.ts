@@ -14,6 +14,20 @@ export interface SemaphorePayClientOptions {
   collectionId: string;
 }
 
+/** A feature (entitlement) definition in the collection catalog. */
+export interface Feature {
+  /** Unique identifier for this feature (e.g. "seats", "pro_mode"). */
+  id: string;
+  /** Human-readable name. */
+  name: string;
+  /** "boolean" for on/off features, "limit" for metered/countable features. */
+  type: "boolean" | "limit";
+  /** When this feature was created. */
+  createdAt: string;
+  /** When this feature was last updated. */
+  updatedAt: string;
+}
+
 /** A feature (entitlement) definition shared by plans and products. */
 export interface FeatureInput {
   /** Unique identifier for this feature (e.g. "seats", "pro_mode"). */
@@ -208,8 +222,8 @@ export class SemaphorePayClient {
 
   // ──── Customer ────
 
-  async createCustomer(input: CustomerInput) {
-    return await this.request("POST", "/customers", input);
+  async createCustomer(input: CustomerInput): Promise<{ id: string }> {
+    return await this.request<{ id: string }>("POST", "/customers", input);
   }
 
   /** Get the current customer resolved from the API key's userId. */
@@ -233,6 +247,12 @@ export class SemaphorePayClient {
     return await this.request<Product[]>("GET", "/products");
   }
 
+  // ──── Features (read-only catalog) ────
+
+  async listFeatures(): Promise<Feature[]> {
+    return await this.request<Feature[]>("GET", "/features");
+  }
+
   // ──── Subscriptions ────
 
   async subscribeToPlan(input: SubscribeToPlanInput): Promise<SubscribeToPlanResult> {
@@ -246,10 +266,18 @@ export class SemaphorePayClient {
     );
   }
 
+  async listSubscriptions(): Promise<{ subscriptions: Array<{ id: string; status: string; planId: string; [key: string]: unknown }>; total: number }> {
+    return await this.request("GET", "/subscriptions");
+  }
+
   // ──── Products (purchase) ────
 
   async purchaseProduct(input: PurchaseProductInput) {
     return await this.request("POST", "/products/purchase", input);
+  }
+
+  async listPurchases(): Promise<{ purchases: Array<{ id: string; productInternalId: string; status: string; purchasedAt: string; [key: string]: unknown }>; total: number }> {
+    return await this.request("GET", "/purchases");
   }
 
   // ──── Entitlements ────

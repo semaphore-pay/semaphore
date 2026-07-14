@@ -127,7 +127,7 @@ async function handlePaymentSuccess(
     subscriptionId: subscription.id,
     amount,
     currency,
-    tokenizedCards: data?.tokenizedCardData,
+    tokenizedCards: data?.tokenizedCardData ? [data.tokenizedCardData] : undefined,
   });
 }
 
@@ -145,7 +145,7 @@ export async function processSuccessfulPayment(
     subscriptionId: string;
     amount: number;
     currency?: string;
-    tokenizedCards?: Array<{ tokenKey: string; cardType?: string; cardBrand?: string; last4?: string; expiryMonth?: number; expiryYear?: number }>;
+    tokenizedCards?: Array<{ tokenKey: string; cardType?: string; cardPan?: string; tokenExpiryMonth?: string; tokenExpiryYear?: string }>;
   },
 ): Promise<{ processed: boolean; alreadyProcessed: boolean }> {
   const schema = engine.schema;
@@ -198,10 +198,10 @@ export async function processSuccessfulPayment(
           customerId: subscription.customerId,
           nombaTokenId: card.tokenKey,
           type: card.cardType ?? null,
-          brand: card.cardBrand ?? null,
-          last4: card.last4 ?? null,
-          expiryMonth: card.expiryMonth ?? null,
-          expiryYear: card.expiryYear ?? null,
+          brand: card.cardType ?? null,
+          last4: card.cardPan ?? null,
+          expiryMonth: card.tokenExpiryMonth ?? null,
+          expiryYear: card.tokenExpiryYear ?? null,
           isDefault: true,
         });
       }
